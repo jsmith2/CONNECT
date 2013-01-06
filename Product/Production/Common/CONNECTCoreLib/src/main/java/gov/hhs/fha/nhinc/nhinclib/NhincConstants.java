@@ -336,6 +336,7 @@ public class NhincConstants {
     public static final String WS_SOAP_HEADER_REPLYTO = "ReplyTo";
     public static final String WS_SOAP_HEADER_ADDRESS = "Address";
     public static final String WS_SOAP_HEADER_MESSAGE_ID = "MessageID";
+    public static final String WS_SOAP_HEADER_RELATESTO = "RelatesTo";
     public static final String WS_SOAP_HEADER_MESSAGE_ID_PREFIX = "urn:uuid:";
     public static final String WS_SOAP_TARGET_HOME_COMMUNITY_ID = "TargetHomeCommunityID";
     // Document Query Constants
@@ -436,6 +437,7 @@ public class NhincConstants {
     public static final String HIBERNATE_ASYNCMSGS_REPOSITORY = "AsyncMsgs.hibernate.cfg.xml";
     public static final String HIBERNATE_PATIENTDB_REPOSITORY = "patientdb.hibernate.cfg.xml";
     public static final String HIBERNATE_PERFREPO_REPOSITORY = "perfrepo.hibernate.cfg.xml";
+    public static final String HIBERNATE_CONFORMANCE_REPOSITORY = "confmessage.hibernate.cfg.xml";
     public static final String HIBERNATE_TRANSREPO_REPOSITORY = "transrepo.hibernate.cfg.xml";
     public static final String HIBERNATE_HIEMSUBREP_REPOSITORY = "HiemSubRepHibernate.cfg.xml";
     public static final String HIBERNATE_AGGREGATOR_REPOSITORY = "aggregator.cfg.xml";

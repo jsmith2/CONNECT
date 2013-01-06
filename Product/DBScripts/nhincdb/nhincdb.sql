@@ -358,4 +358,22 @@ COMMENT = 'Event Logging';
 GRANT SELECT,INSERT,UPDATE,DELETE ON eventdb.* to nhincuser;
 -- end eventdb
 
+-- begin conformancedb
+
+CREATE DATABASE conformancedb;
+
+CREATE TABLE conformancedb.conformancerepository (
+	id BIGINT NOT NULL AUTO_INCREMENT,
+	action VARCHAR(100),
+	messageID VARCHAR(100),
+	relatesToID VARCHAR(100),
+	direction VARCHAR(25),
+	message LONGBLOB,
+	confTime TIMESTAMP,
+	PRIMARY KEY (id) )
+COMMENT = 'Conformance NHINC Messages';
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON conformancedb.* to nhincuser;
+-- end conformancedb
+
 FLUSH PRIVILEGES;

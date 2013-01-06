@@ -29,7 +29,11 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd http://www.s
         </jaxws:properties>
         <jaxws:inInterceptors>
             <ref bean="securityConfigInInterceptor" />
+             <ref bean="conformanceInboundInterceptor" />
         </jaxws:inInterceptors>
+        <jaxws:outInterceptors>
+        	<ref bean="conformanceOutboundInterceptor" />
+        </jaxws:outInterceptors>
         <jaxws:handlers>
             <ref bean="SOAPHeaderHandler" />
             <ref bean="TransactionHandler"/>
