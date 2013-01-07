@@ -29,7 +29,7 @@ public final class ConformanceDAO {
 	    }
 
 	    /**
-	     * Inserts a single TransactionRepo object into the database, returns boolean on success or failure.
+	     * Inserts a single ConformanceMessage object into the database, returns boolean on success or failure.
 	     * 
 	     * @param ConformanceMessage
 	     * @return boolean

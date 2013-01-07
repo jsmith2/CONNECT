@@ -109,7 +109,11 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
         <jaxws:inInterceptors>
             <ref bean="timestampInInterceptor" />
             <ref bean="securityConfigInInterceptor" />
+        	<ref bean="conformanceInboundInterceptor" />
         </jaxws:inInterceptors>
+        <jaxws:outInterceptors>
+        	<ref bean="conformanceOutboundInterceptor" />
+        </jaxws:outInterceptors>
         <jaxws:outFaultInterceptors>
             <ref bean="attachmentFaultOutInterceptor" />
         </jaxws:outFaultInterceptors>
@@ -178,7 +182,11 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
         </jaxws:properties>
         <jaxws:inInterceptors>
             <ref bean="securityConfigInInterceptor" />
+        	<ref bean="conformanceInboundInterceptor" />
         </jaxws:inInterceptors>
+        <jaxws:outInterceptors>
+        	<ref bean="conformanceOutboundInterceptor" />
+        </jaxws:outInterceptors>
         <jaxws:handlers>
             <ref bean="SOAPHeaderHandler" />
             <ref bean="TransactionHandler" />
