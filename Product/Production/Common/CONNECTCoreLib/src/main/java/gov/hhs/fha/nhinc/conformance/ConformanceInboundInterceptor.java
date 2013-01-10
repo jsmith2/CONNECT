@@ -3,6 +3,8 @@ package gov.hhs.fha.nhinc.conformance;
 import gov.hhs.fha.nhinc.conformance.dao.ConformanceDAO;
 import gov.hhs.fha.nhinc.conformance.dao.ConformanceMessage;
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
+import gov.hhs.fha.nhinc.properties.PropertyAccessException;
+import gov.hhs.fha.nhinc.properties.PropertyAccessor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -26,6 +28,7 @@ public class ConformanceInboundInterceptor extends AbstractSoapInterceptor{
 
 	private static final Logger LOG = Logger.getLogger(ConformanceInboundInterceptor.class);
 	private final String DIRECTION = "INBOUND REQUEST";
+	private final String CONF_PROP = "conformanceInboundEnabled";
 	
 	public ConformanceInboundInterceptor() {
 		super(Phase.UNMARSHAL);
@@ -33,6 +36,12 @@ public class ConformanceInboundInterceptor extends AbstractSoapInterceptor{
 
 	@Override
 	public void handleMessage(SoapMessage message) throws Fault {
+		
+		if(!ConformanceUtil.isInterceptorEnabled(CONF_PROP)){
+			LOG.debug("Conformance inbound interceptor set to disabled.");
+			return;
+		}
+		
 		LOG.debug("ConformanceInboundInteceptor handleMessage() begin.");
 		try {
 			SOAPMessage soapMessage = message.getContent(SOAPMessage.class);
