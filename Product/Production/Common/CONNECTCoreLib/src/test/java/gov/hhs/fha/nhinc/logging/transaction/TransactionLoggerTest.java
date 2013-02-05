@@ -69,7 +69,12 @@ public class TransactionLoggerTest {
     public void logTransaction() {        
         TransactionDAO transactionDAO = mock(TransactionDAO.class);
 
-        TransactionLogger transactionLogger = new TransactionLogger(transactionDAO);
+        TransactionLogger transactionLogger = new TransactionLogger(transactionDAO){
+        	@Override
+        	public Boolean transactionLoggingEnabled(){
+        		return true;
+        	}
+        };
 
         when(transactionDAO.insertIntoTransactionRepo(any(TransactionRepo.class))).thenReturn(true);
 
@@ -82,7 +87,12 @@ public class TransactionLoggerTest {
     public void logTransactionWithNullIds() {
         TransactionDAO transactionDAO = mock(TransactionDAO.class);
 
-        TransactionLogger transactionLogger = new TransactionLogger(transactionDAO);
+        TransactionLogger transactionLogger = new TransactionLogger(transactionDAO){
+        	@Override
+        	public Boolean transactionLoggingEnabled(){
+        		return true;
+        	}
+        };
 
         transactionLogger.logTransaction(null, "messageId");
         verifyNothingLogged(transactionDAO);
@@ -98,7 +108,12 @@ public class TransactionLoggerTest {
     public void logRelatedTransaction() {  
         TransactionDAO transactionDAO = mock(TransactionDAO.class);
 
-        TransactionLogger transactionLogger = new TransactionLogger(transactionDAO);
+        TransactionLogger transactionLogger = new TransactionLogger(transactionDAO){
+        	@Override
+        	public Boolean transactionLoggingEnabled(){
+        		return true;
+        	}
+        };
 
         when(transactionDAO.getTransactionId(relatedMessageId)).thenReturn(transactionId);
         when(transactionDAO.insertIntoTransactionRepo(any(TransactionRepo.class))).thenReturn(true);
@@ -111,7 +126,12 @@ public class TransactionLoggerTest {
     public void logNoRelatedTransaction() {        
         TransactionDAO transactionDAO = mock(TransactionDAO.class);
 
-        TransactionLogger transactionLogger = new TransactionLogger(transactionDAO);
+        TransactionLogger transactionLogger = new TransactionLogger(transactionDAO){
+        	@Override
+        	public Boolean transactionLoggingEnabled(){
+        		return true;
+        	}
+        };
 
         when(transactionDAO.getTransactionId(relatedMessageId)).thenReturn(null);
         

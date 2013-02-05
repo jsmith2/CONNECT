@@ -137,6 +137,9 @@ public class NhincConstants {
     public static final String TIMESTAMP_TIME_TO_LIVE = "TimeStampTimeToLive";
     public static final String TIMESTAMP_STRICT = "TimeStampStrict";
     public static final String TIMESTAMP_FUTURE_TIME_TO_LIVE = "FutureTimeToLive";
+    
+    //Transaction Logging Property File Constant
+    public static final String TRANSACTION_ENABLED = "transactionLoggingEnabled";
 
     // Response Message Interceptor Constants
     public static final String RESPONSE_MESSAGE_ID_KEY = "RESPONSE_MESSAGE_ID";

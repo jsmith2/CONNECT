@@ -30,6 +30,9 @@ import java.sql.Timestamp;
 
 import gov.hhs.fha.nhinc.logging.transaction.dao.TransactionDAO;
 import gov.hhs.fha.nhinc.logging.transaction.model.TransactionRepo;
+import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
+import gov.hhs.fha.nhinc.properties.PropertyAccessException;
+import gov.hhs.fha.nhinc.properties.PropertyAccessor;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -65,8 +68,10 @@ public class TransactionLogger {
      * @param messageId The messageId for the message
      */
     public void logTransaction(String transactionId, String messageId) {
-        createTransactionRecord(messageId, transactionId);
-        enableMdcLogging(transactionId, messageId);
+        if(transactionLoggingEnabled()){
+        	createTransactionRecord(messageId, transactionId);
+        	enableMdcLogging(transactionId, messageId);
+        }
     }
 
     /**
@@ -127,6 +132,26 @@ public class TransactionLogger {
      */
     private Timestamp createTimestamp() {
         return new Timestamp(System.currentTimeMillis());
+    }
+    
+    /**
+     * Returns if transaction logging is enabled.  Does look up on gateway.properties file.
+     * 
+     * @return
+     */
+    public Boolean transactionLoggingEnabled(){
+    	PropertyAccessor propAccessor = PropertyAccessor.getInstance(NhincConstants.GATEWAY_PROPERTY_FILE);		
+		try {
+			if(!propAccessor.getPropertyBoolean(NhincConstants.TRANSACTION_ENABLED)){
+				return false;
+			}
+		} catch (PropertyAccessException e) {
+			LOG.error("Unable to access " + NhincConstants.TRANSACTION_ENABLED + " from " +
+					NhincConstants.GATEWAY_PROPERTY_FILE, e);
+			return false;
+		}
+
+		return true;
     }
 
 }

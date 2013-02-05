@@ -27,7 +27,10 @@
 package gov.hhs.fha.nhinc.logging.transaction;
 
 import gov.hhs.fha.nhinc.logging.transaction.dao.TransactionDAO;
+import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
 import gov.hhs.fha.nhinc.nhinclib.NullChecker;
+import gov.hhs.fha.nhinc.properties.PropertyAccessException;
+import gov.hhs.fha.nhinc.properties.PropertyAccessor;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -62,7 +65,6 @@ public class TransactionHandler implements SOAPHandler<SOAPMessageContext> {
     private static final String WSA_NS_2004 = "http://www.w3.org/2004/08/addressing";
     private static final String MESSAGE_ID = "MessageID";
     private static final String RELATESTO_ID = "RelatesTo";
-    
    
     /*
      * (non-Javadoc)
@@ -73,6 +75,11 @@ public class TransactionHandler implements SOAPHandler<SOAPMessageContext> {
     public boolean handleMessage(SOAPMessageContext context) {
 
         LOG.debug("TransactionHandler handleMessage() START ");
+        
+		if(!isTransactionLoggingEnabled()){
+			LOG.debug("Transaction logging set to disabled.");
+			return true;
+		}
         
         String messageId = null;
         String transactionId = null;
@@ -259,6 +266,15 @@ public class TransactionHandler implements SOAPHandler<SOAPMessageContext> {
         Set<QName> headers = new HashSet<QName>();
         headers.add(TRANSACTION_QNAME);
         return headers;
+    }
+    
+    /**
+     * For overriding for unit testing.
+     * @param transType
+     * @return
+     */
+    protected Boolean isTransactionLoggingEnabled(){
+    	return new TransactionLogger().transactionLoggingEnabled();
     }
 
 }

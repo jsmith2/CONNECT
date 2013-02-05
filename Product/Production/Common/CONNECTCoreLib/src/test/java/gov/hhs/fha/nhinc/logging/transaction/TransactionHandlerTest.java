@@ -75,6 +75,11 @@ public class TransactionHandlerTest {
             protected String getTransactionId(String id) {
                 return null;
             }
+            
+            @Override
+            protected Boolean isTransactionLoggingEnabled(){
+            	return true;
+            }
         };
 
         runHandleMessage(true, true, false, transHandler);
@@ -99,6 +104,11 @@ public class TransactionHandlerTest {
             @Override
             protected String getTransactionId(String id) {
                 return TRANSACTION_ID;
+            }
+            
+            @Override
+            protected Boolean isTransactionLoggingEnabled(){
+            	return true;
             }
         };
 
@@ -125,6 +135,11 @@ public class TransactionHandlerTest {
             protected String getTransactionId(String id) {
                 return null;
             }
+            
+            @Override
+            protected Boolean isTransactionLoggingEnabled(){
+            	return true;
+            }
         };
 
         runHandleMessage(true, false, false, transHandler);
@@ -150,6 +165,11 @@ public class TransactionHandlerTest {
             protected String getTransactionId(String id) {
                 assertEquals(id, RELATESTO_ID);
                 return TRANSACTION_ID;
+            }
+            
+            @Override
+            protected Boolean isTransactionLoggingEnabled(){
+            	return true;
             }
         };
 
@@ -184,6 +204,11 @@ public class TransactionHandlerTest {
                 counter++;
                 return null;
             }
+            
+            @Override
+            protected Boolean isTransactionLoggingEnabled(){
+            	return true;
+            }
         };
 
         runHandleMessage(true, false, true, transHandler);
@@ -208,6 +233,11 @@ public class TransactionHandlerTest {
             protected String getTransactionId(String id) {
                 assertEquals(1, 2);
                 return null;
+            }
+            
+            @Override
+            protected Boolean isTransactionLoggingEnabled(){
+            	return true;
             }
         };
 
