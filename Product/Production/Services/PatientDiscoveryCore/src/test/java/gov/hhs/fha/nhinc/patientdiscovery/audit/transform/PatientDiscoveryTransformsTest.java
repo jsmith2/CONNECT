@@ -114,7 +114,7 @@ public class PatientDiscoveryTransformsTest<T extends PRPAIN201305UV02,K extends
         webContextProperties.setProperty(NhincConstants.WEB_SERVICE_REQUEST_URL, "http://16.14.13.12:9090/AuditService");
         webContextProperties.setProperty(NhincConstants.REMOTE_HOST_ADDRESS, "16.14.13.12");
         final String remoteObjectIP = "http://16.14.13.12:9090/source/AuditService";
-        PRPAIN201306UV02 response = null;
+        
         PatientDiscoveryTransforms transforms = new PatientDiscoveryTransforms() {
             @Override
             protected String getLocalHostAddress() {

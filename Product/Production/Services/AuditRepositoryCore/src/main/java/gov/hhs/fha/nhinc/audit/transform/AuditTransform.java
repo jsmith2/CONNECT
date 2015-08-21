@@ -71,19 +71,19 @@ public abstract class AuditTransform<T, K> {
 
     /**
      * Build AuditLog Request Message from Request
-     * 
-     * This abstract class follows Template design pattern. EventIdentification, ActivePartiicpant(HumanRequestor,Source,
-     * Destination), AuditSourceIdentification are same across all the exchange services (PD,DQ,DR,AD,DS) and X12.
-     * The ParticipantObjectIdentification is built using the requests and response types received from Inbound and 
-     * Outbound for any specific service. Therefore an abstract method is defined here to build 
-     * ParticipantObjectIdentification and this can be implemented by specific Core services AuditTransformer. In order 
-     * to build ParticipantObjectIdentification the generic request of type <T> and generic response of type <K> are 
-     * used here. These Generic types can be extended in the subclasses to their respective request and response types
-     * objects.
-     * 
+     *
+     * This abstract class follows Template design pattern. EventIdentification,
+     * ActivePartiicpant(HumanRequestor,Source, Destination), AuditSourceIdentification are same across all the exchange
+     * services (PD,DQ,DR,AD,DS) and X12. The ParticipantObjectIdentification is built using the requests and response
+     * types received from Inbound and Outbound for any specific service. Therefore an abstract method is defined here
+     * to build ParticipantObjectIdentification and this can be implemented by specific Core services AuditTransformer.
+     * In order to build ParticipantObjectIdentification the generic request of type <T> and generic response of type
+     * <K> are used here. These Generic types can be extended in the subclasses to their respective request and response
+     * types objects.
+     *
      * @param request Request Object
      * @param assertion Assertion Object
-     * @param target  Target Community
+     * @param target Target Community
      * @param direction Inbound/Outbound
      * @param _interface Entity, Adapter and Nwhin
      * @param isRequesting Initiating/Responding Gateway
@@ -91,31 +91,35 @@ public abstract class AuditTransform<T, K> {
      * @param serviceName Service Name
      * @param instance
      * @return Audit Request
-     * 
+     *
      */
     public final LogEventRequestType transformRequestToAuditMsg(T request, AssertionType assertion,
-        NhinTargetSystemType target, String direction, String _interface, boolean isRequesting, Properties 
-            webContextProperties, String serviceName, AuditTransformDataBuilder instance) {
+        NhinTargetSystemType target, String direction, String _interface, boolean isRequesting, Properties webContextProperties, String serviceName, AuditTransformDataBuilder instance) {
 
-        return createAuditMessage(request, assertion, target, direction, _interface, isRequesting, 
+        AuditMessageType auditMsg = createBaseAuditMessage(assertion, target, isRequesting,
             webContextProperties, serviceName, instance);
+
+        auditMsg = getParticipantObjectIdentificationForRequest(request, assertion, auditMsg);
+        String communityId = getMessageCommunityId(assertion, target, isRequesting);
+
+        return buildLogEventRequestType(auditMsg, direction, _interface, communityId);
     }
-    
+
     /**
      * Build AuditLog Request Message from Response
-     * 
-     * This abstract class follows Template design pattern. EventIdentification, ActivePartiicpant(HumanRequestor,Source,
-     * Destination), AuditSourceIdentification are same across all the exchange services (PD,DQ,DR,AD,DS) and X12.
-     * The ParticipantObjectIdentification is built using the requests and response types received from Inbound and 
-     * Outbound for any specific service. Therefore an abstract method is defined here to build 
-     * ParticipantObjectIdentification and this can be implemented by specific Core services AuditTransformer. In order 
-     * to build ParticipantObjectIdentification the generic request of type <T> and generic response of type <K> are 
-     * used here. These Generic types can be extended in the subclasses to their respective request and response types
-     * objects.
-     * 
+     *
+     * This abstract class follows Template design pattern. EventIdentification,
+     * ActivePartiicpant(HumanRequestor,Source, Destination), AuditSourceIdentification are same across all the exchange
+     * services (PD,DQ,DR,AD,DS) and X12. The ParticipantObjectIdentification is built using the requests and response
+     * types received from Inbound and Outbound for any specific service. Therefore an abstract method is defined here
+     * to build ParticipantObjectIdentification and this can be implemented by specific Core services AuditTransformer.
+     * In order to build ParticipantObjectIdentification the generic request of type <T> and generic response of type
+     * <K> are used here. These Generic types can be extended in the subclasses to their respective request and response
+     * types objects.
+     *
      * @param response Response Object
      * @param assertion Assertion Object
-     * @param target  Target Community
+     * @param target Target Community
      * @param direction Inbound/Outbound
      * @param _interface Entity, Adapter and Nwhin
      * @param isRequesting Initiating/Responding Gateway
@@ -123,27 +127,85 @@ public abstract class AuditTransform<T, K> {
      * @param serviceName Service Name
      * @param instance
      * @return Audit Request
-     * 
+     *
      */
     public final LogEventRequestType transformResponseToAuditMsg(K response, AssertionType assertion,
-        NhinTargetSystemType target, String direction, String _interface, boolean isRequesting, Properties 
-            webContextProperties, String serviceName, AuditTransformDataBuilder instance) {
+        NhinTargetSystemType target, String direction, String _interface, boolean isRequesting, Properties webContextProperties, String serviceName, AuditTransformDataBuilder instance) {
 
-        return createAuditMessage(response, assertion, target, direction, _interface, isRequesting, 
+        AuditMessageType auditMsg = createBaseAuditMessage(assertion, target, isRequesting,
             webContextProperties, serviceName, instance);
+
+        // Assign ParticipationObjectIdentification
+        auditMsg = getParticipantObjectIdentificationForResponse(response, assertion, auditMsg);
+        String communityId = getMessageCommunityId(assertion, target, isRequesting);
+
+        return buildLogEventRequestType(auditMsg, direction, _interface, communityId);
+    }
+
+    private AuditMessageType createBaseAuditMessage(AssertionType assertion,
+        NhinTargetSystemType target, boolean isRequesting, Properties webContextProperties, String serviceName, AuditTransformDataBuilder instance) {
+
+        AuditMessageType auditMsg = new AuditMessageType();
+        //****************************Construct Event Identification**************************
+
+        auditMsg.setEventIdentification(createEventIdentification(serviceName, isRequesting, instance));
+
+        //*********************************Construct Active Participant************************
+        //Active Participant for human requester only required for requesting gateway
+        if (isRequesting) {
+            AuditMessageType.ActiveParticipant participantHumanFactor = getActiveParticipant(assertion.getUserInfo(), isRequesting);
+            auditMsg.getActiveParticipant().add(participantHumanFactor);
+        }
+        AuditMessageType.ActiveParticipant participantSource = getActiveParticipantSource(isRequesting,
+            webContextProperties, serviceName);
+        AuditMessageType.ActiveParticipant participantDestination = getActiveParticipantDestination(target,
+            isRequesting, webContextProperties, serviceName);
+        auditMsg.getActiveParticipant().add(participantSource);
+        auditMsg.getActiveParticipant().add(participantDestination);
+
+        //Create the AuditSourceIdentifierType object
+        AuditSourceIdentificationType auditSource = getAuditSourceIdentificationType();
+
+        //******************************Constuct Audit Source Identification**********************
+        auditMsg.getAuditSourceIdentification().add(auditSource);
+
+        return auditMsg;
+    }
+
+    private LogEventRequestType buildLogEventRequestType(AuditMessageType auditMsg, String direction, String _interface,
+        String communityId) {
+        LogEventRequestType result = new LogEventRequestType();
+
+        result.setAuditMessage(auditMsg);
+        result.setDirection(direction);
+        result.setInterface(_interface);
+        result.setCommunityId(communityId);
+        return result;
     }
 
     /**
-     * ParticipantObjectIdentifiaction is specific to each service and the implementation can be carried out in 
+     * ParticipantObjectIdentifiaction is specific to each service request and the implementation can be carried out in
      * specific service core transformer.
+     *
      * @param msg
      * @param assertion
      * @param auditMsg
      * @return
      */
-    protected abstract AuditMessageType getParticipantObjectIdentification(Object msg, AssertionType assertion, 
+    protected abstract AuditMessageType getParticipantObjectIdentificationForRequest(T request, AssertionType assertion,
         AuditMessageType auditMsg);
-    
+
+    /**
+     * ParticipantObjectIdentifiaction is specific to each service response and the implementation can be carried out in
+     * specific service core transformer.
+     *
+     * @param msg
+     * @param assertion
+     * @param auditMsg
+     * @return
+     */
+    protected abstract AuditMessageType getParticipantObjectIdentificationForResponse(K response, AssertionType assertion,
+        AuditMessageType auditMsg);
 
     /**
      *
@@ -181,11 +243,11 @@ public abstract class AuditTransform<T, K> {
      * @param instance
      * @return
      */
-    protected EventIdentificationType createEventIdentification(String serviceName, boolean isRequesting, 
+    protected EventIdentificationType createEventIdentification(String serviceName, boolean isRequesting,
         AuditTransformDataBuilder instance) {
         CodedValueType eventID = createCodeValueType(instance.getServiceEvenIdCode(), null,
             instance.getServiceEventCodeSystem(), isRequesting ? instance.getServiceEventDisplayRequestor()
-            : instance.getServiceEventDisplayResponder());
+                : instance.getServiceEventDisplayResponder());
 
         EventIdentificationType oEventIdentificationType = getEventIdentificationType(eventID, isRequesting,
             serviceName, instance);
@@ -313,10 +375,8 @@ public abstract class AuditTransform<T, K> {
         }
 
         participant.setUserIsRequestor(Boolean.FALSE);
-        participant.getRoleIDCode().add(AuditDataTransformHelper.createCodeValueType(AuditTransformConstants.
-            ACTIVE_PARTICIPANT_ROLE_CODE_DEST, null,
-            AuditTransformConstants.ACTIVE_PARTICIPANT_CODE_SYSTEM_NAME, AuditTransformConstants.
-                ACTIVE_PARTICPANT_ROLE_CODE_DESTINATION_DISPLAY_NAME));
+        participant.getRoleIDCode().add(AuditDataTransformHelper.createCodeValueType(AuditTransformConstants.ACTIVE_PARTICIPANT_ROLE_CODE_DEST, null,
+            AuditTransformConstants.ACTIVE_PARTICIPANT_CODE_SYSTEM_NAME, AuditTransformConstants.ACTIVE_PARTICPANT_ROLE_CODE_DESTINATION_DISPLAY_NAME));
         return participant;
     }
 
@@ -560,49 +620,5 @@ public abstract class AuditTransform<T, K> {
 
         return auditSrcId;
     }
-    
-    private LogEventRequestType createAuditMessage(Object msg, AssertionType assertion,
-        NhinTargetSystemType target, String direction, String _interface, boolean isRequesting, Properties 
-            webContextProperties, String serviceName, AuditTransformDataBuilder instance) {
-        LogEventRequestType result = new LogEventRequestType();
 
-        AuditMessageType auditMsg = new AuditMessageType();
-        //****************************Construct Event Identification**************************
-
-        auditMsg.setEventIdentification(createEventIdentification(serviceName, isRequesting, instance));
-
-        //*********************************Construct Active Participant************************
-        //Active Participant for human requester only required for requesting gateway
-        if (isRequesting) {
-            AuditMessageType.ActiveParticipant participantHumanFactor = getActiveParticipant(assertion.getUserInfo(), isRequesting);
-            auditMsg.getActiveParticipant().add(participantHumanFactor);
-        }
-        AuditMessageType.ActiveParticipant participantSource = getActiveParticipantSource(isRequesting,
-            webContextProperties, serviceName);
-        AuditMessageType.ActiveParticipant participantDestination = getActiveParticipantDestination(target,
-            isRequesting, webContextProperties, serviceName);
-        auditMsg.getActiveParticipant().add(participantSource);
-        auditMsg.getActiveParticipant().add(participantDestination);
-
-        //******************************Constuct Participation Object Identification*************
-        // Assign ParticipationObjectIdentification
-        auditMsg = getParticipantObjectIdentification(msg, assertion, auditMsg);
-
-        //Create the AuditSourceIdentifierType object
-        String communityId = getMessageCommunityId(assertion, target, isRequesting);
-        AuditSourceIdentificationType auditSource = getAuditSourceIdentificationType();
-
-        //******************************Constuct Audit Source Identification**********************
-        auditMsg.getAuditSourceIdentification().add(auditSource);
-
-        //Set the all the required data
-        result.setAuditMessage(auditMsg);
-        result.setDirection(direction);
-        result.setInterface(_interface);
-        //set the target community identifier
-        result.setCommunityId(communityId);
-
-        LOG.trace("End AuditDataTransform transformMsgToAuditMsg() ----");
-        return result;
-    }
 }
