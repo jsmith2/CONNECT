@@ -24,18 +24,23 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.hhs.fha.nhinc.orchestration;
+package gov.hhs.fha.nhinc.corex12.docsubmission.audit;
+
+import gov.hhs.fha.nhinc.audit.AuditLogger;
+import gov.hhs.fha.nhinc.audit.transform.AuditTransforms;
+import gov.hhs.fha.nhinc.corex12.docsubmission.audit.transform.COREX12BatchSubmissionAuditTransforms;
+import org.caqh.soap.wsdl.corerule2_2_0.COREEnvelopeBatchSubmission;
+import org.caqh.soap.wsdl.corerule2_2_0.COREEnvelopeBatchSubmissionResponse;
 
 /**
  *
- * @author mweaver
+ * @author achidamb
  */
-public interface AuditTransformer {
-    public enum Direction {
-        INBOUND, OUTBOUND
-    };
+public class CORE_X12BatchSubmissionAuditLogger extends AuditLogger<COREEnvelopeBatchSubmission, COREEnvelopeBatchSubmissionResponse> {
 
-    public void transformRequest(Orchestratable message);
+    @Override
+    protected AuditTransforms<COREEnvelopeBatchSubmission, COREEnvelopeBatchSubmissionResponse> getAuditTransforms() {
+        return new COREX12BatchSubmissionAuditTransforms();
+    }
 
-    public void transformResponse(Orchestratable message);
 }
