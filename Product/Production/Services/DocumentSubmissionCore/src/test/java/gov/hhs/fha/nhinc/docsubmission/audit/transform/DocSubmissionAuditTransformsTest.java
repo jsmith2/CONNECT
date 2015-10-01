@@ -123,7 +123,7 @@ public class DocSubmissionAuditTransformsTest extends AuditTransformsTest<
         assertActiveParticipantHumanRequestor(auditRequest.getAuditMessage());
         assertActiveParticipantSource(auditRequest.getAuditMessage());
         assertActiveParticipantDestinationForRequest(auditRequest.getAuditMessage(), soapUIEndpoint, destinationIP);
-        testGetActiveParticipantSource(auditRequest, Boolean.TRUE, localIP, webContextProperties);
+        testGetActiveParticipantSource(auditRequest, Boolean.TRUE, webContextProperties, localIP);
         assertParticipantObjectIdentification(auditRequest.getAuditMessage());
     }
 
@@ -163,7 +163,7 @@ public class DocSubmissionAuditTransformsTest extends AuditTransformsTest<
             createNhinTarget(), NhincConstants.AUDIT_LOG_INBOUND_DIRECTION, NhincConstants.AUDIT_LOG_ENTITY_INTERFACE,
             Boolean.TRUE, webContextProperties, NhincConstants.XDR_RESPONSE_ACTION);
         assertEventIdentificationTypeForResponse(auditResponse.getAuditMessage());
-        testGetActiveParticipantSource(auditResponse, Boolean.TRUE, localIP, webContextProperties);
+        testGetActiveParticipantSource(auditResponse, Boolean.TRUE, webContextProperties, localIP);
         assertActiveParticipantDestinationForResponse(auditResponse.getAuditMessage(), soapUIEndpoint, destinationIP);
         assertParticipantObjectIdentification(auditResponse.getAuditMessage());
     }
@@ -201,7 +201,8 @@ public class DocSubmissionAuditTransformsTest extends AuditTransformsTest<
     private void assertActiveParticipantSource(AuditMessageType auditMsg) {
         ActiveParticipant source = getActiveParticipant(
             AuditTransformsConstants.ACTIVE_PARTICIPANT_ROLE_CODE_SOURCE_DISPLAY_NAME, auditMsg.getActiveParticipant());
-        assertEquals(AuditTransformsConstants.ACTIVE_PARTICIPANT_USER_ID_SOURCE, source.getUserID());
+        String compareId = NhincConstants.WS_ADDRESSING_URL + "/" + AuditTransformsConstants.ACTIVE_PARTICIPANT_USER_ID_SOURCE;
+        assertEquals(compareId, source.getUserID());
         assertEquals(Boolean.TRUE, source.isUserIsRequestor());
         assertEquals(AuditTransformsConstants.ACTIVE_PARTICIPANT_ROLE_CODE_SOURCE,
             source.getRoleIDCode().get(0).getCode());
@@ -283,7 +284,7 @@ public class DocSubmissionAuditTransformsTest extends AuditTransformsTest<
             eventType.getEventTypeCode().get(0).getDisplayName());
     }
 
-    private AssertionType createAssertion() {
+    protected AssertionType createAssertion() {
         AssertionType assertion = new AssertionType();
         UserType userType = new UserType();
         userType.setOrg(createHomeCommunityType());
@@ -294,22 +295,6 @@ public class DocSubmissionAuditTransformsTest extends AuditTransformsTest<
         return assertion;
     }
 
-    private HomeCommunityType createHomeCommunityType() {
-        HomeCommunityType homeCommunityType = new HomeCommunityType();
-        homeCommunityType.setHomeCommunityId("1.1");
-        homeCommunityType.setName("DOD");
-        homeCommunityType.setDescription("This is DOD Gateway");
-        return homeCommunityType;
-    }
-
-    private PersonNameType createPersonNameType() {
-        PersonNameType personNameType = new PersonNameType();
-        personNameType.setFamilyName("Tamney");
-        personNameType.setFullName("Erica");
-        personNameType.setGivenName("Jasmine");
-        personNameType.setPrefix("Ms");
-        return personNameType;
-    }
 
     private CeType createRoleCodedCeType() {
         CeType ceType = new CeType();
@@ -318,20 +303,6 @@ public class DocSubmissionAuditTransformsTest extends AuditTransformsTest<
         ceType.setCodeSystemVersion("1.1");
         ceType.setDisplayName(HUMAN_REQUESTOR);
         return ceType;
-    }
-
-    private NhinTargetSystemType createNhinTarget() {
-        NhinTargetSystemType targetSystem = new NhinTargetSystemType();
-        targetSystem.setHomeCommunity(createTragetHomeCommunityType());
-        return targetSystem;
-    }
-
-    private HomeCommunityType createTragetHomeCommunityType() {
-        HomeCommunityType homeCommunityType = new HomeCommunityType();
-        homeCommunityType.setHomeCommunityId("2.2");
-        homeCommunityType.setName("SSA");
-        homeCommunityType.setDescription("This is DOD Gateway");
-        return homeCommunityType;
     }
 
     private ProvideAndRegisterDocumentSetRequestType createProvideAndRegisterDocumentSetRequestType() {
