@@ -34,14 +34,13 @@ import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
 import gov.hhs.fha.nhinc.docquery.audit.DocQueryAuditTransformsConstants;
 import gov.hhs.fha.nhinc.transform.marshallers.JAXBContextHandler;
 import gov.hhs.fha.nhinc.util.HomeCommunityMap;
-import java.io.StringWriter;
+import java.io.ByteArrayOutputStream;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import oasis.names.tc.ebxml_regrep.xsd.query._3.AdhocQueryRequest;
 import oasis.names.tc.ebxml_regrep.xsd.query._3.AdhocQueryResponse;
 import oasis.names.tc.ebxml_regrep.xsd.rim._3.SlotType1;
 import org.apache.log4j.Logger;
-import org.apache.ws.security.util.Base64;
 
 /**
  *
@@ -83,7 +82,12 @@ public class DocQueryAuditTransforms extends AuditTransforms<AdhocQueryRequest, 
     }
 
     @Override
-    protected String getServiceEventIdCode() {
+    protected String getServiceEventIdCodeRequestor() {
+        return DocQueryAuditTransformsConstants.EVENT_ID_CODE;
+    }
+
+    @Override
+    protected String getServiceEventIdCodeResponder() {
         return DocQueryAuditTransformsConstants.EVENT_ID_CODE;
     }
 
@@ -181,8 +185,6 @@ public class DocQueryAuditTransforms extends AuditTransforms<AdhocQueryRequest, 
         if (queryId != null && !queryId.isEmpty()) {
             participantObject.setParticipantObjectID(queryId);
         }
-        participantObject.setParticipantObjectName(HomeCommunityMap.formatHomeCommunityId(
-            HomeCommunityMap.getLocalHomeCommunityId()));
         TypeValuePairType encoding = new TypeValuePairType();
         encoding.setType(DocQueryAuditTransformsConstants.QUERY_ENCODING_TYPE);
         encoding.setValue(DocQueryAuditTransformsConstants.UTF_8.getBytes());
@@ -222,11 +224,10 @@ public class DocQueryAuditTransforms extends AuditTransforms<AdhocQueryRequest, 
     }
 
     private byte[] getParticipantObjectQueryForRequest(AdhocQueryRequest request) throws JAXBException {
-        StringWriter sw = new StringWriter();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         if (request != null) {
-            getMarshaller().marshal(request, sw);
-            String encodedStr = Base64.encode(sw.toString().getBytes());
-            return encodedStr.getBytes();
+            getMarshaller().marshal(request, baos);
+            return baos.toByteArray();
         }
         return null;
     }

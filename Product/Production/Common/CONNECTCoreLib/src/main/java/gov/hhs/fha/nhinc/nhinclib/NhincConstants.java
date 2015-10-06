@@ -281,6 +281,7 @@ public class NhincConstants {
     public static final String AUDIT_DISABLED_ACK_MSG = "Audit Service is not enabled";
     public static final String WEB_SERVICE_REQUEST_URL = "webservicerequesturl";
     public static final String REMOTE_HOST_ADDRESS = "remotehostaddress";
+    public static final String LOCAL_HOST_ADDRESS = "localhostaddress";
     // Policy Engine Constants
     public static final String POLICYENGINE_DTE_SERVICE_NAME = "policyenginedte";
     public static final String POLICYENGINE_SERVICE_NAME = "policyengineservice";
@@ -465,6 +466,13 @@ public class NhincConstants {
     //AuditRepository EJB Bean name
     public static final String AUDIT_LOGGER_EJB_BEAN_NAME = "AuditEJBLoggerImpl";
     /* -- End Document Retrieve deferred Service Name -- */
+
+    //ReplyTo Header value for Nwhin Outbound messages
+    public static final String WSA_REPLY_TO = "http://www.w3.org/2005/08/addressing/anonymous";
+    //ReplyTo key value to be retrieved from cxf message Inbound Headers
+    public static final String INBOUND_REPLY_TO = "ReplyTo";
+    //ReplyTo Header to be retrieved from cxf Inbound messages
+    public static final String INBOUND_REPLY_TO_HEADER = "javax.xml.ws.addressing.context.inbound";
 
     private NhincConstants() {
     }

@@ -72,7 +72,12 @@ public class DocSubmissionAuditTransforms extends AuditTransforms<ProvideAndRegi
     }
 
     @Override
-    protected String getServiceEventIdCode() {
+    protected String getServiceEventIdCodeRequestor() {
+        return DocSubmissionAuditTransformsConstants.EVENT_ID_CODE_DS_SOURCE;
+    }
+
+    @Override
+    protected String getServiceEventIdCodeResponder() {
         return DocSubmissionAuditTransformsConstants.EVENT_ID_CODE_DS_SOURCE;
     }
 

@@ -26,82 +26,21 @@
  */
 package gov.hhs.fha.nhinc.corex12.docsubmission.audit;
 
-import gov.hhs.fha.nhinc.auditrepository.nhinc.proxy.AuditRepositoryProxy;
-import gov.hhs.fha.nhinc.auditrepository.nhinc.proxy.AuditRepositoryProxyObjectFactory;
-import gov.hhs.fha.nhinc.common.auditlog.LogEventRequestType;
-import gov.hhs.fha.nhinc.common.nhinccommon.AcknowledgementType;
-import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
-import gov.hhs.fha.nhinc.common.nhinccommon.NhinTargetSystemType;
-import gov.hhs.fha.nhinc.corex12.docsubmission.audit.transform.CORE_X12AuditDataTransform;
-import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
-import java.util.Properties;
-import org.apache.log4j.Logger;
+import gov.hhs.fha.nhinc.audit.AuditLogger;
+import gov.hhs.fha.nhinc.audit.transform.AuditTransforms;
+import gov.hhs.fha.nhinc.corex12.docsubmission.audit.transform.COREX12RealTimeAuditTransforms;
+import org.caqh.soap.wsdl.corerule2_2_0.COREEnvelopeRealTimeRequest;
+import org.caqh.soap.wsdl.corerule2_2_0.COREEnvelopeRealTimeResponse;
 
 /**
  * Class provides APIs to persist Audit data
  *
  * @author svalluripalli
  */
-public class CORE_X12AuditLogger {
+public class CORE_X12AuditLogger extends AuditLogger<COREEnvelopeRealTimeRequest, COREEnvelopeRealTimeResponse> {
 
-    private static final Logger LOG = Logger.getLogger(CORE_X12AuditLogger.class);
-    private final CORE_X12AuditDataTransform coreX12AuditDataTransform = new CORE_X12AuditDataTransform();
-
-    /**
-     *
-     * @param message
-     * @param assertion
-     * @param target
-     * @param direction
-     * @param isRequesting
-     * @param webContextProperties
-     * @param serviceName
-     */
-    public void auditNhinCoreX12RealtimeMessage(Object message, AssertionType assertion, NhinTargetSystemType target,
-        String direction, boolean isRequesting, Properties webContextProperties, String serviceName) {
-        LOG.trace("---Begin CORE_X12AuditLogger.auditNhinCoreX12RealtimeMessage()---");
-        // Set up the audit logging request message
-        LogEventRequestType auditLogMsg = coreX12AuditDataTransform.transformX12MsgToAuditMsg(message, assertion, target, direction, NhincConstants.AUDIT_LOG_NHIN_INTERFACE, isRequesting, webContextProperties, serviceName);
-        if (auditLogMsg != null && auditLogMsg.getAuditMessage() != null) {
-            audit(auditLogMsg, assertion);
-        } else {
-            LOG.error("Core X12 Realtime Request auditLogMsg is null");
-        }
-        LOG.trace("---End CORE_X12AuditLogger.auditNhinCoreX12RealtimeMessage()---");
-    }
-
-    /**
-     *
-     * @param message
-     * @param assertion
-     * @param target
-     * @param direction
-     * @param isRequesting
-     * @param webContextProperties
-     * @param serviceName
-     */
-    public void auditNhinCoreX12BatchMessage(Object message, AssertionType assertion, NhinTargetSystemType target,
-        String direction, boolean isRequesting, Properties webContextProperties, String serviceName) {
-        LOG.trace("---Begin CORE_X12AuditLogger.auditNhinCoreX12BatchRequest()---");
-        LogEventRequestType auditLogMsg = coreX12AuditDataTransform.transformX12MsgToAuditMsg(message, assertion, target, direction, NhincConstants.AUDIT_LOG_NHIN_INTERFACE, isRequesting, webContextProperties, serviceName);
-        if (auditLogMsg != null && auditLogMsg.getAuditMessage() != null) {
-            audit(auditLogMsg, assertion);
-        } else {
-            LOG.error("Core X12 Nhin Batch Request auditLogMsg is null");
-        }
-        LOG.trace("---End CORE_X12AuditLogger.auditNhinCoreX12BatchRequest()---");
-    }
-
-    /**
-     * Submits a generic Audit Log message to the Audit Log Repository.
-     *
-     * @param auditLogMsg The generic audit log to be audited
-     * @param assertion The assertion to be audited
-     * @return
-     */
-    private AcknowledgementType audit(LogEventRequestType auditLogMsg, AssertionType assertion) {
-        AuditRepositoryProxyObjectFactory auditRepoFactory = new AuditRepositoryProxyObjectFactory();
-        AuditRepositoryProxy proxy = auditRepoFactory.getAuditRepositoryProxy();
-        return proxy.auditLog(auditLogMsg, assertion);
+    @Override
+    protected AuditTransforms<COREEnvelopeRealTimeRequest, COREEnvelopeRealTimeResponse> getAuditTransforms() {
+        return new COREX12RealTimeAuditTransforms();
     }
 }
