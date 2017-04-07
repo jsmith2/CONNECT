@@ -32,6 +32,7 @@ import gov.hhs.fha.nhinc.docquery._30.entity.EntityDocQuerySecured;
 import gov.hhs.fha.nhinc.docquery._30.entity.EntityDocQueryUnsecured;
 import gov.hhs.fha.nhinc.docquery.inbound.PassthroughInboundDocQuery;
 import gov.hhs.fha.nhinc.docquery.inbound.StandardInboundDocQuery;
+import gov.hhs.fha.nhinc.docquery.inbound.TestInboundDocQuery;
 import gov.hhs.fha.nhinc.docquery.outbound.PassthroughOutboundDocQuery;
 import gov.hhs.fha.nhinc.docquery.outbound.StandardOutboundDocQuery;
 import oasis.names.tc.ebxml_regrep.xsd.query._3.AdhocQueryRequest;
@@ -48,10 +49,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "/docquery/_30/applicationContext.xml" })
+@ContextConfiguration(locations = {"/docquery/_30/applicationContext.xml"})
 public class DocQuerySpringContextTest {
 
-    @Autowired
     DocQuery inboundDocQuery;
 
     @Autowired
@@ -74,7 +74,14 @@ public class DocQuerySpringContextTest {
 
     @Test
     public void inbound() {
-        assertNotNull(inboundDocQuery);
+        inboundDocQuery = new DocQuery() {
+            @Override
+            public void setHeaderForContext() {
+
+            }
+        };
+        
+        inboundDocQuery.setInboundDocQuery(new TestInboundDocQuery());
 
         AdhocQueryRequest request = new AdhocQueryRequest();
         AdhocQueryResponse response = inboundDocQuery.respondingGatewayCrossGatewayQuery(request);

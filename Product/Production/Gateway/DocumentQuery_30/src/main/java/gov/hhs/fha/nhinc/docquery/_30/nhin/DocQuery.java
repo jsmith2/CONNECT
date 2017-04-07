@@ -31,13 +31,21 @@ import gov.hhs.fha.nhinc.docquery.aspect.AdhocQueryRequestDescriptionBuilder;
 import gov.hhs.fha.nhinc.docquery.aspect.AdhocQueryResponseDescriptionBuilder;
 import gov.hhs.fha.nhinc.docquery.inbound.InboundDocQuery;
 import ihe.iti.xds_b._2007.RespondingGatewayQueryPortType;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
+import javax.xml.bind.JAXBException;
+import javax.xml.namespace.QName;
 import javax.xml.ws.BindingType;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.soap.Addressing;
 import javax.xml.ws.soap.SOAPBinding;
 import oasis.names.tc.ebxml_regrep.xsd.query._3.AdhocQueryRequest;
 import oasis.names.tc.ebxml_regrep.xsd.query._3.AdhocQueryResponse;
+import org.apache.cxf.headers.Header;
+import org.apache.cxf.jaxb.JAXBDataBinding;
 
 /**
  *
@@ -61,14 +69,17 @@ public class DocQuery implements RespondingGatewayQueryPortType {
         version = "3.0")
     @Override
     public AdhocQueryResponse respondingGatewayCrossGatewayQuery(AdhocQueryRequest body) {
-        return new DocQueryImpl(inboundDocQuery).respondingGatewayCrossGatewayQuery(body, context);
+        AdhocQueryResponse response = new DocQueryImpl(inboundDocQuery).respondingGatewayCrossGatewayQuery(body, context);
+        
+        setHeaderForContext();
+        return response;
     }
 
     @Resource
     public void setContext(WebServiceContext context) {
         this.context = context;
     }
-
+ 
     public void setInboundDocQuery(InboundDocQuery inboundDocQuery) {
         this.inboundDocQuery = inboundDocQuery;
     }
@@ -80,5 +91,21 @@ public class DocQuery implements RespondingGatewayQueryPortType {
      */
     public InboundDocQuery getInboundDocQuery() {
         return this.inboundDocQuery;
+    }
+    
+    public void setHeaderForContext() {
+        try {
+            List<Header> headers = (List<Header>) context.getMessageContext().get(Header.HEADER_LIST);
+            if(headers == null) {
+                headers = new ArrayList<>();
+            }
+            
+            Header dummyHeader = new Header(new QName("uri:org.apache.cxf", "dummy"), "decapitated",
+                    new JAXBDataBinding(String.class));
+            headers.add(dummyHeader);
+            context.getMessageContext().put(Header.HEADER_LIST, headers);
+        } catch (JAXBException ex) {
+           //nothing for now
+        }
     }
 }

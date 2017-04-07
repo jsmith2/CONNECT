@@ -47,6 +47,9 @@
         <jaxws:inInterceptors>
             <ref bean="securityConfigInInterceptor" />
         </jaxws:inInterceptors>
+        <jaxws:outInterceptors>
+            <ref bean="testInterceptor" />
+        </jaxws:outInterceptors>
         <jaxws:handlers>
             <ref bean="SOAPHeaderHandler" />
             <ref bean="TransactionHandler" />
