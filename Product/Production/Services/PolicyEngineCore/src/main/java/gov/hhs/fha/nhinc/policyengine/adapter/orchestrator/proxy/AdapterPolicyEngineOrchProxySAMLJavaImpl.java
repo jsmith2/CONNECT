@@ -29,23 +29,21 @@ package gov.hhs.fha.nhinc.policyengine.adapter.orchestrator.proxy;
 import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
 import gov.hhs.fha.nhinc.common.nhinccommonadapter.CheckPolicyRequestType;
 import gov.hhs.fha.nhinc.common.nhinccommonadapter.CheckPolicyResponseType;
-import gov.hhs.fha.nhinc.policyengine.adapter.orchestrator.util.policyEngineUtil;
+import gov.hhs.fha.nhinc.policyengine.adapter.orchestrator.util.PolicyEngineUtil;
 
 /**
  * @author achidambaram
  *
  */
-public class AdapterPolicyEngineOrchProxySAMLJavaImpl implements AdapterPolicyEngineOrchProxy{
+public class AdapterPolicyEngineOrchProxySAMLJavaImpl implements AdapterPolicyEngineOrchProxy {
 
     /* (non-Javadoc)
      * @see gov.hhs.fha.nhinc.policyengine.adapter.orchestrator.proxy.AdapterPolicyEngineOrchProxy#checkPolicy(gov.hhs.fha.nhinc.common.nhinccommonadapter.CheckPolicyRequestType, gov.hhs.fha.nhinc.common.nhinccommon.AssertionType)
      */
     @Override
     public CheckPolicyResponseType checkPolicy(CheckPolicyRequestType checkPolicyRequest, AssertionType assertion) {
-        CheckPolicyResponseType oResponse = new CheckPolicyResponseType();
-        policyEngineUtil util = new policyEngineUtil();
-        oResponse = util.checkAssertionAttributeStatement(assertion);
-        return oResponse;
+        PolicyEngineUtil util = new PolicyEngineUtil();
+        return util.checkAssertionAttributeStatement(assertion);
     }
 
 }

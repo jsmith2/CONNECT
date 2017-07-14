@@ -97,7 +97,7 @@ public class AsyncMsgRecordDao {
      */
     public List<AsyncMsgRecord> queryByMessageIdAndDirection(String messageId, String direction) {
         LOG.debug(
-                "Performing database record retrieve using message id: " + messageId + " and direction: " + direction);
+            "Performing database record retrieve using message id: " + messageId + " and direction: " + direction);
 
         List<AsyncMsgRecord> asyncMsgRecs = null;
         Session sess = null;
@@ -115,7 +115,7 @@ public class AsyncMsgRecordDao {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Completed database record retrieve by message id. Results found: "
-                        + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
+                    + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
             }
         } finally {
             if (sess != null) {
@@ -139,7 +139,7 @@ public class AsyncMsgRecordDao {
      */
     public List<AsyncMsgRecord> queryByMessageIdAndServiceName(String messageId, String serviceName) {
         LOG.debug("Performing database record retrieve using message id: " + messageId + "and service name: "
-                + serviceName);
+            + serviceName);
 
         List<AsyncMsgRecord> asyncMsgRecs = null;
         Session sess = null;
@@ -157,7 +157,7 @@ public class AsyncMsgRecordDao {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Completed database record retrieve by message id and service name. Results found: "
-                        + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
+                    + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
             }
         } finally {
             if (sess != null) {
@@ -196,7 +196,7 @@ public class AsyncMsgRecordDao {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Completed database record retrieve by timestamp. Results found: "
-                        + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
+                    + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
             }
         } finally {
             if (sess != null) {
@@ -235,7 +235,7 @@ public class AsyncMsgRecordDao {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Completed database record retrieve by timestamp. Results found: "
-                        + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
+                    + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
             }
         } finally {
             if (sess != null) {
@@ -272,7 +272,7 @@ public class AsyncMsgRecordDao {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Completed database record retrieve for deferred queue manager processing. Results found: "
-                        + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
+                    + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
             }
         } finally {
             if (sess != null) {
@@ -310,7 +310,7 @@ public class AsyncMsgRecordDao {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Completed database record retrieve for deferred queue manager selected. Results found: "
-                        + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
+                    + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
             }
         } finally {
             if (sess != null) {
@@ -397,7 +397,7 @@ public class AsyncMsgRecordDao {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Completed database record retrieve by criteria. Results found: "
-                        + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
+                    + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
             }
         } finally {
             if (sess != null) {
@@ -451,7 +451,11 @@ public class AsyncMsgRecordDao {
             } finally {
                 // Actual insertion will happen at this step
                 if (session != null) {
-                    session.close();
+                    try {
+                        session.close();
+                    } catch (HibernateException he) {
+                        LOG.error("Failed to close session: {}", he.getLocalizedMessage(), he);
+                    }
                 }
             }
         }
@@ -621,11 +625,11 @@ public class AsyncMsgRecordDao {
         String units = null;
         try {
             units = accessor.getProperty(NhincConstants.GATEWAY_PROPERTY_FILE,
-                    NhincConstants.ASYNC_DB_REC_EXP_VAL_UNITS_PROP);
+                NhincConstants.ASYNC_DB_REC_EXP_VAL_UNITS_PROP);
         } catch (PropertyAccessException ex) {
             LOG.error("Error: Failed to retrieve {} from property file {}: {}",
-                    NhincConstants.ASYNC_DB_REC_EXP_VAL_UNITS_PROP, NhincConstants.GATEWAY_PROPERTY_FILE,
-                    ex.getLocalizedMessage(), ex);
+                NhincConstants.ASYNC_DB_REC_EXP_VAL_UNITS_PROP, NhincConstants.GATEWAY_PROPERTY_FILE,
+                ex.getLocalizedMessage(), ex);
         }
         return units;
     }
@@ -637,11 +641,11 @@ public class AsyncMsgRecordDao {
         long value = 0;
         try {
             value = accessor.getPropertyLong(NhincConstants.GATEWAY_PROPERTY_FILE,
-                    NhincConstants.ASYNC_DB_REC_EXP_VAL_PROP);
+                NhincConstants.ASYNC_DB_REC_EXP_VAL_PROP);
         } catch (PropertyAccessException ex) {
             LOG.error("Error: Failed to retrieve {} from property file {}: {}",
-                    NhincConstants.ASYNC_DB_REC_EXP_VAL_PROP, NhincConstants.GATEWAY_PROPERTY_FILE,
-                    ex.getLocalizedMessage(), ex);
+                NhincConstants.ASYNC_DB_REC_EXP_VAL_PROP, NhincConstants.GATEWAY_PROPERTY_FILE,
+                ex.getLocalizedMessage(), ex);
         }
         return value;
     }

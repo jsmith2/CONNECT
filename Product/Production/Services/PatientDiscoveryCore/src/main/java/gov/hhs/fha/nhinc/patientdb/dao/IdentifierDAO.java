@@ -209,9 +209,12 @@ public class IdentifierDAO {
             // Flush and close session
             if (session != null) {
 
-                session.flush();
-
-                session.close();
+                try {
+                    session.flush();
+                    session.close();
+                } catch (HibernateException he) {
+                    LOG.error("Failed to close session: {}", he.getLocalizedMessage(), he);
+                }
 
             }
 

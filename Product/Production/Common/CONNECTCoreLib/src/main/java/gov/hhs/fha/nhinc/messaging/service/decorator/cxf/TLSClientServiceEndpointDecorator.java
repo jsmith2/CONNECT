@@ -28,7 +28,6 @@ package gov.hhs.fha.nhinc.messaging.service.decorator.cxf;
 
 import gov.hhs.fha.nhinc.messaging.service.ServiceEndpoint;
 import gov.hhs.fha.nhinc.messaging.service.decorator.ServiceEndpointDecorator;
-import org.apache.cxf.configuration.jsse.TLSClientParameters;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.transport.http.HTTPConduit;
@@ -60,7 +59,7 @@ public class TLSClientServiceEndpointDecorator<T> extends ServiceEndpointDecorat
      * @param paramFactory
      */
     public TLSClientServiceEndpointDecorator(ServiceEndpoint<T> decoratoredEndpoint,
-            TLSClientParametersFactory tlsClientFactory) {
+        TLSClientParametersFactory tlsClientFactory) {
         super(decoratoredEndpoint);
         this.tlsClientFactory = tlsClientFactory;
     }
@@ -71,11 +70,18 @@ public class TLSClientServiceEndpointDecorator<T> extends ServiceEndpointDecorat
     @Override
     public void configure() {
         super.configure();
+        getHttpConduit().setTlsClientParameters(tlsClientFactory.getTLSClientParameters());
+    }
+    protected HTTPConduit getHttpConduit(){
         Client client = ClientProxy.getClient(getPort());
-        HTTPConduit conduit = (HTTPConduit) client.getConduit();
-        TLSClientParameters tlsCP = tlsClientFactory.getTLSClientParameters();
+        return (HTTPConduit) client.getConduit();
+    }
 
-        conduit.setTlsClientParameters(tlsCP);
+    /**
+     * @return the tlsClientFactory
+     */
+    public TLSClientParametersFactory getTlsClientFactory() {
+        return tlsClientFactory;
     }
 
 }

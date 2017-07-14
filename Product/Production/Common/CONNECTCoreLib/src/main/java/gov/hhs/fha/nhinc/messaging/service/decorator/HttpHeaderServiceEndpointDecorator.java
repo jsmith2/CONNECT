@@ -84,14 +84,14 @@ public class HttpHeaderServiceEndpointDecorator<T> extends ServiceEndpointDecora
             keepAlive = getKeepAliveProperty();
         }
 
-        return ("TRUE".equalsIgnoreCase(keepAlive) || "T".equalsIgnoreCase(keepAlive));
+        return "TRUE".equalsIgnoreCase(keepAlive) || "T".equalsIgnoreCase(keepAlive);
     }
 
     private String getKeepAliveProperty() {
         try {
             return getPropertyAccessor().getProperty(NhincConstants.GATEWAY_PROPERTY_FILE, NhincConstants.KEEP_ALIVE_PROP);
         } catch (PropertyAccessException ex) {
-            LOG.warn("Unable to access property: {}", NhincConstants.KEEP_ALIVE_PROP, ex.getLocalizedMessage());
+            LOG.warn("Unable to access property: {} {}", NhincConstants.KEEP_ALIVE_PROP, ex.getLocalizedMessage(),ex);
             return null;
         }
     }
@@ -105,7 +105,7 @@ public class HttpHeaderServiceEndpointDecorator<T> extends ServiceEndpointDecora
                 addPropertiesToCustomHeaders(allPropNames, customHeaders);
             }
         } catch (PropertyAccessException ex) {
-            LOG.warn("Unable to access properties for custom http headers.", ex.getLocalizedMessage());
+            LOG.warn("Unable to access properties for custom http headers.{}", ex.getLocalizedMessage(),ex);
         }
 
         for (CONNECTCustomHttpHeadersType header : assertion.getCONNECTCustomHttpHeaders()) {

@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.connectopensource</groupId>
         <artifactId>Adapters</artifactId>
-        <version>5.0-SNAPSHOT</version>
+        <version>5.1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>General</artifactId>
@@ -13,8 +13,6 @@
 
     <modules>
         <module>CONNECTAdapterWeb</module>
-        <module>CONNECTAdapterPDPOpenSSO</module>
-        <module>CONNECTConsumerPreferencesProfileGUI</module>
         <module>CONNECTDeferredQueueManagerGUI</module>        
         <module>CONNECTAdminGUI</module>
         <module>CONNECTDirectConfig</module>

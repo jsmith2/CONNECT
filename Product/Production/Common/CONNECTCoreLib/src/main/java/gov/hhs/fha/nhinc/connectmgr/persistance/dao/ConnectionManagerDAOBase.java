@@ -26,13 +26,17 @@
  */
 package gov.hhs.fha.nhinc.connectmgr.persistance.dao;
 
+import gov.hhs.fha.nhinc.util.JAXBUnmarshallingUtil;
+import gov.hhs.fha.nhinc.util.StreamUtils;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.stream.XMLStreamException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uddi.api_v3.BusinessDetail;
@@ -47,27 +51,38 @@ public class ConnectionManagerDAOBase {
     private static final Logger LOG = LoggerFactory.getLogger(ConnectionManagerDAOBase.class);
 
     protected BusinessDetail loadBusinessDetail(File file) throws JAXBException {
-        BusinessDetail resp;
-        synchronized (file) {
-            JAXBContext context = JAXBContext.newInstance(BusinessDetail.class);
-            Unmarshaller unmarshaller = context.createUnmarshaller();
-            JAXBElement<BusinessDetail> jaxbElement = unmarshaller.unmarshal(new StreamSource(file),
-                    BusinessDetail.class);
-            resp = jaxbElement.getValue();
-        }
-        return resp;
-    }
+        BusinessDetail resp = null;
+        FileInputStream inputStream = null;
 
-    protected void saveBusinessDetail(BusinessDetail BusinessDetail, File file) {
         try {
             synchronized (file) {
                 JAXBContext context = JAXBContext.newInstance(BusinessDetail.class);
-                ObjectFactory factory = new ObjectFactory();
-                Marshaller marshaller = context.createMarshaller();
+                Unmarshaller unmarshaller = context.createUnmarshaller();
+                JAXBUnmarshallingUtil util = new JAXBUnmarshallingUtil();
+                inputStream = new FileInputStream(file);
+                JAXBElement<BusinessDetail> jaxbElement = unmarshaller
+                        .unmarshal(util.getSafeStreamReaderFromInputStream(inputStream), BusinessDetail.class);
+                resp = jaxbElement.getValue();
+            }
+        } catch (FileNotFoundException | XMLStreamException e) {
+            LOG.error("Exception in reading/parsing Connection Information file: {}", e.getLocalizedMessage(), e);
+        } finally {
+            StreamUtils.closeStreamSilently(inputStream);
+        }
+        return resp;
+
+    }
+
+    protected void saveBusinessDetail(final BusinessDetail BusinessDetail, final File file) {
+        try {
+            synchronized (file) {
+                final JAXBContext context = JAXBContext.newInstance(BusinessDetail.class);
+                final ObjectFactory factory = new ObjectFactory();
+                final Marshaller marshaller = context.createMarshaller();
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
                 marshaller.marshal(factory.createBusinessDetail(BusinessDetail), file);
             }
-        } catch (JAXBException ex) {
+        } catch (final JAXBException ex) {
             throw new RuntimeException("Unable to save to Connection Information File " + file.getName(), ex);
         }
 
