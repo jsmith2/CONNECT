@@ -112,7 +112,7 @@ public class StandardOutboundPatientDiscoveryTest {
         when(mockOrchestratable.getRequest()).thenReturn(request.getPRPAIN201305UV02());
         when(mockOrchestratable.getTarget()).thenReturn(target);
         RespondingGatewayPRPAIN201306UV02ResponseType actualMessage = standardPD.respondingGatewayPRPAIN201305UV02(
-            request, assertion);
+            request, assertion).getResponse();
         assertNotNull("Assertion MessageId is null", assertion.getMessageId());
         verify(mockEJBLogger).auditRequestMessage(eq(request.getPRPAIN201305UV02()), any(AssertionType.class), any(
             NhinTargetSystemType.class), eq(NhincConstants.AUDIT_LOG_OUTBOUND_DIRECTION),
@@ -133,7 +133,7 @@ public class StandardOutboundPatientDiscoveryTest {
         when(delegate.process(any(OutboundPatientDiscoveryOrchestratable.class))).thenReturn(outOrchestratable);
         StandardOutboundPatientDiscovery standardPatientDiscovery = createStandardPDObj(getAuditLogger(false));
         RespondingGatewayPRPAIN201306UV02ResponseType actualMessage = standardPatientDiscovery
-            .respondingGatewayPRPAIN201305UV02(request, assertion);
+            .respondingGatewayPRPAIN201305UV02(request, assertion).getResponse();
         assertNotNull("Assertion MessageId is null", assertion.getMessageId());
         verify(mockEJBLogger, never()).auditRequestMessage(any(PRPAIN201305UV02.class), any(AssertionType.class),
             any(NhinTargetSystemType.class), eq(NhincConstants.AUDIT_LOG_OUTBOUND_DIRECTION),

@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executors;
+import org.apache.cxf.headers.Header;
 import org.junit.Test;
 
 /**

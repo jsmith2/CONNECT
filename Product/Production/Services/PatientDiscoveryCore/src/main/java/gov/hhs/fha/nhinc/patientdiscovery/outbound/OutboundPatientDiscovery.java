@@ -27,9 +27,9 @@
 package gov.hhs.fha.nhinc.patientdiscovery.outbound;
 
 import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
+import gov.hhs.fha.nhinc.patientdiscovery.entity.wrapper.RespondingGatewayPatientDiscoveryWrapper;
 import java.util.concurrent.ExecutorService;
 import org.hl7.v3.RespondingGatewayPRPAIN201305UV02RequestType;
-import org.hl7.v3.RespondingGatewayPRPAIN201306UV02ResponseType;
 
 /**
  * @author akong
@@ -37,7 +37,7 @@ import org.hl7.v3.RespondingGatewayPRPAIN201306UV02ResponseType;
  */
 public interface OutboundPatientDiscovery {
 
-    public RespondingGatewayPRPAIN201306UV02ResponseType respondingGatewayPRPAIN201305UV02(
+    public RespondingGatewayPatientDiscoveryWrapper respondingGatewayPRPAIN201305UV02(
             RespondingGatewayPRPAIN201305UV02RequestType request, AssertionType assertion);
 
     public void setExecutorService(ExecutorService regularExecutor, ExecutorService largeJobExecutor);

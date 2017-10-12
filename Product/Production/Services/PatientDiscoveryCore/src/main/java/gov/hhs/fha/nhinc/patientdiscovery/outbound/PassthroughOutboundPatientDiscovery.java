@@ -36,8 +36,12 @@ import gov.hhs.fha.nhinc.patientdiscovery.MessageGeneratorUtils;
 import gov.hhs.fha.nhinc.patientdiscovery.audit.PatientDiscoveryAuditLogger;
 import gov.hhs.fha.nhinc.patientdiscovery.entity.OutboundPatientDiscoveryDelegate;
 import gov.hhs.fha.nhinc.patientdiscovery.entity.OutboundPatientDiscoveryOrchestratable;
+import gov.hhs.fha.nhinc.patientdiscovery.entity.wrapper.RespondingGatewayPatientDiscoveryWrapper;
 import gov.hhs.fha.nhinc.transform.subdisc.HL7PRPA201306Transforms;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
+import org.apache.cxf.headers.Header;
 import org.hl7.v3.CommunityPRPAIN201306UV02ResponseType;
 import org.hl7.v3.PRPAIN201305UV02;
 import org.hl7.v3.PRPAIN201306UV02;
@@ -71,11 +75,11 @@ public class PassthroughOutboundPatientDiscovery implements OutboundPatientDisco
     }
 
     @Override
-    public RespondingGatewayPRPAIN201306UV02ResponseType respondingGatewayPRPAIN201305UV02(
+    public RespondingGatewayPatientDiscoveryWrapper respondingGatewayPRPAIN201305UV02(
         RespondingGatewayPRPAIN201305UV02RequestType request, AssertionType assertion) {
         auditRequest(request, assertion,
                 msgUtils.convertFirstToNhinTargetSystemType(request.getNhinTargetCommunities()));
-        RespondingGatewayPRPAIN201306UV02ResponseType response = sendToNhin(request.getPRPAIN201305UV02(),
+        RespondingGatewayPatientDiscoveryWrapper response = sendToNhin(request.getPRPAIN201305UV02(),
             MessageGeneratorUtils.getInstance().generateMessageId(assertion),
             msgUtils.convertFirstToNhinTargetSystemType(request.getNhinTargetCommunities()));
         return response;
@@ -86,9 +90,10 @@ public class PassthroughOutboundPatientDiscovery implements OutboundPatientDisco
         // Do nothing. Passthrough does not do fan out.
     }
 
-    private RespondingGatewayPRPAIN201306UV02ResponseType sendToNhin(PRPAIN201305UV02 request, AssertionType assertion,
+    private RespondingGatewayPatientDiscoveryWrapper sendToNhin(PRPAIN201305UV02 request, AssertionType assertion,
         NhinTargetSystemType target) {
         PRPAIN201306UV02 response;
+        List<Header> headers = new ArrayList<>();
 
         try {
             OutboundPatientDiscoveryOrchestratable inMessage = new OutboundPatientDiscoveryOrchestratable(delegate,
@@ -96,16 +101,17 @@ public class PassthroughOutboundPatientDiscovery implements OutboundPatientDisco
                 NhincConstants.PATIENT_DISCOVERY_SERVICE_NAME, target, request);
             OutboundPatientDiscoveryOrchestratable outMessage = delegate.process(inMessage);
             response = outMessage.getResponse();
+            headers = outMessage.getResponseHeaders();
         } catch (Exception ex) {
             String err = ExecutorServiceHelper.getFormattedExceptionInfo(ex, target,
                 NhincConstants.PATIENT_DISCOVERY_SERVICE_NAME);
             response = generateErrorResponse(target, request, err);
         }
 
-        return convert(response, target);
+        return convert(response, target, headers);
     }
 
-    private RespondingGatewayPRPAIN201306UV02ResponseType convert(PRPAIN201306UV02 response, NhinTargetSystemType target) {
+    private RespondingGatewayPatientDiscoveryWrapper convert(PRPAIN201306UV02 response, NhinTargetSystemType target, List<Header> headers) {
         String hcid = getHCID(target);
         CommunityPRPAIN201306UV02ResponseType communityResponse = msgUtils
             .createCommunityPRPAIN201306UV02ResponseType(hcid);
@@ -113,8 +119,12 @@ public class PassthroughOutboundPatientDiscovery implements OutboundPatientDisco
 
         RespondingGatewayPRPAIN201306UV02ResponseType gatewayResponse = new RespondingGatewayPRPAIN201306UV02ResponseType();
         gatewayResponse.getCommunityResponse().add(communityResponse);
-
-        return gatewayResponse;
+        
+        RespondingGatewayPatientDiscoveryWrapper pdWrapper = new RespondingGatewayPatientDiscoveryWrapper();
+        pdWrapper.setResponse(gatewayResponse);
+        pdWrapper.setResponseHeaders(headers);
+        
+        return pdWrapper;
     }
 
     private String getHCID(NhinTargetSystemType target) {

@@ -60,7 +60,7 @@ public class EntityPatientDiscoveryProxyJavaImpl implements EntityPatientDiscove
             processorRequest.setPRPAIN201305UV02(pdRequest);
             processorRequest.setAssertion(assertion);
             processorRequest.setNhinTargetCommunities(targetCommunities);
-            response = processor.respondingGatewayPRPAIN201305UV02(processorRequest, assertion);
+            response = processor.respondingGatewayPRPAIN201305UV02(processorRequest, assertion).getResponse();
         }
         LOG.debug("End respondingGatewayPRPAIN201305UV02");
         return response;

@@ -27,6 +27,8 @@
 package gov.hhs.fha.nhinc.orchestration;
 
 import com.google.common.base.Optional;
+import java.util.List;
+import org.apache.cxf.headers.Header;
 
 /**
  * Used for concurrent task executor based orchestrator implementations

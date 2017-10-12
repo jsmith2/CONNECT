@@ -33,6 +33,7 @@ import gov.hhs.fha.nhinc.messaging.server.BaseService;
 import gov.hhs.fha.nhinc.patientdiscovery._10.entity.EntityPatientDiscoveryImpl;
 import gov.hhs.fha.nhinc.patientdiscovery.aspect.PRPAIN201305UV02ArgTransformer;
 import gov.hhs.fha.nhinc.patientdiscovery.aspect.RespondingGatewayPRPAIN201306UV02Builder;
+import gov.hhs.fha.nhinc.patientdiscovery.entity.wrapper.RespondingGatewayPatientDiscoveryWrapper;
 import gov.hhs.fha.nhinc.patientdiscovery.outbound.OutboundPatientDiscovery;
 import javax.annotation.Resource;
 import javax.xml.ws.BindingType;
@@ -63,8 +64,11 @@ public class EntityPatientDiscoveryUnsecured extends BaseService implements Enti
 
         AssertionType assertion = getAssertion(context, request.getAssertion());
 
-        return new EntityPatientDiscoveryImpl(outboundPatientDiscovery).respondingGatewayPRPAIN201305UV02(request,
+        RespondingGatewayPatientDiscoveryWrapper respondingPdWrapper = new EntityPatientDiscoveryImpl(outboundPatientDiscovery).respondingGatewayPRPAIN201305UV02(request,
             assertion);
+        addSoapHeaders("patientDiscovery", respondingPdWrapper.getResponseHeaders(), context);
+        
+        return respondingPdWrapper.getResponse();
     }
 
     public void setOutboundPatientDiscovery(OutboundPatientDiscovery outboundPatientDiscovery) {

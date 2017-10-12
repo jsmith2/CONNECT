@@ -27,6 +27,7 @@
 package gov.hhs.fha.nhinc.patientdiscovery.outbound;
 
 import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
+import gov.hhs.fha.nhinc.patientdiscovery.entity.wrapper.RespondingGatewayPatientDiscoveryWrapper;
 import java.util.concurrent.ExecutorService;
 import org.hl7.v3.RespondingGatewayPRPAIN201305UV02RequestType;
 import org.hl7.v3.RespondingGatewayPRPAIN201306UV02ResponseType;
@@ -38,9 +39,9 @@ import org.hl7.v3.RespondingGatewayPRPAIN201306UV02ResponseType;
 public class TestOutboundPatientDiscovery implements OutboundPatientDiscovery {
 
     @Override
-    public RespondingGatewayPRPAIN201306UV02ResponseType respondingGatewayPRPAIN201305UV02(
+    public RespondingGatewayPatientDiscoveryWrapper respondingGatewayPRPAIN201305UV02(
             RespondingGatewayPRPAIN201305UV02RequestType request, AssertionType assertion) {
-        return new RespondingGatewayPRPAIN201306UV02ResponseType();
+        return new RespondingGatewayPatientDiscoveryWrapper(new RespondingGatewayPRPAIN201306UV02ResponseType());
     }
 
     @Override

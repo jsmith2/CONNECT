@@ -32,9 +32,11 @@ import gov.hhs.fha.nhinc.common.nhinccommon.NhinTargetSystemType;
 import gov.hhs.fha.nhinc.connectmgr.ConnectionManagerCache;
 import gov.hhs.fha.nhinc.messaging.client.CONNECTClient;
 import gov.hhs.fha.nhinc.messaging.client.CONNECTClientFactory;
+import gov.hhs.fha.nhinc.messaging.client.interceptor.SoapResponseInInterceptor;
 import gov.hhs.fha.nhinc.messaging.service.port.ServicePortDescriptor;
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
 import gov.hhs.fha.nhinc.nhinclib.NullChecker;
+import gov.hhs.fha.nhinc.patientdiscovery.adapter.wrapper.PatientDiscoveryResponseWrapper;
 import gov.hhs.fha.nhinc.patientdiscovery.aspect.PRPAIN201305UV02EventDescriptionBuilder;
 import gov.hhs.fha.nhinc.patientdiscovery.aspect.PRPAIN201306UV02EventDescriptionBuilder;
 import gov.hhs.fha.nhinc.patientdiscovery.nhin.proxy.service.RespondingGatewayServicePortDescriptor;
@@ -60,9 +62,9 @@ public class NhinPatientDiscoveryProxyWebServiceSecuredImpl implements NhinPatie
 
     @Override
     @NwhinInvocationEvent(beforeBuilder = PRPAIN201305UV02EventDescriptionBuilder.class, afterReturningBuilder = PRPAIN201306UV02EventDescriptionBuilder.class, serviceType = "Patient Discovery", version = "1.0")
-    public PRPAIN201306UV02 respondingGatewayPRPAIN201305UV02(PRPAIN201305UV02 request, AssertionType assertion,
+    public PatientDiscoveryResponseWrapper respondingGatewayPRPAIN201305UV02(PRPAIN201305UV02 request, AssertionType assertion,
             NhinTargetSystemType target) throws Exception {
-        PRPAIN201306UV02 response = new PRPAIN201306UV02();
+        PatientDiscoveryResponseWrapper pdResponse = new PatientDiscoveryResponseWrapper(new PRPAIN201306UV02());
 
         try {
             if (request != null && target != null) {
@@ -83,8 +85,9 @@ public class NhinPatientDiscoveryProxyWebServiceSecuredImpl implements NhinPatie
                     CONNECTClient<RespondingGatewayPortType> client = getCONNECTSecuredClient(target, portDescriptor,
                             url, assertion);
 
-                    response = (PRPAIN201306UV02) client.invokePort(RespondingGatewayPortType.class,
-                            "respondingGatewayPRPAIN201305UV02", request);
+                    pdResponse.setResponseMessage((PRPAIN201306UV02) client.invokePort(RespondingGatewayPortType.class,
+                            "respondingGatewayPRPAIN201305UV02", request));
+                    pdResponse.setResponseHeaders(SoapResponseInInterceptor.getResponseHeaders(client.getPort()));
                 } else {
                     LOG.error("Failed to call the web service (" + NhincConstants.PATIENT_DISCOVERY_SERVICE_NAME
                             + ").  The URL is null.");
@@ -99,6 +102,6 @@ public class NhinPatientDiscoveryProxyWebServiceSecuredImpl implements NhinPatie
             throw e;
         }
 
-        return response;
+        return pdResponse;
     }
 }

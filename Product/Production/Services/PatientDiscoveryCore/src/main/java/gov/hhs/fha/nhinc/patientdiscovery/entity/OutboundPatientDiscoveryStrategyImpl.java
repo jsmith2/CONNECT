@@ -28,6 +28,7 @@ package gov.hhs.fha.nhinc.patientdiscovery.entity;
 
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants.GATEWAY_API_LEVEL;
+import gov.hhs.fha.nhinc.patientdiscovery.adapter.wrapper.PatientDiscoveryResponseWrapper;
 import gov.hhs.fha.nhinc.patientdiscovery.nhin.proxy.NhinPatientDiscoveryProxy;
 import gov.hhs.fha.nhinc.patientdiscovery.nhin.proxy.NhinPatientDiscoveryProxyObjectFactory;
 import gov.hhs.fha.nhinc.transform.subdisc.HL7PRPA201306Transforms;
@@ -69,8 +70,11 @@ public class OutboundPatientDiscoveryStrategyImpl extends OutboundPatientDiscove
             message.getTarget().setUrl(url);
             LOG.debug("executeStrategy sending nhin patient discovery request to target hcid={} at url={}",
                 message.getTarget().getHomeCommunity().getHomeCommunityId(), url);
-            message.setResponse(proxy.respondingGatewayPRPAIN201305UV02(message.getRequest(), message.getAssertion(),
-                message.getTarget()));
+            
+            PatientDiscoveryResponseWrapper pdWrapper = proxy.respondingGatewayPRPAIN201305UV02(message.getRequest(), message.getAssertion(),
+                message.getTarget());
+            message.setResponse(pdWrapper.getResponseMessage());
+            message.setResponseHeaders(pdWrapper.getResponseHeaders());
             LOG.debug("executeStrategy returning response");
         } catch (Exception ex) {
             PRPAIN201306UV02 response = new HL7PRPA201306Transforms().createPRPA201306ForErrors(message.getRequest(),

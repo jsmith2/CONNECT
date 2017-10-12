@@ -77,7 +77,7 @@ public class PassthroughOutboundPatientDiscoveryTest {
         PassthroughOutboundPatientDiscovery passthroughPatientDiscovery = new PassthroughOutboundPatientDiscovery(
             delegate, auditLogger);
         RespondingGatewayPRPAIN201306UV02ResponseType actualMessage = passthroughPatientDiscovery
-            .respondingGatewayPRPAIN201305UV02(request, assertion);
+            .respondingGatewayPRPAIN201305UV02(request, assertion).getResponse();
 
         assertSame(outOrchestratable.getResponse(), actualMessage.getCommunityResponse().get(0).getPRPAIN201306UV02());
         assertNotNull("Assertion MessageId is null", assertion.getMessageId());
@@ -102,7 +102,7 @@ public class PassthroughOutboundPatientDiscoveryTest {
         PassthroughOutboundPatientDiscovery passthroughPatientDiscovery = new PassthroughOutboundPatientDiscovery(
             delegate, auditLogger);
         RespondingGatewayPRPAIN201306UV02ResponseType actualMessage = passthroughPatientDiscovery
-            .respondingGatewayPRPAIN201305UV02(request, assertion);
+            .respondingGatewayPRPAIN201305UV02(request, assertion).getResponse();
 
         assertSame(outOrchestratable.getResponse(), actualMessage.getCommunityResponse().get(0).getPRPAIN201306UV02());
         assertNotNull("Assertion MessageId is null", assertion.getMessageId());

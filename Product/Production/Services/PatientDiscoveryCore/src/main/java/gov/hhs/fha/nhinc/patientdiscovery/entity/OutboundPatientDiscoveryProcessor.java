@@ -293,6 +293,7 @@ public class OutboundPatientDiscoveryProcessor implements OutboundResponseProces
             communityResponse.setPRPAIN201306UV02(current);
 
             cumulativeResponse.getCumulativeResponse().getCommunityResponse().add(communityResponse);
+            cumulativeResponse.addResponseHeaders(individual.getResponseHeaders());
             LOG.debug("EntityPatientDiscoveryProcessor::aggregateResponse combine next response done cumulativeResponse count="
                 + count);
         } else {

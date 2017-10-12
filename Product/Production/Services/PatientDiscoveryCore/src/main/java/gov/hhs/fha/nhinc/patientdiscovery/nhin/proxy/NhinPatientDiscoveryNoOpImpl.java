@@ -29,6 +29,7 @@ package gov.hhs.fha.nhinc.patientdiscovery.nhin.proxy;
 import gov.hhs.fha.nhinc.aspect.NwhinInvocationEvent;
 import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
 import gov.hhs.fha.nhinc.common.nhinccommon.NhinTargetSystemType;
+import gov.hhs.fha.nhinc.patientdiscovery.adapter.wrapper.PatientDiscoveryResponseWrapper;
 import gov.hhs.fha.nhinc.patientdiscovery.aspect.PRPAIN201305UV02EventDescriptionBuilder;
 import gov.hhs.fha.nhinc.patientdiscovery.aspect.PRPAIN201306UV02EventDescriptionBuilder;
 import org.hl7.v3.PRPAIN201305UV02;
@@ -44,9 +45,9 @@ public class NhinPatientDiscoveryNoOpImpl implements NhinPatientDiscoveryProxy {
             afterReturningBuilder = PRPAIN201306UV02EventDescriptionBuilder.class, serviceType = "Patient Discovery",
             version = "1.0")
     @Override
-    public PRPAIN201306UV02 respondingGatewayPRPAIN201305UV02(PRPAIN201305UV02 request, AssertionType assertion,
+    public PatientDiscoveryResponseWrapper respondingGatewayPRPAIN201305UV02(PRPAIN201305UV02 request, AssertionType assertion,
             NhinTargetSystemType target) {
-        return new PRPAIN201306UV02();
+        return new PatientDiscoveryResponseWrapper(new PRPAIN201306UV02());
     }
 
 }

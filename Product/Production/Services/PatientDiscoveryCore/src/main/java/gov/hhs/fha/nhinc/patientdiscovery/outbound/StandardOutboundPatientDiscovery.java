@@ -54,6 +54,7 @@ import gov.hhs.fha.nhinc.patientdiscovery.audit.PatientDiscoveryAuditLogger;
 import gov.hhs.fha.nhinc.patientdiscovery.entity.OutboundPatientDiscoveryDelegate;
 import gov.hhs.fha.nhinc.patientdiscovery.entity.OutboundPatientDiscoveryOrchestratable;
 import gov.hhs.fha.nhinc.patientdiscovery.entity.OutboundPatientDiscoveryProcessor;
+import gov.hhs.fha.nhinc.patientdiscovery.entity.wrapper.RespondingGatewayPatientDiscoveryWrapper;
 import gov.hhs.fha.nhinc.properties.PropertyAccessException;
 import gov.hhs.fha.nhinc.properties.PropertyAccessor;
 import gov.hhs.fha.nhinc.transform.subdisc.HL7DataTransformHelper;
@@ -115,11 +116,11 @@ public class StandardOutboundPatientDiscovery implements OutboundPatientDiscover
 
     @Override
     @OutboundProcessingEvent(beforeBuilder = PRPAIN201305UV02ArgTransformer.class, afterReturningBuilder = RespondingGatewayPRPAIN201306UV02Builder.class, serviceType = "Patient Discovery", version = "1.0")
-    public RespondingGatewayPRPAIN201306UV02ResponseType respondingGatewayPRPAIN201305UV02(
+    public RespondingGatewayPatientDiscoveryWrapper respondingGatewayPRPAIN201305UV02(
             final RespondingGatewayPRPAIN201305UV02RequestType request, final AssertionType assertion) {
 
         LOG.debug("Begin respondingGatewayPRPAIN201305UV02");
-        RespondingGatewayPRPAIN201306UV02ResponseType response = new RespondingGatewayPRPAIN201306UV02ResponseType();
+        RespondingGatewayPatientDiscoveryWrapper response = new RespondingGatewayPatientDiscoveryWrapper(new RespondingGatewayPRPAIN201306UV02ResponseType());
 
         try {
             if (request == null) {
@@ -135,7 +136,7 @@ public class StandardOutboundPatientDiscovery implements OutboundPatientDiscover
             LOG.error("Exception occurred while getting responses", e);
 
             // generate error message and add to response
-            addErrorMessageToResponse(request, response, e);
+            addErrorMessageToResponse(request, response.getResponse(), e);
         }
         LOG.debug("End respondingGatewayPRPAIN201305UV02");
         return response;
@@ -155,11 +156,11 @@ public class StandardOutboundPatientDiscovery implements OutboundPatientDiscover
     }
 
     @SuppressWarnings("static-access")
-    protected RespondingGatewayPRPAIN201306UV02ResponseType getResponseFromCommunities(
+    protected RespondingGatewayPatientDiscoveryWrapper getResponseFromCommunities(
             final RespondingGatewayPRPAIN201305UV02RequestType request, final AssertionType assertion) {
         LOG.debug("Begin getResponseFromCommunities");
 
-        RespondingGatewayPRPAIN201306UV02ResponseType response = new RespondingGatewayPRPAIN201306UV02ResponseType();
+        RespondingGatewayPatientDiscoveryWrapper rWrapper = new RespondingGatewayPatientDiscoveryWrapper(new RespondingGatewayPRPAIN201306UV02ResponseType());
         final NhincConstants.GATEWAY_API_LEVEL gatewayLevel = getGatewayVersion();
         try {
             final List<UrlInfo> urlInfoList = getEndpoints(request.getNhinTargetCommunities());
@@ -208,19 +209,19 @@ public class StandardOutboundPatientDiscovery implements OutboundPatientDiscover
                             callableList, transactionId);
                     pdExecutor.executeTask();
                     LOG.debug("Aggregating all responses");
-                    response = getCumulativeResponse(pdExecutor);
+                    getCumulativeResponse(rWrapper, pdExecutor);
                 }
 
-                addPolicyErrorsToResponse(response, policyErrList);
+                addPolicyErrorsToResponse(rWrapper.getResponse(), policyErrList);
             }
         } catch (final Exception e) {
             LOG.error("Exception occurred while getting responses from communities", e);
 
-            addErrorMessageToResponse(request, response, e);
+            addErrorMessageToResponse(request, rWrapper.getResponse(), e);
         }
 
         LOG.debug("Exiting getResponseFromCommunities");
-        return response;
+        return rWrapper;
     }
 
     /**
@@ -280,10 +281,12 @@ public class StandardOutboundPatientDiscovery implements OutboundPatientDiscover
         return communityResponse;
     }
 
-    protected RespondingGatewayPRPAIN201306UV02ResponseType getCumulativeResponse(
-            final NhinTaskExecutor<OutboundPatientDiscoveryOrchestratable, OutboundPatientDiscoveryOrchestratable> dqexecutor) {
-        final OutboundPatientDiscoveryOrchestratable orchResponse = dqexecutor.getFinalResponse();
-        return orchResponse.getCumulativeResponse();
+    protected void getCumulativeResponse(RespondingGatewayPatientDiscoveryWrapper rWrapper,
+            final NhinTaskExecutor<OutboundPatientDiscoveryOrchestratable, OutboundPatientDiscoveryOrchestratable> pdexecutor) {
+        
+        final OutboundPatientDiscoveryOrchestratable orchResponse = pdexecutor.getFinalResponse();
+        rWrapper.setResponse(orchResponse.getCumulativeResponse());
+        rWrapper.setResponseHeaders(orchResponse.getResponseHeaders());
     }
 
     protected void addPolicyErrorsToResponse(final RespondingGatewayPRPAIN201306UV02ResponseType response,

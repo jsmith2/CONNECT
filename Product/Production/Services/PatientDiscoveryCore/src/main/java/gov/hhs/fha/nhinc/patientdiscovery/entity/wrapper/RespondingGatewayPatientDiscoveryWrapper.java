@@ -24,27 +24,42 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.hhs.fha.nhinc.patientdiscovery._10.entity;
+package gov.hhs.fha.nhinc.patientdiscovery.entity.wrapper;
 
-import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
-import gov.hhs.fha.nhinc.gateway.servlet.InitServlet;
-import gov.hhs.fha.nhinc.patientdiscovery.entity.wrapper.RespondingGatewayPatientDiscoveryWrapper;
-import gov.hhs.fha.nhinc.patientdiscovery.outbound.OutboundPatientDiscovery;
-import org.hl7.v3.RespondingGatewayPRPAIN201305UV02RequestType;
+import java.util.List;
+import org.apache.cxf.headers.Header;
+import org.hl7.v3.RespondingGatewayPRPAIN201306UV02ResponseType;
 
-public class EntityPatientDiscoveryImpl {
+/**
+ *
+ * @author jasonsmith
+ */
+public class RespondingGatewayPatientDiscoveryWrapper {
 
-    private OutboundPatientDiscovery outboundPatientDiscovery;
+    private RespondingGatewayPRPAIN201306UV02ResponseType response;
+    private List<Header> responseHeaders;
 
-    public EntityPatientDiscoveryImpl(OutboundPatientDiscovery outboundPatientDiscovery) {
-        this.outboundPatientDiscovery = outboundPatientDiscovery;
-        this.outboundPatientDiscovery.setExecutorService(InitServlet.getExecutorService(),
-                InitServlet.getLargeJobExecutorService());
+    public RespondingGatewayPatientDiscoveryWrapper() {
+        
+    }
+    
+    public RespondingGatewayPatientDiscoveryWrapper(RespondingGatewayPRPAIN201306UV02ResponseType response) {
+        this.response = response;
+    }
+    
+    public RespondingGatewayPRPAIN201306UV02ResponseType getResponse() {
+        return response;
     }
 
-    public RespondingGatewayPatientDiscoveryWrapper respondingGatewayPRPAIN201305UV02(
-            RespondingGatewayPRPAIN201305UV02RequestType request, AssertionType assertion) {
+    public void setResponse(RespondingGatewayPRPAIN201306UV02ResponseType response) {
+        this.response = response;
+    }
 
-        return outboundPatientDiscovery.respondingGatewayPRPAIN201305UV02(request, assertion);
+    public List<Header> getResponseHeaders() {
+        return responseHeaders;
+    }
+
+    public void setResponseHeaders(List<Header> responseHeaders) {
+        this.responseHeaders = responseHeaders;
     }
 }

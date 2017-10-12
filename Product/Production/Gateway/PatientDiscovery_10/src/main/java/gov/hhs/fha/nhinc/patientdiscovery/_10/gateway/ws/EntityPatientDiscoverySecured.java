@@ -33,6 +33,7 @@ import gov.hhs.fha.nhinc.messaging.server.BaseService;
 import gov.hhs.fha.nhinc.patientdiscovery._10.entity.EntityPatientDiscoveryImpl;
 import gov.hhs.fha.nhinc.patientdiscovery.aspect.PRPAIN201305UV02ArgTransformer;
 import gov.hhs.fha.nhinc.patientdiscovery.aspect.RespondingGatewayPRPAIN201306UV02Builder;
+import gov.hhs.fha.nhinc.patientdiscovery.entity.wrapper.RespondingGatewayPatientDiscoveryWrapper;
 import gov.hhs.fha.nhinc.patientdiscovery.outbound.OutboundPatientDiscovery;
 import javax.annotation.Resource;
 import javax.xml.ws.BindingType;
@@ -55,16 +56,19 @@ public class EntityPatientDiscoverySecured extends BaseService implements Entity
     }
 
     @OutboundMessageEvent(beforeBuilder = PRPAIN201305UV02ArgTransformer.class,
-        afterReturningBuilder = RespondingGatewayPRPAIN201306UV02Builder.class, serviceType = "Patient Discovery",
-        version = "1.0")
+            afterReturningBuilder = RespondingGatewayPRPAIN201306UV02Builder.class, serviceType = "Patient Discovery",
+            version = "1.0")
     @Override
     public RespondingGatewayPRPAIN201306UV02ResponseType respondingGatewayPRPAIN201305UV02(
-        RespondingGatewayPRPAIN201305UV02RequestType request) {
+            RespondingGatewayPRPAIN201305UV02RequestType request) {
 
         AssertionType assertion = getAssertion(context, null);
 
-        return new EntityPatientDiscoveryImpl(outboundPatientDiscovery).respondingGatewayPRPAIN201305UV02(request,
-            assertion);
+        RespondingGatewayPatientDiscoveryWrapper respondingPdWrapper
+                = new EntityPatientDiscoveryImpl(outboundPatientDiscovery).respondingGatewayPRPAIN201305UV02(request,
+                        assertion);
+        addSoapHeaders("patientDiscovery", respondingPdWrapper.getResponseHeaders(), context);
+        return respondingPdWrapper.getResponse();
     }
 
     public void setOutboundPatientDiscovery(OutboundPatientDiscovery outboundPatientDiscovery) {
