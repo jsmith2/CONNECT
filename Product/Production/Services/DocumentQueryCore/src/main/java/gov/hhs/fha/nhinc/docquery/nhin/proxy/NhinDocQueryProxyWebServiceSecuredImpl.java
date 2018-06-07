@@ -41,13 +41,13 @@ import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants.UDDI_SPEC_VERSION;
 import gov.hhs.fha.nhinc.nhinclib.NullChecker;
 import gov.hhs.fha.nhinc.webserviceproxy.WebServiceProxyHelper;
-import gov.hhs.fha.nhinc.xdcommon.XDCommonResponseHelper;
-import gov.hhs.fha.nhinc.xdcommon.XDCommonResponseHelper.ErrorCodes;
 import ihe.iti.xds_b._2007.RespondingGatewayQueryPortType;
 import javax.xml.ws.WebServiceException;
 import oasis.names.tc.ebxml_regrep.xsd.query._3.AdhocQueryRequest;
 import oasis.names.tc.ebxml_regrep.xsd.query._3.AdhocQueryResponse;
 import oasis.names.tc.ebxml_regrep.xsd.rim._3.RegistryObjectListType;
+import oasis.names.tc.ebxml_regrep.xsd.rs._3.RegistryError;
+import oasis.names.tc.ebxml_regrep.xsd.rs._3.RegistryErrorList;
 import oasis.names.tc.ebxml_regrep.xsd.rs._3.RegistryResponseType;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -129,31 +129,39 @@ public class NhinDocQueryProxyWebServiceSecuredImpl implements NhinDocQueryProxy
 
         } catch (final ExchangeManagerException e) {
             LOG.error("Error calling respondingGatewayCrossGatewayQuery", e);
-            final XDCommonResponseHelper helper = new XDCommonResponseHelper();
-            final RegistryResponseType registryError = helper.createError(e.getLocalizedMessage(),
-                ErrorCodes.XDSRepositoryError, NhincConstants.INIT_MULTISPEC_LOC_ENTITY_DR);
-
-            response = new AdhocQueryResponse();
-            response.setRegistryObjectList(new RegistryObjectListType());
-            response.setStatus(registryError.getStatus());
-            response.setRegistryErrorList(registryError.getRegistryErrorList());
+            response = createErrorResponse(e.getLocalizedMessage());
 
         } catch (final WebServiceException wse) {
             LOG.error("Error calling respondingGatewayCrossGatewayQuery", wse);
-            final XDCommonResponseHelper helper = new XDCommonResponseHelper();
             final String endpointAvailableError = NhincConstants.INIT_MULTISPEC_ERROR_NO_ENDPOINT_AVAILABLE
                 + target.getHomeCommunity().getHomeCommunityId() + ".";
-            final RegistryResponseType registryError = helper.createError(endpointAvailableError,
-                ErrorCodes.XDSRegistryError, NhincConstants.INIT_MULTISPEC_LOC_ENTITY_DQ);
-            response = new AdhocQueryResponse();
-            response.setRegistryObjectList(new RegistryObjectListType());
-            response.setStatus(registryError.getStatus());
-            response.setRegistryErrorList(registryError.getRegistryErrorList());
+            response = createErrorResponse(endpointAvailableError);
 
         } catch (final Exception ex) {
             LOG.error("Error calling respondingGatewayCrossGatewayQuery", ex);
             throw ex;
         }
         return response;
+    }
+    
+    private AdhocQueryResponse createErrorResponse(String errorMessage) {
+        AdhocQueryResponse response = new AdhocQueryResponse();
+        response.setStatus(NhincConstants.XDR_ACK_FAILURE_STATUS_MSG);
+        response.setRegistryObjectList(new RegistryObjectListType());
+        response.setRegistryErrorList(createRegistryErrorList(errorMessage));
+        
+        return response;
+    }
+    
+    private RegistryErrorList createRegistryErrorList(String errorMessage) {
+        RegistryErrorList errorList = new RegistryErrorList();
+        RegistryError regError = new RegistryError();
+        regError.setErrorCode("XDSRegistryError");
+        regError.setLocation(NhincConstants.INIT_MULTISPEC_LOC_ENTITY_DQ);
+        regError.setCodeContext(StringUtils.trim(errorMessage));
+        regError.setSeverity(NhincConstants.XDS_REGISTRY_ERROR_SEVERITY_ERROR);
+        
+        errorList.getRegistryError().add(regError);
+        return errorList;
     }
 }

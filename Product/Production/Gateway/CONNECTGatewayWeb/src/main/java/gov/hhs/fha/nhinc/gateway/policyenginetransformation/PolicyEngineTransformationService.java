@@ -28,7 +28,7 @@ package gov.hhs.fha.nhinc.gateway.policyenginetransformation;
 
 import gov.hhs.fha.nhinc.common.eventcommon.SubjectAddedEventType;
 import gov.hhs.fha.nhinc.common.nhinccommonadapter.CheckPolicyRequestType;
-import gov.hhs.fha.nhinc.transform.policy.PolicyEngineTransformer;
+import gov.hhs.fha.nhinc.policyengine.transform.PolicyEngineTransformer;
 import javax.xml.ws.BindingType;
 import javax.xml.ws.soap.SOAPBinding;
 
@@ -73,13 +73,12 @@ public class PolicyEngineTransformationService implements gov.hhs.fha.nhinc.nhin
     @Override
     public gov.hhs.fha.nhinc.common.nhinccommonadapter.CheckPolicyRequestType transformFindAuditEventsToCheckPolicy(
         gov.hhs.fha.nhinc.common.eventcommon.FindAuditEventsEventType transformFindAuditEventsToCheckPolicyRequest) {
-        return new PolicyEngineTransformer()
-            .transformFindAuditEventsToCheckPolicy(transformFindAuditEventsToCheckPolicyRequest);
+        throw new UnsupportedOperationException("Not implemented.");
     }
 
     public gov.hhs.fha.nhinc.common.nhinccommonadapter.CheckPolicyRequestType transformNotifyToCheckPolicy(
         gov.hhs.fha.nhinc.common.eventcommon.NotifyEventType transformNotifyToCheckPolicyRequest) {
-        return new PolicyEngineTransformer().transformNotifyToCheckPolicy(transformNotifyToCheckPolicyRequest);
+        throw new UnsupportedOperationException("Not implemented.");
     }
 
     public CheckPolicyRequestType transformSubjectAddedToCheckPolicy(

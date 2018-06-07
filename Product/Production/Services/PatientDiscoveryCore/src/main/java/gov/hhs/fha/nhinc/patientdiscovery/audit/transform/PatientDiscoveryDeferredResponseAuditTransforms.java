@@ -39,7 +39,7 @@ import gov.hhs.fha.nhinc.patientdiscovery.MessageGeneratorUtils;
 import gov.hhs.fha.nhinc.patientdiscovery.parser.PRPAIN201306UV02Parser;
 import gov.hhs.fha.nhinc.properties.PropertyAccessException;
 import gov.hhs.fha.nhinc.properties.PropertyAccessor;
-import gov.hhs.fha.nhinc.transform.audit.AuditDataTransformHelper;
+import gov.hhs.fha.nhinc.audit.transform.AuditDataTransformHelper;
 import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
 import java.net.URL;

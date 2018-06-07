@@ -36,7 +36,7 @@ import gov.hhs.fha.nhinc.auditrepository.hibernate.AuditRepositoryRecord;
 import gov.hhs.fha.nhinc.common.auditlog.LogEventSecureRequestType;
 import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
 import gov.hhs.fha.nhinc.common.nhinccommon.UserType;
-import gov.hhs.fha.nhinc.transform.audit.AuditDataTransformHelper;
+import gov.hhs.fha.nhinc.audit.transform.AuditDataTransformHelper;
 import java.sql.Blob;
 import org.junit.Before;
 import org.junit.Test;

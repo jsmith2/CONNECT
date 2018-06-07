@@ -27,6 +27,8 @@
 package gov.hhs.fha.nhinc.patientcorrelation.nhinc;
 
 import gov.hhs.fha.nhinc.patientcorrelation.nhinc.dao.CorrelatedIdentifiersDaoImpl;
+import gov.hhs.fha.nhinc.patientcorrelation.nhinc.orch.PatientCorrelationOrch;
+import gov.hhs.fha.nhinc.patientcorrelation.nhinc.orch.PatientCorrelationOrchImpl;
 import org.hl7.v3.AddPatientCorrelationRequestType;
 import org.hl7.v3.AddPatientCorrelationResponseType;
 import org.hl7.v3.RetrievePatientCorrelationsRequestType;

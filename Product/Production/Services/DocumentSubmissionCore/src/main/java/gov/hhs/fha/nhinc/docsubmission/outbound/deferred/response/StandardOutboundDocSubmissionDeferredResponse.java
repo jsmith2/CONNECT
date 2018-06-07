@@ -41,7 +41,7 @@ import gov.hhs.fha.nhinc.docsubmission.entity.deferred.response.OutboundDocSubmi
 import gov.hhs.fha.nhinc.docsubmission.entity.deferred.response.OutboundDocSubmissionDeferredResponseOrchestratable;
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
 import gov.hhs.fha.nhinc.nhinclib.NullChecker;
-import gov.hhs.fha.nhinc.transform.policy.SubjectHelper;
+import gov.hhs.fha.nhinc.transform.helper.SubjectHelper;
 import gov.hhs.healthit.nhin.XDRAcknowledgementType;
 import oasis.names.tc.ebxml_regrep.xsd.rs._3.RegistryResponseType;
 import org.slf4j.Logger;

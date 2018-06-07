@@ -32,7 +32,6 @@ import gov.hhs.fha.nhinc.common.nhinccommonadapter.CheckPolicyRequestType;
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
 import gov.hhs.fha.nhinc.orchestration.Orchestratable;
 import gov.hhs.fha.nhinc.orchestration.PolicyTransformer;
-import gov.hhs.fha.nhinc.policyengine.DocumentRetrievePolicyEngineChecker;
 import gov.hhs.fha.nhinc.policyengine.PolicyEngineChecker;
 
 /**
@@ -41,14 +40,14 @@ import gov.hhs.fha.nhinc.policyengine.PolicyEngineChecker;
  */
 public class InboundDocRetrievePolicyTransformer_g0 implements PolicyTransformer {
 
-    private  DocumentRetrievePolicyEngineChecker policyChecker;
+    private  PolicyEngineChecker policyChecker;
 
 
     public InboundDocRetrievePolicyTransformer_g0() {
         policyChecker = new PolicyEngineChecker();
     }
 
-    public InboundDocRetrievePolicyTransformer_g0(DocumentRetrievePolicyEngineChecker policyChecker) {
+    public InboundDocRetrievePolicyTransformer_g0(PolicyEngineChecker policyChecker) {
         this.policyChecker = policyChecker;
     }
 

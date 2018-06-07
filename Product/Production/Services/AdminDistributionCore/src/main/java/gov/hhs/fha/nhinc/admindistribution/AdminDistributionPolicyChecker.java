@@ -54,9 +54,9 @@ public class AdminDistributionPolicyChecker {
     public boolean checkOutgoingPolicy(RespondingGatewaySendAlertMessageType request, String target) {
         LOG.debug("checking the policy engine for the new request to a target community");
 
-        gov.hhs.fha.nhinc.transform.policy.AdminDistributionTransformHelper policyHelper;
+        AdminDistributionTransformHelper policyHelper;
 
-        policyHelper = new gov.hhs.fha.nhinc.transform.policy.AdminDistributionTransformHelper();
+        policyHelper = new AdminDistributionTransformHelper();
 
         CheckPolicyRequestType checkPolicyRequest = policyHelper.transformEntityAlertToCheckPolicy(request, target);
 
@@ -73,9 +73,9 @@ public class AdminDistributionPolicyChecker {
     public boolean checkIncomingPolicy(EDXLDistribution request, AssertionType assertion) {
         LOG.debug("checking the policy engine for the new request to a target community");
 
-        gov.hhs.fha.nhinc.transform.policy.AdminDistributionTransformHelper policyHelper;
+        AdminDistributionTransformHelper policyHelper;
 
-        policyHelper = new gov.hhs.fha.nhinc.transform.policy.AdminDistributionTransformHelper();
+        policyHelper = new AdminDistributionTransformHelper();
 
         CheckPolicyRequestType checkPolicyRequest = policyHelper.transformNhinAlertToCheckPolicy(request, assertion);
 

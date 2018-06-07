@@ -37,6 +37,11 @@
             <groupId>org.connectopensource</groupId>
             <artifactId>DocumentSubmissionWebervices</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.connectopensource</groupId>
+            <artifactId>PolicyEngineCore</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
 
         <!-- Spring Framework -->
         <dependency>

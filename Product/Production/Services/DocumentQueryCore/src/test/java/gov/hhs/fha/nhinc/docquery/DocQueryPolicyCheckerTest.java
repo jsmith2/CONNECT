@@ -27,7 +27,7 @@
 package gov.hhs.fha.nhinc.docquery;
 
 import gov.hhs.fha.nhinc.common.nhinccommonadapter.CheckPolicyResponseType;
-import gov.hhs.fha.nhinc.policyengine.DocumentRetrievePolicyEngineChecker;
+import gov.hhs.fha.nhinc.policyengine.PolicyEngineChecker;
 import java.util.ArrayList;
 import java.util.List;
 import oasis.names.tc.xacml._2_0.context.schema.os.DecisionType;
@@ -168,7 +168,7 @@ public class DocQueryPolicyCheckerTest {
     @Test
     public void testGetPolicyChecker() {
         DocQueryPolicyChecker testSubject = new DocQueryPolicyChecker();
-        DocumentRetrievePolicyEngineChecker result = testSubject.getPolicyChecker();
+        PolicyEngineChecker result = testSubject.getPolicyChecker();
         assertNotNull(result);
     }
 }

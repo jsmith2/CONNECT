@@ -34,7 +34,7 @@ import gov.hhs.fha.nhinc.direct.addressparsing.ToAddressParser;
 import gov.hhs.fha.nhinc.direct.addressparsing.ToAddressParserFactory;
 import gov.hhs.fha.nhinc.direct.xdr.audit.SoapEdgeAuditor;
 import gov.hhs.fha.nhinc.direct.xdr.audit.SoapEdgeAuditorFactory;
-import gov.hhs.fha.nhinc.xdcommon.XDCommonResponseHelper;
+import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
 import ihe.iti.xds_b._2007.ProvideAndRegisterDocumentSetRequestType;
 import java.util.Set;
 import javax.mail.Address;
@@ -123,7 +123,9 @@ public class SoapDirectEdgeOrchestration {
         getDirectSender().sendOutboundDirect(addressFrom, addressTo.toArray(new Address[0]), documents,
                 context.getMessageId());
 
-        return new XDCommonResponseHelper().createSuccess();
+        RegistryResponseType response = new RegistryResponseType();
+        response.setStatus(NhincConstants.NHINC_ADHOC_QUERY_SUCCESS_RESPONSE);
+        return response;
     }
 
     /**

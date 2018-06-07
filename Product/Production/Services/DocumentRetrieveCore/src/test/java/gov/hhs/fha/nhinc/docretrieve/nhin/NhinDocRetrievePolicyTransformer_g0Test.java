@@ -28,7 +28,7 @@ package gov.hhs.fha.nhinc.docretrieve.nhin;
 
 import gov.hhs.fha.nhinc.common.eventcommon.DocRetrieveEventType;
 import gov.hhs.fha.nhinc.orchestration.PolicyTransformer.Direction;
-import gov.hhs.fha.nhinc.policyengine.DocumentRetrievePolicyEngineChecker;
+import gov.hhs.fha.nhinc.policyengine.PolicyEngineChecker;
 import org.junit.Test;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -47,7 +47,7 @@ public class NhinDocRetrievePolicyTransformer_g0Test {
      */
     @Test
     public void testTranform() {
-        DocumentRetrievePolicyEngineChecker mockPolicyEngine = mock(DocumentRetrievePolicyEngineChecker.class);
+        PolicyEngineChecker mockPolicyEngine = mock(PolicyEngineChecker.class);
         InboundDocRetrievePolicyTransformer_g0 policyTransform = new InboundDocRetrievePolicyTransformer_g0(mockPolicyEngine);
         InboundDocRetrieveOrchestratable message = mock(InboundDocRetrieveOrchestratable.class);
         policyTransform.transform(message, Direction.INBOUND);

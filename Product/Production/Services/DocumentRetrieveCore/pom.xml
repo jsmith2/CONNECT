@@ -37,6 +37,16 @@
             <groupId>org.connectopensource</groupId>
             <artifactId>DocumentRetrieveWebservices</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.connectopensource</groupId>
+            <artifactId>DocRepositoryCore</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.connectopensource</groupId>
+            <artifactId>PolicyEngineCore</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
 
         <!-- Spring Framework -->
         <dependency>

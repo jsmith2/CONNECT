@@ -39,7 +39,7 @@ import gov.hhs.fha.nhinc.exchangemgr.ExchangeManagerException;
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
 import gov.hhs.fha.nhinc.properties.PropertyAccessException;
 import gov.hhs.fha.nhinc.properties.PropertyAccessor;
-import gov.hhs.fha.nhinc.transform.audit.AuditDataTransformHelper;
+import gov.hhs.fha.nhinc.audit.transform.AuditDataTransformHelper;
 import gov.hhs.healthit.nhin.XDRAcknowledgementType;
 import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;

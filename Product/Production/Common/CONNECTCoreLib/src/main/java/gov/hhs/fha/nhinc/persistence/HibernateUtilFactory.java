@@ -46,8 +46,6 @@ public class HibernateUtilFactory {
     private static gov.hhs.fha.nhinc.event.persistence.HibernateUtil eventHibernateUtil;
     private static gov.hhs.fha.nhinc.asyncmsgs.persistence.HibernateUtil asyncMsgsHibernateUtil;
     private static gov.hhs.fha.nhinc.common.connectionmanager.persistence.HibernateUtil connManHibernateUtil;
-    private static gov.hhs.fha.nhinc.docrepository.adapter.persistence.HibernateUtil docRepoHibernateUtil;
-    private static gov.hhs.fha.nhinc.patientcorrelation.nhinc.persistence.HibernateUtil patientCorrHibernateUtil;
     private static gov.hhs.fha.nhinc.direct.messagemonitoring.persistence.HibernateUtil msgMonitorHibernateUtil;
 
     /**
@@ -130,38 +128,6 @@ public class HibernateUtilFactory {
                     gov.hhs.fha.nhinc.common.connectionmanager.persistence.HibernateUtil.class);
         }
         return connManHibernateUtil;
-    }
-
-    /**
-     * Method that returns the Document Repository HibernateUtil
-     *
-     * @return
-     */
-    public static gov.hhs.fha.nhinc.docrepository.adapter.persistence.HibernateUtil getDocRepoHibernateUtil() {
-        ClassPathXmlApplicationContext context = ClassPathSingleton.CONTEXT;
-
-        LOG.debug("Memory address getDocRepoHibernateUtil {}", context.getId());
-        if (docRepoHibernateUtil == null) {
-            docRepoHibernateUtil = context.getBean(NhincConstants.DOCREPO_HIBERNATE_BEAN,
-                    gov.hhs.fha.nhinc.docrepository.adapter.persistence.HibernateUtil.class);
-        }
-        return docRepoHibernateUtil;
-    }
-
-    /**
-     * Method that returns the Patient Correlation HibernateUtil.
-     *
-     * @return
-     */
-    public static gov.hhs.fha.nhinc.patientcorrelation.nhinc.persistence.HibernateUtil getPatientCorrHibernateUtil() {
-        ClassPathXmlApplicationContext context = ClassPathSingleton.CONTEXT;
-
-        LOG.debug("Memory address getPatientCorrHibernateUtil {}", context.getId());
-        if (patientCorrHibernateUtil == null) {
-            patientCorrHibernateUtil = context.getBean(NhincConstants.PATIENT_CORR_HIBERNATE_BEAN,
-                    gov.hhs.fha.nhinc.patientcorrelation.nhinc.persistence.HibernateUtil.class);
-        }
-        return patientCorrHibernateUtil;
     }
 
     /**

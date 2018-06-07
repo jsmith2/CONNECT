@@ -27,6 +27,7 @@
 package gov.hhs.fha.nhinc.patientcorrelation.nhinc;
 
 import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
+import gov.hhs.fha.nhinc.patientcorrelation.nhinc.orch.PatientCorrelationOrch;
 import org.hl7.v3.AddPatientCorrelationResponseType;
 import org.hl7.v3.AddPatientCorrelationSecuredRequestType;
 import org.hl7.v3.AddPatientCorrelationSecuredResponseType;

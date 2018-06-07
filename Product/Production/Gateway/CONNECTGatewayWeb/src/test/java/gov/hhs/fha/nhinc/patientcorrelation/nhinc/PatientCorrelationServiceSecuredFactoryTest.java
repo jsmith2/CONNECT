@@ -26,6 +26,7 @@
  */
 package gov.hhs.fha.nhinc.patientcorrelation.nhinc;
 
+import gov.hhs.fha.nhinc.patientcorrelation.nhinc.orch.PatientCorrelationOrch;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;

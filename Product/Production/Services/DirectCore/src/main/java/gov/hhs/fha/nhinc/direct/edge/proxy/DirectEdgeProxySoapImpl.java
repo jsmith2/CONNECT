@@ -35,11 +35,11 @@ import gov.hhs.fha.nhinc.messaging.service.port.ServicePortDescriptor;
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
 import gov.hhs.fha.nhinc.nhinclib.NullChecker;
 import gov.hhs.fha.nhinc.webserviceproxy.WebServiceProxyHelper;
-import gov.hhs.fha.nhinc.xdcommon.XDCommonResponseHelper;
 import ihe.iti.xds_b._2007.DocumentRepositoryPortType;
 import ihe.iti.xds_b._2007.ProvideAndRegisterDocumentSetRequestType;
 import javax.mail.internet.MimeMessage;
 import oasis.names.tc.ebxml_regrep.xsd.rs._3.RegistryResponseType;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,12 +112,11 @@ public class DirectEdgeProxySoapImpl implements DirectEdgeProxy {
     }
 
     private void handleError(String errorMessage, Throwable e, MimeMessage mimeMessage) {
-        XDCommonResponseHelper helper = new XDCommonResponseHelper();
         if (e != null) {
-            LOG.error(helper.createError(errorMessage + e.getLocalizedMessage()).toString());
+            LOG.error(StringUtils.trim(errorMessage) + ", " + e.getLocalizedMessage());
             throw new DirectException(errorMessage, e, mimeMessage);
         } else {
-            LOG.error(helper.createError(errorMessage).toString());
+            LOG.error(StringUtils.trim(errorMessage));
             throw new DirectException(errorMessage, mimeMessage);
         }
     }

@@ -31,7 +31,7 @@ import gov.hhs.fha.nhinc.common.nhinccommonadapter.CheckPolicyRequestType;
 import gov.hhs.fha.nhinc.generic.GenericFactory;
 import gov.hhs.fha.nhinc.policyengine.adapter.proxy.PolicyEngineProxy;
 import gov.hhs.fha.nhinc.policyengine.adapter.proxy.PolicyEngineProxyObjectFactory;
-import gov.hhs.fha.nhinc.transform.policy.PatientDiscoveryPolicyTransformHelper;
+import gov.hhs.fha.nhinc.policyengine.transform.PatientDiscoveryPolicyTransformHelper;
 import org.hl7.v3.PRPAIN201305UV02;
 import org.hl7.v3.RespondingGatewayPRPAIN201305UV02RequestType;
 import org.slf4j.Logger;
