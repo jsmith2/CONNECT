@@ -57,10 +57,10 @@ import org.apache.wss4j.common.saml.bean.SubjectLocalityBean;
 import org.apache.wss4j.common.saml.builder.SAML1ComponentBuilder;
 import org.apache.wss4j.common.saml.builder.SAML2ComponentBuilder;
 import org.joda.time.DateTime;
+import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.XMLObjectBuilderFactory;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.schema.XSAny;
-import org.opensaml.core.xml.schema.XSURI;
 import org.opensaml.core.xml.schema.impl.XSAnyBuilder;
 import org.opensaml.saml.common.SAMLObjectBuilder;
 import org.opensaml.saml.common.xml.SAMLConstants;
@@ -478,6 +478,10 @@ public class OpenSAML2ComponentBuilder implements SAMLCompontentBuilder {
         attributeStatement.getAttributes().add(attribute);
         return attributeStatement;
     }
+    
+    public AttributeStatement createAttributeStatement() {
+        return attributeStatementBuilder.buildObject();
+    }
 
     public List<AttributeStatement> createAttributeStatement(final List<Attribute> attributes) {
         final List<AttributeStatement> attributeStatements = new ArrayList<>();
@@ -606,18 +610,31 @@ public class OpenSAML2ComponentBuilder implements SAMLCompontentBuilder {
      * @return the attribute
      */
     public Attribute createResourceIDAttribute(final String patientId) {
-        return createAttribute(null, SamlConstants.PATIENT_ID_ATTR, null, Collections.singletonList(patientId));
+        return createAnyAttributeNoType(patientId, SamlConstants.PATIENT_ID_ATTR);
     }
 
     public XSAny createUriAttributeValue(String value) {
         XSAny uri = createAny(SAMLConstants.SAML20_NS,
             org.opensaml.saml.saml1.core.AttributeValue.DEFAULT_ELEMENT_LOCAL_NAME, SAMLConstants.SAML20_PREFIX);
         uri.setTextContent(value);
-        uri.getUnknownAttributes().put(new QName(SamlConstants.HL7_TYPE_NAMESPACE_URI,
-            SamlConstants.HL7_TYPE_LOCAL_PART, SamlConstants.HL7_TYPE_PREFIX), XSURI.TYPE_NAME);
+        //uri.getUnknownAttributes().put(new QName(SamlConstants.HL7_TYPE_NAMESPACE_URI,
+        //    SamlConstants.HL7_TYPE_LOCAL_PART, SamlConstants.HL7_TYPE_PREFIX), XSURI.TYPE_NAME);
         return uri;
     }
 
+    public Attribute createAnyAttributeNoType(String value, String name) {
+        final Attribute attribute = createAttribute(null, name, null,
+            Arrays.asList(value));
+        attribute.setNameFormat(null);
+        
+        XSAny hcAny = createAny(SAMLConstants.SAML20_NS,
+            org.opensaml.saml.saml1.core.AttributeValue.DEFAULT_ELEMENT_LOCAL_NAME, SAMLConstants.SAML20_PREFIX);
+        hcAny.setTextContent(value);
+        attribute.getAttributeValues().clear();
+        attribute.getAttributeValues().add(hcAny);
+        return attribute;
+    }
+    
     /**
      * Creates the npi attribute.
      *
@@ -625,7 +642,7 @@ public class OpenSAML2ComponentBuilder implements SAMLCompontentBuilder {
      * @return the attribute
      */
     public Attribute createNPIAttribute(final String npi) {
-        return createAttribute(null, SamlConstants.ATTRIBUTE_NAME_NPI, null, Arrays.asList(npi));
+        return createAnyAttributeNoType(npi, SamlConstants.ATTRIBUTE_NAME_NPI);
     }
 
     /**
@@ -634,11 +651,8 @@ public class OpenSAML2ComponentBuilder implements SAMLCompontentBuilder {
      * @param communityId the community id
      * @return the list
      */
-    public AttributeStatement createHomeCommunitAttributeStatement(final String communityId) {
-        final Attribute attribute = createAttribute(null, SamlConstants.HOME_COM_ID_ATTR, null,
-            Arrays.asList(communityId));
-
-        return createAttributeStatement(attribute);
+    public Attribute createHomeCommunitAttributeStatement(final String communityId) {
+        return createAnyAttributeNoType(communityId, SamlConstants.HOME_COM_ID_ATTR);
     }
 
 
@@ -689,22 +703,6 @@ public class OpenSAML2ComponentBuilder implements SAMLCompontentBuilder {
     }
 
     /**
-     * PurposeForUse attribute statements.
-     *
-     * @param purposeCode the purpose code
-     * @param purposeSystem the purpose system
-     * @param purposeSystemName the purpose system name
-     * @param purposeDisplay the purpose display
-     * @return the list
-     */
-    public AttributeStatement createPurposeForUseAttributeStatement(final String purposeCode,
-        final String purposeSystem, final String purposeSystemName, final String purposeDisplay) {
-        final Attribute attribute = createPurposeForUseAttribute(purposeCode, purposeSystem, purposeSystemName,
-            purposeDisplay);
-        return createAttributeStatement(attribute);
-    }
-
-    /**
      * Creates the purpose of use attribute.
      *
      * @param purposeCode the purpose code
@@ -735,7 +733,6 @@ public class OpenSAML2ComponentBuilder implements SAMLCompontentBuilder {
         final Object attributeValue = createHL7Attribute("PurposeForUse", purposeCode, purposeSystem, purposeSystemName,
             purposeDisplay);
         return createAttribute(null, SamlConstants.PURPOSE_ROLE_ATTR, null, Arrays.asList(attributeValue));
-
     }
 
     /**
@@ -744,9 +741,7 @@ public class OpenSAML2ComponentBuilder implements SAMLCompontentBuilder {
      * @param organizationId the organization id
      * @return the list
      */
-    public AttributeStatement createOrganizationIdAttributeStatement(final String organizationId) {
-        final Attribute attribute = createAttribute(null, SamlConstants.USER_ORG_ID_ATTR, null,
-            Arrays.asList(organizationId));
-        return createAttributeStatement(attribute);
+    public Attribute createOrganizationIdAttribute(final String organizationId) {
+        return createAnyAttributeNoType(organizationId, SamlConstants.USER_ORG_ID_ATTR);
     }
 }
