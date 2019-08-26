@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.connectopensource</groupId>
         <artifactId>RegressionSuite</artifactId>
-        <version>4.8.0-SNAPSHOT</version>
+        <version>5.4.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>Bimodal</artifactId>
@@ -24,7 +24,7 @@
                 </property>
             </activation>
             <modules>
-                <module>ValidateDQDRMultispecSupportTest</module>
+            <!--    <module>ValidateDQDRMultispecSupportTest</module> -->
                 <module>XDRAdapterTests</module>
                 <module>AdapterPatientDiscoveryAsyncReq</module>
                 <module>AdapterPatientDiscoveryAsyncReqError</module>
@@ -33,11 +33,14 @@
                 <module>AdapterRegistryErrorListMissingTest</module>
                 <module>ValidatePDCountryCodeTest</module>
                 <module>ValidateDQAdapterMultipleEventCodesTest</module>
-                <module>ConnectionManagerTest</module>
                 <module>DocRegistryAndRepository</module>
                 <module>DocumentRetrieveXDSErrorValidation</module>
                 <module>ValidatePDCommunicationErrorHandlingTest</module>
-                <module>QueryByState</module>
+                <module>ExchangeManagerTests</module>
+                <module>ValidateSAMLResourceURIAttributeTest</module>
+                <module>ValidateQDMessageSpecVersionTest</module>
+                <module>ValidateAuditQueryLogService</module>
+                <module>ValidateRDMessageSpecVersionTest</module>
             </modules>
         </profile>
     </profiles>

@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,10 +23,9 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.patientcorrelation.nhinc.parsers.PRPAIN201309UV;
 
-//import com.sun.org.apache.bcel.internal.classfile.ConstantString;
 import gov.hhs.fha.nhinc.common.nhinccommon.QualifiedSubjectIdentifierType;
 import gov.hhs.fha.nhinc.common.patientcorrelationfacade.RetrievePatientCorrelationsRequestType;
 import gov.hhs.fha.nhinc.nhinclib.NullChecker;
@@ -86,16 +85,16 @@ public class PixRetrieveBuilder {
     }
 
     public PRPAIN201309UV02 createPixRetrieve(
-            RetrievePatientCorrelationsRequestType retrievePatientCorrelationsRequest) {
+        RetrievePatientCorrelationsRequestType retrievePatientCorrelationsRequest) {
         List<String> targetAssigningAuthorities = extractTargetAssigningAuthorities(retrievePatientCorrelationsRequest);
         PRPAIN201309UV02 pixRetrieve = createTransmissionWrapper("1.1", null);
 
         PRPAIN201309UV02QUQIMT021001UV01ControlActProcess controlActProcess = createBaseControlActProcess();
 
         PRPAMT201307UV02QueryByParameter queryByParameter = createQueryByParameter(
-                retrievePatientCorrelationsRequest.getQualifiedPatientIdentifier(), targetAssigningAuthorities);
+            retrievePatientCorrelationsRequest.getQualifiedPatientIdentifier(), targetAssigningAuthorities);
         JAXBElement<PRPAMT201307UV02QueryByParameter> createQueryByParameterElement = createQueryByParameterElement(
-                queryByParameter);
+            queryByParameter);
         controlActProcess.setQueryByParameter(createQueryByParameterElement);
 
         pixRetrieve.setControlActProcess(controlActProcess);
@@ -104,7 +103,7 @@ public class PixRetrieveBuilder {
     }
 
     protected List<String> extractTargetAssigningAuthorities(
-            RetrievePatientCorrelationsRequestType retrievePatientCorrelationsRequest) {
+        RetrievePatientCorrelationsRequestType retrievePatientCorrelationsRequest) {
         // if assigning authorities are present, use those. If not, convert home community to assigning authority
         List<String> targetAssigningAuthorities = retrievePatientCorrelationsRequest.getTargetAssigningAuthority();
 
@@ -112,7 +111,7 @@ public class PixRetrieveBuilder {
             List<String> targetHomeCommunities = retrievePatientCorrelationsRequest.getTargetHomeCommunity();
             if (NullChecker.isNotNullish(targetHomeCommunities)) {
                 targetAssigningAuthorities = aaMappingHelper
-                        .lookupAssigningAuthorities(stripCommunityIdsPrefix(targetHomeCommunities));
+                    .lookupAssigningAuthorities(stripCommunityIdsPrefix(targetHomeCommunities));
             }
         }
 
@@ -142,7 +141,7 @@ public class PixRetrieveBuilder {
     }
 
     private static PRPAMT201307UV02ParameterList createParameterList(
-            QualifiedSubjectIdentifierType qualifiedSubjectIdentifier, List<String> targetAssigningAuthorities) {
+        QualifiedSubjectIdentifierType qualifiedSubjectIdentifier, List<String> targetAssigningAuthorities) {
         PRPAMT201307UV02ParameterList parameterList = new PRPAMT201307UV02ParameterList();
         PRPAMT201307UV02PatientIdentifier patId = createPatientIdentifier(qualifiedSubjectIdentifier);
         parameterList.getPatientIdentifier().add(patId);
@@ -189,7 +188,7 @@ public class PixRetrieveBuilder {
     }
 
     private static PRPAMT201307UV02QueryByParameter createQueryByParameter(
-            QualifiedSubjectIdentifierType qualifiedSubjectIdentifier, List<String> targetAssigningAuthorities) {
+        QualifiedSubjectIdentifierType qualifiedSubjectIdentifier, List<String> targetAssigningAuthorities) {
         PRPAMT201307UV02QueryByParameter queryByParameter = new PRPAMT201307UV02QueryByParameter();
         queryByParameter.setQueryId(UniqueIdHelper.createUniqueId("1.1"));
         queryByParameter.setStatusCode(CSHelper.buildCS("new"));
@@ -199,17 +198,17 @@ public class PixRetrieveBuilder {
     }
 
     private static JAXBElement<PRPAMT201307UV02QueryByParameter> createQueryByParameterElement(
-            PRPAMT201307UV02QueryByParameter queryByParameter) {
+        PRPAMT201307UV02QueryByParameter queryByParameter) {
         JAXBElement<PRPAMT201307UV02QueryByParameter> queryByParameterElement;
         javax.xml.namespace.QName xmlqname = new javax.xml.namespace.QName("urn:hl7-org:v3", "queryByParameter");
         queryByParameterElement = new JAXBElement<>(xmlqname, PRPAMT201307UV02QueryByParameter.class,
-                new PRPAMT201307UV02QueryByParameter());
+            new PRPAMT201307UV02QueryByParameter());
         queryByParameterElement.setValue(queryByParameter);
         return queryByParameterElement;
     }
 
     private static PRPAMT201307UV02PatientIdentifier createPatientIdentifier(
-            QualifiedSubjectIdentifierType qualifiedSubjectIdentifier) {
+        QualifiedSubjectIdentifierType qualifiedSubjectIdentifier) {
         PRPAMT201307UV02PatientIdentifier patientIdentifier = new PRPAMT201307UV02PatientIdentifier();
         patientIdentifier.getValue().add(IIHelper.IIFactory(qualifiedSubjectIdentifier));
         patientIdentifier.setSemanticsText(SemanticsTextHelper.createSemanticsText("Patient.Id"));

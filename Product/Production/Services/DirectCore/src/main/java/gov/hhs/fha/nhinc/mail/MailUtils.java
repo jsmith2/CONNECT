@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.mail;
 
 import java.util.Enumeration;
@@ -61,6 +61,9 @@ public class MailUtils {
      * boolean flag when we don't want to expunge the inbox.
      */
     public static final boolean FOLDER_EXPUNGE_INBOX_FALSE = false;
+
+    private MailUtils() {
+    }
 
     /**
      * Close the java mail store and folder, specifying whether deleted messages should be expunged. Log exceptions.
@@ -109,13 +112,14 @@ public class MailUtils {
 
     /**
      * Send a mime message.
+     *
      * @param recipients of the mime message.
      * @param session used to send the mime message.
      * @param message to be sent.
      * @throws MessagingException if there is an error.
      */
     public static void sendMessage(Address[] recipients, Session session, MimeMessage message)
-            throws MessagingException {
+        throws MessagingException {
 
         Transport transport = null;
         try {
@@ -136,7 +140,11 @@ public class MailUtils {
             throw e;
         } finally {
             if (transport != null) {
-                transport.close();
+                try {
+                    transport.close();
+                } catch (MessagingException e) {
+                    LOG.error("Exception while closing the transport: {}", e.getMessage(), e);
+                }
             }
         }
     }
@@ -160,6 +168,7 @@ public class MailUtils {
 
     /**
      * Log message headers.
+     *
      * @param mimeMessage to log headers from
      */
     @SuppressWarnings("unchecked")
@@ -180,6 +189,7 @@ public class MailUtils {
     /**
      * Set the deleted flag on a message, log and swallow exceptions. Note: deleted messages must be "expunged" to be
      * removed from server.
+     *
      * @param message mime message to be deleted.
      */
     public static void setDeletedQuietly(MimeMessage message) {

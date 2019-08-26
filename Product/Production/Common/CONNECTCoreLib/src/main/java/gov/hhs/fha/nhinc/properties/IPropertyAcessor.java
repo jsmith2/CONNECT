@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,12 +28,17 @@ package gov.hhs.fha.nhinc.properties;
 
 public interface IPropertyAcessor {
 
+    public String getProperty(String propertyFile, String propertyName, String defaultValue);
+
     public String getProperty(String propertyFile, String propertyName) throws PropertyAccessException;
 
     public boolean getPropertyBoolean(String propertyFile, String propertyName) throws PropertyAccessException;
+
+    public boolean getPropertyBoolean(String propertyFile, String propertyName, boolean defaultValue);
 
     public void setProperty(String propertyFileName, String key, String value) throws PropertyAccessException;
 
     public String getPropertyComment(String propertyFileName, String key) throws PropertyAccessException;
 
+    public Long getPropertyLongObject(String propertyFile, String propertyName, Long defaultValue);
 }

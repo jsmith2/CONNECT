@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,9 +23,10 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.connectmgr.uddi.proxy;
 
+import gov.hhs.fha.nhinc.exchange.ExchangeType;
 import org.uddi.api_v3.BusinessDetail;
 import org.uddi.api_v3.BusinessList;
 import org.uddi.api_v3.GetBusinessDetail;
@@ -35,11 +36,13 @@ public interface UDDIFindBusinessProxy {
     /**
      * Override in implementation class
      *
+     * @param ExchangeType to pull from
      * @return list of businesses from UDDI
      * @throws UDDIFindBusinessException
      */
-    public abstract BusinessList findBusinessesFromUDDI() throws UDDIFindBusinessException;
+    public abstract BusinessList findBusinessesFromUDDI(ExchangeType exchange) throws UDDIFindBusinessException;
 
-    public abstract BusinessDetail getBusinessDetail(GetBusinessDetail searchParams) throws UDDIFindBusinessException;
+    public abstract BusinessDetail getBusinessDetail(GetBusinessDetail searchParams, ExchangeType exchangeURL) throws
+        UDDIFindBusinessException;
 
 }

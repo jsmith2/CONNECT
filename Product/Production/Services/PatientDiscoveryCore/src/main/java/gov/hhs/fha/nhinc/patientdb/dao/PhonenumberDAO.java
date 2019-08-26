@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,19 +23,11 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.patientdb.dao;
 
 import gov.hhs.fha.nhinc.patientdb.model.Phonenumber;
-import gov.hhs.fha.nhinc.patientdb.persistence.HibernateUtil;
-import gov.hhs.fha.nhinc.patientdb.persistence.HibernateUtilFactory;
 import java.util.List;
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Expression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,10 +37,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author richard.ettema
  */
-public class PhonenumberDAO {
+public class PhonenumberDAO extends GenericDAOImpl<Phonenumber> {
 
     private static final Logger LOG = LoggerFactory.getLogger(PhonenumberDAO.class);
-
     private static PhonenumberDAO phonenumberDAO = new PhonenumberDAO();
 
     /**
@@ -56,9 +47,8 @@ public class PhonenumberDAO {
      * Constructor
      */
     private PhonenumberDAO() {
-
-        LOG.info("PhonenumberDAO - Initialized");
-
+        super(Phonenumber.class);
+        LOG.trace("PhonenumberDAO - Initialized");
     }
 
     /**
@@ -68,11 +58,8 @@ public class PhonenumberDAO {
      * @return PhonenumberDAO
      */
     public static PhonenumberDAO getPhonenumberDAOInstance() {
-
-        LOG.debug("getPhonenumberDAOInstance()..");
-
+        LOG.trace("getPhonenumberDAOInstance()..");
         return phonenumberDAO;
-
     }
 
     // =========================
@@ -88,64 +75,10 @@ public class PhonenumberDAO {
      *
      * @return boolean
      */
+    @Override
     public boolean create(Phonenumber phonenumberRecord) {
-
-        LOG.debug("PhonenumberDAO.create() - Begin");
-
-        Session session = null;
-
-        boolean result = true;
-
-        if (phonenumberRecord != null) {
-
-            Transaction tx = null;
-
-            try {
-
-                SessionFactory sessionFactory = getSessionFactory();
-
-                session = sessionFactory.openSession();
-
-                tx = session.beginTransaction();
-
-                LOG.info("Inserting Record...");
-
-                session.persist(phonenumberRecord);
-
-                LOG.info("Phonenumber Inserted seccussfully...");
-
-                tx.commit();
-
-            } catch (HibernateException | NullPointerException e) {
-
-                result = false;
-
-                if (tx != null) {
-
-                    tx.rollback();
-
-                }
-
-                LOG.error("Exception during insertion caused by : {}", e.getMessage(), e);
-
-            } finally {
-
-                // Actual Phonenumber insertion will happen at this step
-                if (session != null) {
-                    try {
-                        session.close();
-                    } catch (HibernateException e) {
-                        LOG.error("Exception while closing the session: {}", e.getMessage(), e);
-                    }
-                }
-            }
-
-        }
-
-        LOG.debug("PhonenumberDAO.create() - End");
-
-        return result;
-
+        LOG.trace("PhonenumberDAO.create() - Begin");
+        return phonenumberRecord != null ? super.create(phonenumberRecord) : true;
     }
 
     /**
@@ -159,70 +92,15 @@ public class PhonenumberDAO {
      * @return Phonenumber
      */
     public Phonenumber read(Long id) {
-
-        LOG.debug("PhonenumberDAO.read() - Begin");
-
+        LOG.trace("PhonenumberDAO.read() - Begin");
         if (id == null) {
-
-            LOG.info("-- id Parameter is required for Phonenumber Query --");
-
-            LOG.debug("PhonenumberDAO.read() - End");
-
+            LOG.trace("-- id Parameter is required for Phonenumber Query --");
+            LOG.trace("PhonenumberDAO.read() - End");
             return null;
-
         }
-
-        Session session = null;
-
-        List<Phonenumber> queryList;
-
-        Phonenumber foundRecord = null;
-
-        try {
-
-            SessionFactory sessionFactory = getSessionFactory();
-
-            if (sessionFactory != null) {
-                session = sessionFactory.openSession();
-
-                LOG.info("Reading Record...");
-
-                // Build the criteria
-                Criteria aCriteria = session.createCriteria(Phonenumber.class);
-
-                aCriteria.add(Expression.eq("id", id));
-
-                queryList = aCriteria.list();
-
-                if (queryList != null && !queryList.isEmpty()) {
-
-                    foundRecord = queryList.get(0);
-
-                }
-            }
-
-        } catch (HibernateException | NullPointerException e) {
-
-            LOG.error("Exception during read occured due to : {}", e.getMessage(), e);
-
-        } finally {
-
-            // Flush and close session
-            if (session != null) {
-
-                try {
-                    session.flush();
-                    session.close();
-                } catch (HibernateException e) {
-                    LOG.error("Exception while closing the session after a read: {}", e.getMessage(), e);
-                }
-            }
-        }
-
-        LOG.debug("PhonenumberDAO.read() - End");
-
+        Phonenumber foundRecord = super.read(id);
+        LOG.trace("PhonenumberDAO.read() - End");
         return foundRecord;
-
     }
 
     /**
@@ -233,64 +111,10 @@ public class PhonenumberDAO {
      *
      * @return boolean
      */
+    @Override
     public boolean update(Phonenumber phonenumberRecord) {
-
-        LOG.debug("PhonenumberDAO.update() - Begin");
-
-        Session session = null;
-
-        boolean result = true;
-
-        if (phonenumberRecord != null) {
-
-            Transaction tx = null;
-
-            try {
-
-                SessionFactory sessionFactory = getSessionFactory();
-
-                session = sessionFactory.openSession();
-
-                tx = session.beginTransaction();
-
-                LOG.info("Updating Record...");
-
-                session.saveOrUpdate(phonenumberRecord);
-
-                LOG.info("Phonenumber Updated seccussfully...");
-
-                tx.commit();
-
-            } catch (HibernateException | NullPointerException e) {
-
-                result = false;
-
-                if (tx != null) {
-
-                    tx.rollback();
-
-                }
-
-                LOG.error("Exception during update caused by : {}", e.getMessage(), e);
-
-            } finally {
-
-                // Actual Phonenumber update will happen at this step
-                if (session != null) {
-                    try {
-                        session.close();
-                    } catch (HibernateException e) {
-                        LOG.error("Exception while closing the session after an update: {}", e.getMessage(), e);
-                    }
-                }
-            }
-
-        }
-
-        LOG.debug("PhonenumberDAO.update() - End");
-
-        return result;
-
+        LOG.trace("PhonenumberDAO.update()");
+        return phonenumberRecord != null ? super.update(phonenumberRecord) : true;
     }
 
     /**
@@ -299,45 +123,14 @@ public class PhonenumberDAO {
      *
      * @param phonenumberRecord
      */
-    public void delete(Phonenumber phonenumberRecord) {
-
-        LOG.debug("PhonenumberDAO.delete() - Begin");
-
-        Session session = null;
-
-        try {
-
-            SessionFactory sessionFactory = getSessionFactory();
-
-            if (sessionFactory != null) {
-                session = sessionFactory.openSession();
-
-                LOG.info("Deleting Record...");
-
-                // Delete the Phonenumber record
-                session.delete(phonenumberRecord);
-            }
-
-        } catch (HibernateException | NullPointerException e) {
-
-            LOG.error("Exception during delete occured due to : {}", e.getMessage(), e);
-
-        } finally {
-
-            // Flush and close session
-            if (session != null) {
-
-                try {
-                    session.flush();
-                    session.close();
-                } catch (HibernateException e) {
-                    LOG.error("Exception while closing the session after a delete: {}", e.getMessage(), e);
-                }
-            }
+    @Override
+    public boolean delete(Phonenumber phonenumberRecord) {
+        LOG.trace("PhonenumberDAO.delete() - Begin");
+        if (phonenumberRecord != null) {
+            return super.delete(phonenumberRecord);
         }
-
-        LOG.debug("PhonenumberDAO.delete() - End");
-
+        LOG.trace("PhonenumberDAO.delete() - End");
+        return false;
     }
 
     // =========================
@@ -354,76 +147,8 @@ public class PhonenumberDAO {
      * @return List<Phonenumber>
      */
     public List<Phonenumber> findPatientPhonenumbers(Long patientId) {
-
-        LOG.debug("PhonenumberDAO.findPatientPhonenumbers() - Begin");
-
-        if (patientId == null) {
-
-            LOG.info("-- patientId Parameter is required for Phonenumber Query --");
-
-            LOG.debug("PhonenumberDAO.findPatientPhonenumbers() - End");
-
-            return null;
-
-        }
-
-        Session session = null;
-
-        List<Phonenumber> queryList = null;
-
-        try {
-
-            SessionFactory sessionFactory = getSessionFactory();
-
-            if (sessionFactory != null) {
-                session = sessionFactory.openSession();
-
-                LOG.info("Reading Record...");
-
-                // Build the criteria
-                Criteria aCriteria = session.createCriteria(Phonenumber.class);
-
-                aCriteria.add(Expression.eq("patient.patientId", patientId));
-
-                queryList = aCriteria.list();
-
-            }
-        } catch (HibernateException | NullPointerException e) {
-
-            LOG.error("Exception during read occured due to : {}", e.getMessage(), e);
-
-        } finally {
-
-            // Flush and close session
-            if (session != null) {
-                try {
-                    session.flush();
-                    session.close();
-                } catch (HibernateException e) {
-                    LOG.error("Exception while closing the session after looking for patient's phone numbers: {}",
-                            e.getMessage(), e);
-                }
-            }
-        }
-
-        LOG.debug("PhonenumberDAO.findPatientPhonenumbers() - End");
-
-        return queryList;
-
+        return super.findRecords(patientId);
     }
 
-    /**
-     * Returns the sessionFactory belonging to PatientDiscovery HibernateUtil
-     *
-     * @return
-     */
-    protected SessionFactory getSessionFactory() {
-        SessionFactory fact = null;
-        HibernateUtil hibernateUtil = HibernateUtilFactory.getPatientDiscHibernateUtil();
-        if (hibernateUtil != null) {
-            fact = hibernateUtil.getSessionFactory();
-        }
-        return fact;
-    }
 
 }

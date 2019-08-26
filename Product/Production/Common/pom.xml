@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.connectopensource</groupId>
         <artifactId>Production</artifactId>
-        <version>4.8.0-SNAPSHOT</version>
+        <version>5.4.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>Common</artifactId>
@@ -18,6 +18,5 @@
     <modules>
         <module>Properties</module>
         <module>CONNECTCoreLib</module>
-        <module>CONNECTCommonWeb</module>
     </modules>
 </project>

@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.patientdiscovery.configuration.jmx;
 
 import gov.hhs.fha.nhinc.configuration.IConfiguration.serviceEnum;
@@ -32,22 +32,16 @@ import gov.hhs.fha.nhinc.patientdiscovery._10.gateway.ws.EntityPatientDiscoveryD
 import gov.hhs.fha.nhinc.patientdiscovery._10.gateway.ws.NhinPatientDiscoveryDeferredResponse;
 import gov.hhs.fha.nhinc.patientdiscovery.inbound.deferred.response.InboundPatientDiscoveryDeferredResponse;
 import gov.hhs.fha.nhinc.patientdiscovery.outbound.deferred.response.OutboundPatientDiscoveryDeferredResponse;
-import javax.servlet.ServletContext;
+import org.springframework.stereotype.Service;
 
 /**
  * @author msw
  *
  */
+@Service
 public class PatientDiscoveryDeferredResp10WebServices extends AbstractPDDeferredResponseWebServicesMXBean {
 
     private final serviceEnum serviceName = serviceEnum.PatientDiscoveryDeferredResponse;
-
-    /**
-     * @param sc
-     */
-    public PatientDiscoveryDeferredResp10WebServices(ServletContext sc) {
-        super(sc);
-    }
 
     /*
      * (non-Javadoc)
@@ -56,7 +50,7 @@ public class PatientDiscoveryDeferredResp10WebServices extends AbstractPDDeferre
      */
     @Override
     public void configureInboundStdImpl() throws InstantiationException, IllegalAccessException,
-            ClassNotFoundException {
+    ClassNotFoundException {
         NhinPatientDiscoveryDeferredResponse nhinPD;
         InboundPatientDiscoveryDeferredResponse inboundPD;
 
@@ -69,7 +63,7 @@ public class PatientDiscoveryDeferredResp10WebServices extends AbstractPDDeferre
 
     @Override
     public void configureInboundPtImpl() throws InstantiationException, IllegalAccessException,
-            ClassNotFoundException {
+    ClassNotFoundException {
         NhinPatientDiscoveryDeferredResponse nhinPD;
         InboundPatientDiscoveryDeferredResponse inboundPD;
 
@@ -86,14 +80,13 @@ public class PatientDiscoveryDeferredResp10WebServices extends AbstractPDDeferre
      */
     @Override
     public void configureOutboundStdImpl() throws InstantiationException, IllegalAccessException,
-            ClassNotFoundException {
+    ClassNotFoundException {
         EntityPatientDiscoveryDeferredResponseUnsecured entityPDUnsecured;
         EntityPatientDiscoveryDeferredResponseSecured entityPDSecured;
         OutboundPatientDiscoveryDeferredResponse inboundPD;
         inboundPD = retrieveBean(OutboundPatientDiscoveryDeferredResponse.class, getStandardOutboundBeanName());
-        //inboundPD = retrieveDependency(OutboundPatientDiscoveryDeferredResponse.class, className);
         entityPDUnsecured = retrieveBean(EntityPatientDiscoveryDeferredResponseUnsecured.class,
-                getEntityUnsecuredBeanName());
+            getEntityUnsecuredBeanName());
         entityPDSecured = retrieveBean(EntityPatientDiscoveryDeferredResponseSecured.class, getEntitySecuredBeanName());
 
         entityPDUnsecured.setOutboundPatientDiscoveryResponse(inboundPD);
@@ -103,14 +96,13 @@ public class PatientDiscoveryDeferredResp10WebServices extends AbstractPDDeferre
 
     @Override
     public void configureOutboundPtImpl() throws InstantiationException, IllegalAccessException,
-            ClassNotFoundException {
+    ClassNotFoundException {
         EntityPatientDiscoveryDeferredResponseUnsecured entityPDUnsecured;
         EntityPatientDiscoveryDeferredResponseSecured entityPDSecured;
         OutboundPatientDiscoveryDeferredResponse inboundPD;
         inboundPD = retrieveBean(OutboundPatientDiscoveryDeferredResponse.class, getPassthroughOutboundBeanName());
-        //inboundPD = retrieveDependency(OutboundPatientDiscoveryDeferredResponse.class, className);
         entityPDUnsecured = retrieveBean(EntityPatientDiscoveryDeferredResponseUnsecured.class,
-                getEntityUnsecuredBeanName());
+            getEntityUnsecuredBeanName());
         entityPDSecured = retrieveBean(EntityPatientDiscoveryDeferredResponseSecured.class, getEntitySecuredBeanName());
 
         entityPDUnsecured.setOutboundPatientDiscoveryResponse(inboundPD);
@@ -126,7 +118,7 @@ public class PatientDiscoveryDeferredResp10WebServices extends AbstractPDDeferre
     public boolean isInboundPassthru() {
         boolean isPassthru = false;
         NhinPatientDiscoveryDeferredResponse nhinPD = retrieveBean(NhinPatientDiscoveryDeferredResponse.class,
-                getNhinBeanName());
+            getNhinBeanName());
         InboundPatientDiscoveryDeferredResponse inboundPatientDiscovery = nhinPD.getInboundPatientDiscovery();
         if (compareClassName(inboundPatientDiscovery, DEFAULT_INBOUND_PASSTHRU_IMPL_CLASS_NAME)) {
             isPassthru = true;
@@ -143,7 +135,7 @@ public class PatientDiscoveryDeferredResp10WebServices extends AbstractPDDeferre
     public boolean isOutboundPassthru() {
         boolean isPassthru = false;
         EntityPatientDiscoveryDeferredResponseUnsecured entityPD = retrieveBean(
-                EntityPatientDiscoveryDeferredResponseUnsecured.class, getEntityUnsecuredBeanName());
+            EntityPatientDiscoveryDeferredResponseUnsecured.class, getEntityUnsecuredBeanName());
         OutboundPatientDiscoveryDeferredResponse outboundPatientDiscovery = entityPD.getOutboundPatientDiscovery();
         if (compareClassName(outboundPatientDiscovery, DEFAULT_OUTBOUND_PASSTHRU_IMPL_CLASS_NAME)) {
             isPassthru = true;
@@ -151,79 +143,9 @@ public class PatientDiscoveryDeferredResp10WebServices extends AbstractPDDeferre
         return isPassthru;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see gov.hhs.fha.nhinc.configuration.jmx.AbstractWebServicesMXBean#getNhinBeanName()
-     */
-   /* @Override
-    protected String getNhinBeanName() {
-        return NHIN_PD_BEAN_NAME;
-    }*/
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see gov.hhs.fha.nhinc.configuration.jmx.AbstractWebServicesMXBean#getEntityUnsecuredBeanName()
-     */
-   /* @Override
-    protected String getEntityUnsecuredBeanName() {
-        return ENTITY_UNSECURED_PD_BEAN_NAME;
-    }*/
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see gov.hhs.fha.nhinc.configuration.jmx.AbstractWebServicesMXBean#getEntitySecuredBeanName()
-     */
-   /* @Override
-    protected String getEntitySecuredBeanName() {
-        return ENTITY_SECURED_PD_BEAN_NAME;
-    }*/
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see gov.hhs.fha.nhinc.configuration.jmx.AbstractWebServicesMXBean#getInboundStandardClassName()
-     */
-   /* @Override
-    protected String getInboundStandardClassName() {
-        return DEFAULT_INBOUND_STANDARD_IMPL_CLASS_NAME;
-    }*/
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see gov.hhs.fha.nhinc.configuration.jmx.AbstractWebServicesMXBean#getInboundPassthruClassName()
-     */
-   /* @Override
-    protected String getInboundPassthruClassName() {
-        return DEFAULT_INBOUND_PASSTHRU_IMPL_CLASS_NAME;
-    }*/
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see gov.hhs.fha.nhinc.configuration.jmx.AbstractWebServicesMXBean#getOutboundStandardClassName()
-     */
-    /*@Override
-    protected String getOutboundStandardClassName() {
-        return DEFAULT_OUTBOUND_STANDARD_IMPL_CLASS_NAME;
-    }*/
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see gov.hhs.fha.nhinc.configuration.jmx.AbstractWebServicesMXBean#getOutboundPassthruClassName()
-     */
-   /* @Override
-    protected String getOutboundPassthruClassName() {
-        return DEFAULT_OUTBOUND_PASSTHRU_IMPL_CLASS_NAME;
-    }*/
-
     @Override
     public serviceEnum getServiceName() {
-        return this.serviceName;
+        return serviceName;
     }
 
     /*
@@ -235,7 +157,7 @@ public class PatientDiscoveryDeferredResp10WebServices extends AbstractPDDeferre
     public boolean isOutboundStandard() {
         boolean isStandard = false;
         EntityPatientDiscoveryDeferredResponseUnsecured entityPD = retrieveBean(
-                EntityPatientDiscoveryDeferredResponseUnsecured.class, getEntityUnsecuredBeanName());
+            EntityPatientDiscoveryDeferredResponseUnsecured.class, getEntityUnsecuredBeanName());
         OutboundPatientDiscoveryDeferredResponse outboundPatientDiscovery = entityPD.getOutboundPatientDiscovery();
         if (compareClassName(outboundPatientDiscovery, DEFAULT_OUTBOUND_STANDARD_IMPL_CLASS_NAME)) {
             isStandard = true;
@@ -252,7 +174,7 @@ public class PatientDiscoveryDeferredResp10WebServices extends AbstractPDDeferre
     public boolean isInboundStandard() {
         boolean isStandard = false;
         NhinPatientDiscoveryDeferredResponse nhinPD = retrieveBean(
-        		NhinPatientDiscoveryDeferredResponse.class, getNhinBeanName());
+            NhinPatientDiscoveryDeferredResponse.class, getNhinBeanName());
         InboundPatientDiscoveryDeferredResponse inboundPatientDiscovery = nhinPD.getInboundPatientDiscovery();
         if (compareClassName(inboundPatientDiscovery, DEFAULT_INBOUND_STANDARD_IMPL_CLASS_NAME)) {
             isStandard = true;
@@ -260,4 +182,4 @@ public class PatientDiscoveryDeferredResp10WebServices extends AbstractPDDeferre
         return isStandard;
     }
 
-   }
+}

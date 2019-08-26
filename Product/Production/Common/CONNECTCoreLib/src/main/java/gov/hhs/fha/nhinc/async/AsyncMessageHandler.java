@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.async;
 
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author JHOPPESC
+ * @author JHOPPESC- EDITED by sjarral
  */
 public class AsyncMessageHandler implements SOAPHandler<SOAPMessageContext> {
 
@@ -69,14 +69,13 @@ public class AsyncMessageHandler implements SOAPHandler<SOAPMessageContext> {
                     String msgType = (String) messageContext.get(NhincConstants.ASYNC_MSG_TYPE_PROP);
 
                     if (msgType.contentEquals(NhincConstants.ASYNC_REQUEST_MSG_TYPE_VAL)) {
-                        System.out.println("Detected an asynchronous request message");
+                        LOG.debug("Detected an asynchronous request message");
                         // Override the Message Id field
-                        String messageId = null;
 
                         if (messageContext.containsKey(NhincConstants.ASYNC_MESSAGE_ID_PROP) == true) {
-                            messageId = (String) messageContext.get(NhincConstants.ASYNC_MESSAGE_ID_PROP);
+                            String messageId = (String) messageContext.get(NhincConstants.ASYNC_MESSAGE_ID_PROP);
 
-                            System.out.println("Setting message ID to " + messageId);
+                            LOG.debug("Setting message ID to {}", messageId);
 
                             // Steps that need to be performed
                             SOAPElement oMessageIdElem = getFirstChild(oHeader, "MessageID", WSA_NS);
@@ -85,24 +84,23 @@ public class AsyncMessageHandler implements SOAPHandler<SOAPMessageContext> {
                             }
                         }
                     } else if (msgType.contentEquals(NhincConstants.ASYNC_RESPONSE_MSG_TYPE_VAL)) {
-                        System.out.println("Detected an asynchronous response message");
+                        LOG.debug("Detected an asynchronous response message");
                         // Override the Relates To Id field
-                        String relatesToId = null;
 
                         if (messageContext.containsKey(NhincConstants.ASYNC_RELATES_TO_PROP) == true) {
-                            relatesToId = (String) messageContext.get(NhincConstants.ASYNC_RELATES_TO_PROP);
+                            String relatesToId = (String) messageContext.get(NhincConstants.ASYNC_RELATES_TO_PROP);
 
-                            System.out.println("Setting relates to ID to " + relatesToId);
+                            LOG.debug("Setting relates to ID to {}", relatesToId);
 
                             // Steps that need to be performed
                             SOAPElement relatesToElem = oHeader.addChildElement("RelatesTo", WSA_PREFIX, WSA_NS);
                             relatesToElem.setTextContent(relatesToId);
                         }
                     } else {
-                        System.out.println("Detected an synchronous request message");
+                        LOG.debug("Detected an synchronous request message");
                     }
                 } else {
-                    System.out.println("Detected an synchronous request message");
+                    LOG.debug("Detected an synchronous request message");
                 }
 
             } else {

@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.mpi.adapter.component.hl7parsers;
 
 import gov.hhs.fha.nhinc.mpilib.Address;
@@ -42,6 +42,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 import javax.xml.bind.JAXBElement;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hl7.v3.ADExplicit;
 import org.hl7.v3.ActClassControlAct;
@@ -120,10 +121,8 @@ public class HL7Parser201306 {
             id.setRoot(PropertyAccessor.getInstance().getProperty(PROPERTY_FILE, PROPERTY_NAME));
         } catch (PropertyAccessException e) {
             LOG.error(
-                "PropertyAccessException - Default Assigning Authority property not defined in adapter.properties",
+                "PropertyAccessException - Default Assigning Authority property not defined in adapter.properties : {} ",
                 e);
-            // CONNECT environment corrupt; return error response
-            // return BuildMessageForError(<ERROR_CODE>, query);
         }
         id.setExtension(MessageIdGenerator.generateMessageId());
         msg.setId(id);
@@ -134,14 +133,14 @@ public class HL7Parser201306 {
             GregorianCalendar today = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
 
             timestamp
-                = String.valueOf(today.get(GregorianCalendar.YEAR))
-                + String.valueOf(today.get(GregorianCalendar.MONTH) + 1)
-                + String.valueOf(today.get(GregorianCalendar.DAY_OF_MONTH))
-                + String.valueOf(today.get(GregorianCalendar.HOUR_OF_DAY))
-                + String.valueOf(today.get(GregorianCalendar.MINUTE))
-                + String.valueOf(today.get(GregorianCalendar.SECOND));
+            = String.valueOf(today.get(GregorianCalendar.YEAR))
+            + String.valueOf(today.get(GregorianCalendar.MONTH) + 1)
+            + String.valueOf(today.get(GregorianCalendar.DAY_OF_MONTH))
+            + String.valueOf(today.get(GregorianCalendar.HOUR_OF_DAY))
+            + String.valueOf(today.get(GregorianCalendar.MINUTE))
+            + String.valueOf(today.get(GregorianCalendar.SECOND));
         } catch (Exception e) {
-            LOG.error("Exception when creating XMLGregorian Date message: {}", e.getLocalizedMessage(), e);
+            LOG.error("Exception when creating XMLGregorian Date message: {} ", e.getLocalizedMessage(), e);
         }
 
         TSExplicit creationTime = new TSExplicit();
@@ -180,7 +179,7 @@ public class HL7Parser201306 {
     private static PRPAIN201306UV02MFMIMT700711UV01ControlActProcess createControlActProcess(Patients patients,
         PRPAIN201305UV02 query) {
         PRPAIN201306UV02MFMIMT700711UV01ControlActProcess controlActProcess
-            = new PRPAIN201306UV02MFMIMT700711UV01ControlActProcess();
+        = new PRPAIN201306UV02MFMIMT700711UV01ControlActProcess();
 
         controlActProcess.setMoodCode(XActMoodIntentEvent.EVN);
         controlActProcess.setClassCode(ActClassControlAct.CACT);
@@ -189,7 +188,7 @@ public class HL7Parser201306 {
         code.setCodeSystem("2.16.840.1.113883.1.6");
         controlActProcess.setCode(code);
 
-        if ((patients != null) && (patients.size() > 0)) {
+        if (CollectionUtils.isNotEmpty(patients)) {
             for (Patient patient : patients) {
                 controlActProcess.getSubject().add(createSubject(patient, query));
             }
@@ -239,7 +238,7 @@ public class HL7Parser201306 {
     private static PRPAIN201306UV02MFMIMT700711UV01RegistrationEvent createRegEvent(Patient patient,
         PRPAIN201305UV02 query) {
         PRPAIN201306UV02MFMIMT700711UV01RegistrationEvent regEvent
-            = new PRPAIN201306UV02MFMIMT700711UV01RegistrationEvent();
+        = new PRPAIN201306UV02MFMIMT700711UV01RegistrationEvent();
         regEvent.getMoodCode().add("EVN");
         regEvent.getClassCode().add("REG");
         II id = new II();
@@ -343,9 +342,8 @@ public class HL7Parser201306 {
         org.setClassCode("ORG");
         II id = new II();
 
-        if (patient.getIdentifiers() != null && patient.getIdentifiers().size() > 0
-            && patient.getIdentifiers().get(0).getOrganizationId() != null
-            && patient.getIdentifiers().get(0).getOrganizationId().length() > 0) {
+        if (CollectionUtils.isNotEmpty(patient.getIdentifiers())
+            && StringUtils.isNotEmpty(patient.getIdentifiers().get(0).getOrganizationId())) {
             id.setRoot(HomeCommunityMap.formatHomeCommunityId(patient.getIdentifiers().get(0).getOrganizationId()));
         }
         org.getId().add(id);
@@ -360,18 +358,17 @@ public class HL7Parser201306 {
     private static II createSubjectId(Patient patient) {
         II id = new II();
 
-        if (patient.getIdentifiers() != null && patient.getIdentifiers().size() > 0
+        if (CollectionUtils.isNotEmpty(patient.getIdentifiers())
             && patient.getIdentifiers().get(0) != null) {
 
-            if (patient.getIdentifiers().get(0).getOrganizationId() != null
-                && patient.getIdentifiers().get(0).getOrganizationId().length() > 0) {
-                LOG.info("Setting Patient Id root in 201306: " + patient.getIdentifiers().get(0).getOrganizationId());
+            if (StringUtils.isNotEmpty(patient.getIdentifiers().get(0).getOrganizationId())) {
+                LOG.info("Setting Patient Id root in 201306 : {} ",
+                    patient.getIdentifiers().get(0).getOrganizationId());
                 id.setRoot(HomeCommunityMap.formatHomeCommunityId(patient.getIdentifiers().get(0).getOrganizationId()));
             }
 
-            if (patient.getIdentifiers().get(0).getId() != null
-                && patient.getIdentifiers().get(0).getId().length() > 0) {
-                LOG.info("Setting Patient Id extension in 201306: " + patient.getIdentifiers().get(0).getId());
+            if (StringUtils.isNotEmpty(patient.getIdentifiers().get(0).getId())) {
+                LOG.info("Setting Patient Id extension in 201306 : {} ", patient.getIdentifiers().get(0).getId());
                 id.setExtension(patient.getIdentifiers().get(0).getId());
             }
         }
@@ -389,12 +386,12 @@ public class HL7Parser201306 {
         person.setDeterminerCode("INSTANCE");
 
         // Set the Subject Gender
-        if (patient.getGender() != null && patient.getGender().length() > 0) {
+        if (StringUtils.isNotEmpty(patient.getGender())) {
             person.setAdministrativeGenderCode(createGender(patient));
         }
 
         // Set the Subject Name
-        if (patient.getNames().size() > 0) {
+        if (CollectionUtils.isNotEmpty(patient.getNames())) {
             for (PersonName name : patient.getNames()) {
                 person.getName().add(createSubjectName(name));
             }
@@ -403,19 +400,19 @@ public class HL7Parser201306 {
         }
 
         // Set the Birth Time
-        if (patient.getDateOfBirth() != null && patient.getDateOfBirth().length() > 0) {
+        if (StringUtils.isNotEmpty(patient.getDateOfBirth())) {
             person.setBirthTime(createBirthTime(patient));
         }
 
         // Set the Address
-        if (patient.getAddresses().size() > 0) {
+        if (CollectionUtils.isNotEmpty(patient.getAddresses())) {
             for (Address add : patient.getAddresses()) {
                 person.getAddr().add(createAddress(add));
             }
         }
 
         // Set the phone Numbers
-        if (patient.getPhoneNumbers().size() > 0) {
+        if (CollectionUtils.isNotEmpty(patient.getPhoneNumbers())) {
             for (PhoneNumber number : patient.getPhoneNumbers()) {
                 TELExplicit tele = HL7DataTransformHelper.createTELExplicit(number.getPhoneNumber());
 
@@ -424,7 +421,7 @@ public class HL7Parser201306 {
         }
 
         // Set the SSN
-        if (patient.getSSN() != null && patient.getSSN().length() > 0) {
+        if (StringUtils.isNotEmpty(patient.getSSN())) {
             person.getAsOtherIDs().add(createOtherIds(patient));
         }
 
@@ -439,7 +436,7 @@ public class HL7Parser201306 {
         otherIds.getClassCode().add("SD");
 
         // Set the SSN
-        if (patient.getSSN() != null && patient.getSSN().length() > 0) {
+        if (StringUtils.isNotEmpty(patient.getSSN())) {
             II ssn = new II();
             ssn.setExtension(patient.getSSN());
             ssn.setRoot("2.16.840.1.113883.4.1");
@@ -461,8 +458,8 @@ public class HL7Parser201306 {
     private static TSExplicit createBirthTime(Patient patient) {
         TSExplicit birthTime = new TSExplicit();
 
-        if (patient.getDateOfBirth() != null && patient.getDateOfBirth().length() > 0) {
-            LOG.info("Setting Patient Birthday in 201306: " + patient.getDateOfBirth());
+        if (StringUtils.isNotEmpty(patient.getDateOfBirth())) {
+            LOG.info("Setting Patient Birthday in 201306 : {} ", patient.getDateOfBirth());
             birthTime.setValue(patient.getDateOfBirth());
         }
 
@@ -470,7 +467,7 @@ public class HL7Parser201306 {
     }
 
     private static PNExplicit createSubjectName(Patient patient) {
-        if (patient.getNames().size() > 0) {
+        if (CollectionUtils.isNotEmpty(patient.getNames())) {
             return createSubjectName(patient.getNames().get(0));
         }
 
@@ -490,8 +487,8 @@ public class HL7Parser201306 {
     private static CE createGender(Patient patient) {
         CE gender = new CE();
 
-        if (patient.getGender() != null && patient.getGender().length() > 0) {
-            LOG.info("Setting Patient Gender in 201306: " + patient.getGender());
+        if (StringUtils.isNotEmpty(patient.getGender())) {
+            LOG.info("Setting Patient Gender in 201306 : {} ", patient.getGender());
             gender.setCode(patient.getGender());
         }
         return gender;
@@ -531,17 +528,17 @@ public class HL7Parser201306 {
                 .getRepresentedOrganization().getValue().getId())
             && querySender.getDevice().getAsAgent().getValue().getRepresentedOrganization().getValue().getId().get(
                 0) != null
-            && NullChecker.isNotNullish(querySender.getDevice().getAsAgent().getValue()
-                .getRepresentedOrganization().getValue().getId().get(0).getRoot())) {
+                && NullChecker.isNotNullish(querySender.getDevice().getAsAgent().getValue()
+                    .getRepresentedOrganization().getValue().getId().get(0).getRoot())) {
             oid
-                = querySender.getDevice().getAsAgent().getValue().getRepresentedOrganization().getValue().getId()
-                .get(0).getRoot();
+            = querySender.getDevice().getAsAgent().getValue().getRepresentedOrganization().getValue().getId()
+            .get(0).getRoot();
         }
 
         MCCIMT000300UV01Device receiverDevice = new MCCIMT000300UV01Device();
         receiverDevice.setDeterminerCode(HL7Constants.RECEIVER_DETERMINER_CODE);
         receiverDevice.setClassCode(EntityClassDevice.DEV);
-        LOG.debug("Setting receiver device id (applicationId) to query sender's device id " + app);
+        LOG.debug("Setting receiver device id (applicationId) to query sender's device id : {} ", app);
         receiverDevice.getId().add(HL7DataTransformHelper.IIFactory(app));
 
         MCCIMT000300UV01Agent agent = new MCCIMT000300UV01Agent();
@@ -552,15 +549,15 @@ public class HL7Parser201306 {
         org.getId().add(id);
 
         javax.xml.namespace.QName xmlqnameorg
-            = new javax.xml.namespace.QName("urn:hl7-org:v3", "representedOrganization");
+        = new javax.xml.namespace.QName("urn:hl7-org:v3", "representedOrganization");
         JAXBElement<MCCIMT000300UV01Organization> orgElem
-            = new JAXBElement<>(xmlqnameorg, MCCIMT000300UV01Organization.class, org);
+        = new JAXBElement<>(xmlqnameorg, MCCIMT000300UV01Organization.class, org);
         agent.setRepresentedOrganization(orgElem);
         agent.getClassCode().add(HL7Constants.AGENT_CLASS_CODE);
 
         javax.xml.namespace.QName xmlqnameagent = new javax.xml.namespace.QName("urn:hl7-org:v3", "asAgent");
         JAXBElement<MCCIMT000300UV01Agent> agentElem
-            = new JAXBElement<>(xmlqnameagent, MCCIMT000300UV01Agent.class, agent);
+        = new JAXBElement<>(xmlqnameagent, MCCIMT000300UV01Agent.class, agent);
 
         receiverDevice.setAsAgent(agentElem);
 
@@ -594,14 +591,14 @@ public class HL7Parser201306 {
             && NullChecker.isNotNullish(queryReceiver.getDevice().getAsAgent().getValue()
                 .getRepresentedOrganization().getValue().getId().get(0).getRoot())) {
             oid
-                = queryReceiver.getDevice().getAsAgent().getValue().getRepresentedOrganization().getValue().getId()
-                .get(0).getRoot();
+            = queryReceiver.getDevice().getAsAgent().getValue().getRepresentedOrganization().getValue().getId()
+            .get(0).getRoot();
         }
 
         MCCIMT000300UV01Device senderDevice = new MCCIMT000300UV01Device();
         senderDevice.setDeterminerCode(HL7Constants.SENDER_DETERMINER_CODE);
         senderDevice.setClassCode(EntityClassDevice.DEV);
-        LOG.debug("Setting sender device id (applicationId) to query receiver's device id " + app);
+        LOG.debug("Setting sender device id (applicationId) to query receiver's device id : {} ", app);
         senderDevice.getId().add(HL7DataTransformHelper.IIFactory(app));
 
         MCCIMT000300UV01Agent agent = new MCCIMT000300UV01Agent();
@@ -612,15 +609,15 @@ public class HL7Parser201306 {
         org.getId().add(id);
 
         javax.xml.namespace.QName xmlqnameorg
-            = new javax.xml.namespace.QName("urn:hl7-org:v3", "representedOrganization");
+        = new javax.xml.namespace.QName("urn:hl7-org:v3", "representedOrganization");
         JAXBElement<MCCIMT000300UV01Organization> orgElem
-            = new JAXBElement<>(xmlqnameorg, MCCIMT000300UV01Organization.class, org);
+        = new JAXBElement<>(xmlqnameorg, MCCIMT000300UV01Organization.class, org);
         agent.setRepresentedOrganization(orgElem);
         agent.getClassCode().add(HL7Constants.AGENT_CLASS_CODE);
 
         javax.xml.namespace.QName xmlqnameagent = new javax.xml.namespace.QName("urn:hl7-org:v3", "asAgent");
         JAXBElement<MCCIMT000300UV01Agent> agentElem
-            = new JAXBElement<>(xmlqnameagent, MCCIMT000300UV01Agent.class, agent);
+        = new JAXBElement<>(xmlqnameagent, MCCIMT000300UV01Agent.class, agent);
 
         senderDevice.setAsAgent(agentElem);
 
@@ -631,36 +628,36 @@ public class HL7Parser201306 {
 
     private static ADExplicit createAddress(Address add) {
         org.hl7.v3.ObjectFactory factory = new org.hl7.v3.ObjectFactory();
-        ADExplicit result = (factory.createADExplicit());
+        ADExplicit result = factory.createADExplicit();
         List addrlist = result.getContent();
 
         if (add != null) {
-            if (add.getStreet1() != null && add.getStreet1().length() > 0) {
+            if (StringUtils.isNotEmpty(add.getStreet1())) {
                 AdxpExplicitStreetAddressLine street = new AdxpExplicitStreetAddressLine();
                 street.setContent(add.getStreet1());
 
                 addrlist.add(factory.createADExplicitStreetAddressLine(street));
             }
 
-            if (add.getStreet2() != null && add.getStreet2().length() > 0) {
+            if (StringUtils.isNotEmpty(add.getStreet2())) {
                 AdxpExplicitStreetAddressLine street = new AdxpExplicitStreetAddressLine();
                 street.setContent(add.getStreet2());
 
                 addrlist.add(factory.createADExplicitStreetAddressLine(street));
             }
-            if (add.getCity() != null && add.getCity().length() > 0) {
+            if (StringUtils.isNotEmpty(add.getCity())) {
                 AdxpExplicitCity city = new AdxpExplicitCity();
                 city.setContent(add.getCity());
 
                 addrlist.add(factory.createADExplicitCity(city));
             }
-            if (add.getState() != null && add.getState().length() > 0) {
+            if (StringUtils.isNotEmpty(add.getState())) {
                 AdxpExplicitState state = new AdxpExplicitState();
                 state.setContent(add.getState());
 
                 addrlist.add(factory.createADExplicitState(state));
             }
-            if (add.getZip() != null && add.getZip().length() > 0) {
+            if (StringUtils.isNotEmpty(add.getZip())) {
                 AdxpExplicitPostalCode zip = new AdxpExplicitPostalCode();
                 zip.setContent(add.getZip());
 

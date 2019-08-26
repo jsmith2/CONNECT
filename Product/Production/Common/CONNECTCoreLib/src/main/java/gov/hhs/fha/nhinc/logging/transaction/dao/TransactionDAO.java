@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.logging.transaction.dao;
 
 import gov.hhs.fha.nhinc.logging.transaction.model.TransactionRepo;
@@ -83,7 +83,14 @@ public class TransactionDAO {
         if (transactionRepo != null) {
             try {
                 final SessionFactory sessionFactory = getSessionFactory();
-                session = sessionFactory.openSession();
+                if (sessionFactory != null) {
+                    session = sessionFactory.openSession();
+                }
+                if (session == null) {
+                    LOG.error("Session equal");
+                    return false;
+                }
+
                 tx = session.beginTransaction();
                 LOG.info("Inserting Record...");
 
@@ -123,12 +130,18 @@ public class TransactionDAO {
 
         try {
             final SessionFactory sessionFactory = getSessionFactory();
-            session = sessionFactory.openSession();
-
+            if (sessionFactory != null) {
+                session = sessionFactory.openSession();
+            }
             if (LOG.isDebugEnabled()) {
                 LOG.info("Getting Records");
             }
+            if (session == null) {
+                LOG.error("Session equal");
+                return null;
+            }
             final Query namedQuery = session.getNamedQuery("findTransactionByMessageId");
+
             namedQuery.setString("messageId", messageId);
 
             final List<TransactionRepo> queryList = namedQuery.list();

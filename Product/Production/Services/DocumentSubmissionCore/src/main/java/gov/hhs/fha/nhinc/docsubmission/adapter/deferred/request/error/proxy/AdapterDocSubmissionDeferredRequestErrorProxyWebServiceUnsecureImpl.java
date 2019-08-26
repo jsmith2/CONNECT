@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.docsubmission.adapter.deferred.request.error.proxy;
 
 import gov.hhs.fha.nhinc.adapterxdrrequesterror.AdapterXDRRequestErrorPortType;
@@ -33,6 +33,7 @@ import gov.hhs.fha.nhinc.common.nhinccommonadapter.AdapterProvideAndRegisterDocu
 import gov.hhs.fha.nhinc.docsubmission.adapter.deferred.request.error.proxy.service.AdapterDocSubmissionDeferredRequestErrorServicePortDescriptor;
 import gov.hhs.fha.nhinc.docsubmission.aspect.DocSubmissionArgTransformerBuilder;
 import gov.hhs.fha.nhinc.docsubmission.aspect.DocSubmissionBaseEventDescriptionBuilder;
+import gov.hhs.fha.nhinc.event.error.ErrorEventException;
 import gov.hhs.fha.nhinc.messaging.client.CONNECTCXFClientFactory;
 import gov.hhs.fha.nhinc.messaging.client.CONNECTClient;
 import gov.hhs.fha.nhinc.messaging.service.port.ServicePortDescriptor;
@@ -41,6 +42,7 @@ import gov.hhs.fha.nhinc.nhinclib.NullChecker;
 import gov.hhs.fha.nhinc.webserviceproxy.WebServiceProxyHelper;
 import gov.hhs.healthit.nhin.XDRAcknowledgementType;
 import ihe.iti.xds_b._2007.ProvideAndRegisterDocumentSetRequestType;
+import javax.xml.ws.WebServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +73,7 @@ public class AdapterDocSubmissionDeferredRequestErrorProxyWebServiceUnsecureImpl
     @AdapterDelegationEvent(beforeBuilder = DocSubmissionBaseEventDescriptionBuilder.class,
     afterReturningBuilder = DocSubmissionArgTransformerBuilder.class,
     serviceType = "Document Submission Deferred Request",
-    version = "")
+    version = "LEVEL_a0")
     @Override
     public XDRAcknowledgementType provideAndRegisterDocumentSetBRequestError(
         ProvideAndRegisterDocumentSetRequestType request, String errorMessage, AssertionType assertion) {
@@ -82,7 +84,7 @@ public class AdapterDocSubmissionDeferredRequestErrorProxyWebServiceUnsecureImpl
         try {
             LOG.debug("Before target system URL look up.");
             String url = oProxyHelper.getAdapterEndPointFromConnectionManager(serviceName);
-            LOG.debug("After target system URL look up. URL for service: " + serviceName + " is: " + url);
+            LOG.debug("After target system URL look up. URL for service: {} is: {}",serviceName, url);
 
             if (NullChecker.isNotNullish(url)) {
                 AdapterProvideAndRegisterDocumentSetRequestErrorType wsRequest = new AdapterProvideAndRegisterDocumentSetRequestErrorType();
@@ -98,11 +100,10 @@ public class AdapterDocSubmissionDeferredRequestErrorProxyWebServiceUnsecureImpl
                 response = (XDRAcknowledgementType) client.invokePort(AdapterXDRRequestErrorPortType.class,
                     "provideAndRegisterDocumentSetBRequestError", wsRequest);
             } else {
-                LOG.error("Failed to call the web service (" + serviceName + ").  The URL is null.");
+                throw new WebServiceException("Could not determine URL for Doc Submission Deferred Request Adapter endpoint");
             }
         } catch (Exception ex) {
-            LOG.error("Error: Failed to retrieve url for service: " + serviceName + " for local home community");
-            LOG.error(ex.getMessage(), ex);
+            throw new ErrorEventException(ex, "Unable to call Doc Submission Deferred Request Adapter");
         }
 
         LOG.debug("End AdapterDocSubmissionDeferredRequestErrorProxyWebServiceUnsecureImpl.provideAndRegisterDocumentSetBRequestError");

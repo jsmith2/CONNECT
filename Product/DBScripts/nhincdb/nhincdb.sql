@@ -247,7 +247,7 @@ GRANT SELECT,INSERT,UPDATE,DELETE ON configdb.* to nhincuser;
 -- begin docrepository
 CREATE DATABASE IF NOT EXISTS docrepository;
 
-CREATE TABLE IF NOT EXISTS docrepository.document (
+CREATE TABLE IF NOT EXISTS docrepository.docregistry (
     documentid int(11) NOT NULL,
     DocumentUniqueId varchar(64) NOT NULL,
     DocumentTitle varchar(128) default NULL,
@@ -279,7 +279,7 @@ CREATE TABLE IF NOT EXISTS docrepository.document (
     IntendedRecipientOrganization varchar(128) default NULL COMMENT 'Format of HL7 2.x XON',
     LanguageCode varchar(64) default NULL,
     LegalAuthenticator varchar(128) default NULL COMMENT 'Format of HL7 2.x XCN',
-    MimeType varchar(32) default NULL,
+    MimeType varchar(256) default NULL,
     ParentDocumentId varchar(64) default NULL,
     ParentDocumentRelationship varchar(64) default NULL,
     PracticeSetting varchar(64) default NULL,
@@ -296,12 +296,21 @@ CREATE TABLE IF NOT EXISTS docrepository.document (
     TypeCodeScheme varchar(64) default NULL,
     TypeCodeDisplayName varchar(64) default NULL,
     DocumentUri varchar(128) default NULL COMMENT 'May derive this value',
-    RawData longblob,
     Persistent int(11) NOT NULL,
     OnDemand tinyint(1) NOT NULL default 0 COMMENT 'Indicate whether document is dynamic (true or 1) or static (false or 0).',
     NewDocumentUniqueId varchar(128) default NULL,
     NewRepositoryUniqueId varchar(128) default NULL,
+    PatientRecordId int(11) NULL,
+	repoId int(11) default NULL,
     PRIMARY KEY  (documentid)
+);
+
+CREATE TABLE IF NOT EXISTS docrepository.docrepository (
+  repoId int(11) NOT NULL,
+  RawData longblob NOT NULL,
+  DocumentUniqueId varchar(64) NOT NULL,
+  RepositoryUniqueId varchar(128) NOT NULL,
+  PRIMARY KEY (repoId)
 );
 
 CREATE TABLE IF NOT EXISTS docrepository.eventcode (
@@ -326,6 +335,7 @@ CREATE TABLE IF NOT EXISTS patientcorrelationdb.correlatedidentifiers (
     CorrelatedPatientAssignAuthId varchar(64) NOT NULL,
     CorrelatedPatientId varchar(128) NOT NULL,
     CorrelationExpirationDate datetime,
+    RlsId VARCHAR(128) default NULL,
     PRIMARY KEY  (correlationId)
 );
 
@@ -385,7 +395,7 @@ CREATE DATABASE IF NOT EXISTS patientdb;
 CREATE TABLE IF NOT EXISTS patientdb.patient (
     patientId BIGINT NOT NULL AUTO_INCREMENT,
     dateOfBirth DATE NULL,
-    gender CHAR(2) NULL,
+    gender CHAR(10) NULL,
     ssn CHAR(9) NULL,
     PRIMARY KEY (patientId),
     UNIQUE INDEX patientId_UNIQUE (patientId ASC)
@@ -455,6 +465,14 @@ CREATE TABLE IF NOT EXISTS patientdb.phonenumber (
         ON DELETE NO ACTION
         ON UPDATE NO ACTION
 ) COMMENT = 'Phone Numbers';
+
+CREATE TABLE IF NOT EXISTS patientdb.recordlocatorservice (
+    Id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    RequestedPatientId VARCHAR(128) NOT NULL,
+    PatientId VARCHAR(128) NOT NULL,
+    AssigningAuthorityId VARCHAR(64) NOT NULL,
+    PRIMARY KEY (Id)
+);
 
 GRANT SELECT,INSERT,UPDATE,DELETE ON patientdb.* to nhincuser;
 -- end patientdb
@@ -526,7 +544,12 @@ CREATE TABLE IF NOT EXISTS adminguidb.UserLogin (
     salt varchar(100) NOT NULL,
     sha2 varchar(100) NOT NULL,
     userName varchar(100) NOT NULL UNIQUE,
+	firstName varchar(100),
+	middleName varchar(100),
+	lastName varchar(100),
     userRole BIGINT unsigned NOT NULL,
+    transactionUserRole varchar(100),
+    transactionUserRoleDesc varchar(150),
     CONSTRAINT fk_role_user
         FOREIGN KEY (userRole)
         REFERENCES adminguidb.UserRole (roleId)
@@ -541,6 +564,11 @@ VALUES
 (2, "SUPER USER"),
 (3, "USER");
 
+INSERT INTO adminguidb.UserLogin
+(id, salt, sha2, userName, userRole)
+VALUES
+(1, "ABCD", "eFw9+D8egYfAGv1QjUMdVzI9dtvwiH3Amc6XlBoXZj03ebwzuQU8yoYzyLtz40JOn69a7P8zqtT7A6lEyIMBmw==", "CONNECTAdmin", 1);
+
 INSERT INTO adminguidb.PagePreference
 (pageName, pageDesc, accessPage, prefRoleId)
 VALUES
@@ -550,9 +578,9 @@ VALUES
 ("direct.xhtml", "Direct Config", 0, 1),
 ("direct.xhtml", "Direct Config", 0, 2),
 ("direct.xhtml", "Direct Config", 0, 3),
-("connectionManager.xhtml", "Connection Management", 0, 1),
-("connectionManager.xhtml", "Connection Management", 0, 2),
-("connectionManager.xhtml", "Connection Management", 0, 3),
+("exchangeManager.xhtml", "Exchange Management", 0, 1),
+("exchangeManager.xhtml", "Exchange Management", 0, 2),
+("exchangeManager.xhtml", "Exchange Management", 0, 3),
 ("properties.xhtml", "CONNECT Properties", 0, 1),
 ("properties.xhtml", "CONNECT Properties", 0, 2),
 ("properties.xhtml", "CONNECT Properties", 0, 3),
@@ -562,14 +590,15 @@ VALUES
 ("patientDiscovery.xhtml", "Cross-Query Gateway Client", 0, 1),
 ("patientDiscovery.xhtml", "Cross-Query Gateway Client", 0, 2),
 ("patientDiscovery.xhtml", "Cross-Query Gateway Client", 0, 3),
-("auditLog.xhtml", "AuditSearch", 0, 1),
-("auditLog.xhtml", "AuditSearch", 0, 2),
-("auditLog.xhtml", "AuditSearch", 0, 3);
-
-INSERT INTO adminguidb.UserLogin
-(id, salt, sha2, userName, userRole)
-VALUES
-(1, "ABCD", "eFw9+D8egYfAGv1QjUMdVzI9dtvwiH3Amc6XlBoXZj03ebwzuQU8yoYzyLtz40JOn69a7P8zqtT7A6lEyIMBmw==", "CONNECTAdmin", 1);
+("loadTestData.xhtml", "Test Data", 0, 1),
+("loadTestData.xhtml", "Test Data", 0, 2),
+("loadTestData.xhtml", "Test Data", 0, 3),
+("auditLog.xhtml", "Logging", 0, 1),
+("auditLog.xhtml", "Logging", 0, 2),
+("auditLog.xhtml", "Logging", 0, 3),
+("certificateManager.xhtml", "Certificate Management", 0, 1),
+("certificateManager.xhtml", "Certificate Management", -1, 2),
+("certificateManager.xhtml", "Certificate Management", -1, 3);
 
 GRANT SELECT,INSERT,UPDATE,DELETE ON adminguidb.* to nhincuser;
 -- end adminguidb

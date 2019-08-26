@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,8 +23,10 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.adaptermpimanager.HL7Parsers;
+
+import com.google.common.base.Optional;
 
 import gov.hhs.fha.nhinc.mpilib.Identifier;
 import gov.hhs.fha.nhinc.mpilib.Identifiers;
@@ -35,8 +37,8 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import javax.xml.bind.JAXBElement;
+import org.apache.commons.collections.CollectionUtils;
 import org.hl7.v3.CE;
-import org.hl7.v3.ENXPExplicit;
 import org.hl7.v3.EnExplicitFamily;
 import org.hl7.v3.EnExplicitGiven;
 import org.hl7.v3.II;
@@ -104,7 +106,7 @@ public class HL7Parser201301 {
         PersonName personname = new PersonName();
 
         LOG.info("patientPerson.getName().size() " + person.getName().size());
-        if (person.getName() != null && person.getName().size() > 0 && person.getName().get(0) != null
+        if (CollectionUtils.isNotEmpty(person.getName()) && person.getName().get(0) != null
             && person.getName().get(0).getContent() != null) {
 
             List<Serializable> choice = person.getName().get(0).getContent();
@@ -143,7 +145,7 @@ public class HL7Parser201301 {
                         firstname = (EnExplicitGiven) oJAXBElement.getValue();
                         LOG.info("found firstname element; content=" + firstname.getContent());
                     } else {
-                        LOG.info("other name part=" + (ENXPExplicit) oJAXBElement.getValue());
+                        LOG.info("other name part=" + oJAXBElement.getValue());
                     }
                 } else {
                     LOG.info("contentItem is other");
@@ -185,8 +187,8 @@ public class HL7Parser201301 {
                 + id.getId() + "]");
             ids.add(id);
         }
-
-        PRPAMT201301UV02Person person = ExtractHL7PatientPersonFromHL7Patient(patient);
+        Optional<PRPAMT201301UV02Person> personOptional = Optional.fromNullable(ExtractHL7PatientPersonFromHL7Patient(patient));
+        PRPAMT201301UV02Person person = personOptional.or(new PRPAMT201301UV02Person());
         for (II personid : person.getId()) {
             Identifier id = new Identifier();
             id.setId(personid.getExtension());
@@ -199,7 +201,7 @@ public class HL7Parser201301 {
         List<PRPAMT201301UV02OtherIDs> OtherIds = person.getAsOtherIDs();
         for (PRPAMT201301UV02OtherIDs otherPersonIds : OtherIds) {
             for (II otherPersonId : otherPersonIds.getId()) {
-                if (!(otherPersonId.getRoot().contentEquals(HL7Parser.SSN_OID))) {
+                if (!otherPersonId.getRoot().contentEquals(HL7Parser.SSN_OID)) {
                     Identifier id = new Identifier();
                     id.setId(otherPersonId.getExtension());
                     id.setOrganizationId(otherPersonId.getRoot());
@@ -229,14 +231,20 @@ public class HL7Parser201301 {
     }
 
     public static PRPAMT201301UV02Person ExtractHL7PatientPersonFromHL7Patient(PRPAMT201301UV02Patient patient) {
+        if (patient == null) {
+            return null;
+        }
         JAXBElement<PRPAMT201301UV02Person> patientPersonElement = patient.getPatientPerson();
+        if (null == patientPersonElement) {
+            return null;
+        }
         return patientPersonElement.getValue();
     }
 
     public static PRPAMT201301UV02Person ExtractHL7PatientPersonFrom201301Message(org.hl7.v3.PRPAIN201301UV02 message) {
         // assume one subject for now
         PRPAMT201301UV02Patient patient = ExtractHL7PatientFromMessage(message);
-        return ExtractHL7PatientPersonFromHL7Patient(patient);
+            return ExtractHL7PatientPersonFromHL7Patient(patient);
     }
 
     public static PRPAMT201301UV02Patient ExtractHL7PatientFromMessage(org.hl7.v3.PRPAIN201301UV02 message) {
@@ -256,7 +264,7 @@ public class HL7Parser201301 {
         HL7Parser.PrintId(controlActProcess.getId(), "controlActProcess");
 
         List<PRPAIN201301UV02MFMIMT700701UV01Subject1> subjects = controlActProcess.getSubject();
-        if ((subjects == null) || (subjects.isEmpty())) {
+        if (CollectionUtils.isEmpty(subjects)) {
             LOG.info("subjects is blank/null - no patient");
             return null;
         }
@@ -298,14 +306,17 @@ public class HL7Parser201301 {
     public static Patient ExtractMpiPatientFromHL7Patient(PRPAMT201301UV02Patient patient) {
         PRPAMT201301UV02Person patientPerson = ExtractHL7PatientPersonFromHL7Patient(patient);
         Patient mpiPatient = new Patient();
-        mpiPatient.getNames().add(ExtractPersonName(patientPerson));
-        mpiPatient.setGender(ExtractGender(patientPerson));
-        String birthdateString = ExtractBirthdate(patientPerson);
-        mpiPatient.setDateOfBirth(birthdateString);
-        mpiPatient.setSSN(ExtractSsn(patientPerson));
-
-        Identifiers ids = ExtractPersonIdentifiers(patient);
-        mpiPatient.setIdentifiers(ids);
+        if (patientPerson != null) {
+            mpiPatient.getNames().add(ExtractPersonName(patientPerson));
+            mpiPatient.setGender(ExtractGender(patientPerson));
+            String birthdateString = ExtractBirthdate(patientPerson);
+            mpiPatient.setDateOfBirth(birthdateString);
+            mpiPatient.setSSN(ExtractSsn(patientPerson));
+        }
+        if (patient != null) {
+            Identifiers ids = ExtractPersonIdentifiers(patient);
+            mpiPatient.setIdentifiers(ids);
+        }
         return mpiPatient;
     }
 
@@ -345,11 +356,11 @@ public class HL7Parser201301 {
         //
         // Name.
         //
-        PNExplicit name = (PNExplicit) (factory.createPNExplicit());
+        PNExplicit name = factory.createPNExplicit();
         List namelist = name.getContent();
 
         PersonName mpiPatientName = null;
-        if (mpiPatient.getNames().size() > 0) {
+        if (CollectionUtils.isNotEmpty(mpiPatient.getNames())) {
             mpiPatientName = mpiPatient.getNames().get(0);
         }
 

@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,19 +23,11 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.patientdb.dao;
 
 import gov.hhs.fha.nhinc.patientdb.model.Personname;
-import gov.hhs.fha.nhinc.patientdb.persistence.HibernateUtil;
-import gov.hhs.fha.nhinc.patientdb.persistence.HibernateUtilFactory;
 import java.util.List;
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Expression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,20 +37,17 @@ import org.slf4j.LoggerFactory;
  *
  * @author richard.ettema
  */
-public class PersonnameDAO {
+public class PersonnameDAO extends GenericDAOImpl<Personname> {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersonnameDAO.class);
-
     private static PersonnameDAO personnameDAO = new PersonnameDAO();
-
     /**
      *
      * Constructor
      */
     private PersonnameDAO() {
-
-        LOG.info("PersonnameDAO - Initialized");
-
+        super(Personname.class);
+        LOG.trace("PersonnameDAO - Initialized");
     }
 
     /**
@@ -68,11 +57,8 @@ public class PersonnameDAO {
      * @return PersonnameDAO
      */
     public static PersonnameDAO getPersonnameDAOInstance() {
-
-        LOG.debug("getPersonnameDAOInstance()..");
-
+        LOG.trace("getPersonnameDAOInstance()..");
         return personnameDAO;
-
     }
 
     // =========================
@@ -88,64 +74,10 @@ public class PersonnameDAO {
      *
      * @return boolean
      */
+    @Override
     public boolean create(Personname personnameRecord) {
-
-        LOG.debug("PersonnameDAO.create() - Begin");
-
-        Session session = null;
-
-        Transaction tx = null;
-
-        boolean result = true;
-
-        if (personnameRecord != null) {
-
-            try {
-
-                SessionFactory sessionFactory = getSessionFactory();
-
-                session = sessionFactory.openSession();
-
-                tx = session.beginTransaction();
-
-                LOG.info("Inserting Record...");
-
-                session.persist(personnameRecord);
-
-                LOG.info("Personname Inserted seccussfully...");
-
-                tx.commit();
-
-            } catch (HibernateException | NullPointerException e) {
-
-                result = false;
-
-                if (tx != null) {
-
-                    tx.rollback();
-
-                }
-
-                LOG.error("Exception during insertion caused by : {}", e.getMessage(), e);
-
-            } finally {
-
-                // Actual Personname insertion will happen at this step
-                if (session != null) {
-                    try {
-                        session.close();
-                    } catch (HibernateException e) {
-                        LOG.error("Exception while closing the session: {}", e.getMessage(), e);
-                    }
-                }
-            }
-
-        }
-
-        LOG.debug("PersonnameDAO.create() - End");
-
-        return result;
-
+        LOG.trace("PersonnameDAO.create() - Begin");
+        return personnameRecord != null ? super.create(personnameRecord) : true;
     }
 
     /**
@@ -159,68 +91,15 @@ public class PersonnameDAO {
      * @return Personname
      */
     public Personname read(Long id) {
-
-        LOG.debug("PersonnameDAO.read() - Begin");
-
+        LOG.trace("PersonnameDAO.read() - Begin");
         if (id == null) {
-
-            LOG.info("-- id Parameter is required for Personname Query --");
-
-            LOG.debug("PersonnameDAO.read() - End");
-
+            LOG.trace("-- id Parameter is required for Personname Query --");
+            LOG.trace("PersonnameDAO.read() - End");
             return null;
-
         }
-
-        Session session = null;
-
-        List<Personname> queryList;
-
-        Personname foundRecord = null;
-
-        try {
-
-            SessionFactory sessionFactory = getSessionFactory();
-
-            session = sessionFactory.openSession();
-
-            LOG.info("Reading Record...");
-
-            // Build the criteria
-            Criteria aCriteria = session.createCriteria(Personname.class);
-
-            aCriteria.add(Expression.eq("id", id));
-
-            queryList = aCriteria.list();
-
-            if (queryList != null && !queryList.isEmpty()) {
-
-                foundRecord = queryList.get(0);
-
-            }
-
-        } catch (HibernateException | NullPointerException e) {
-
-            LOG.error("Exception during read occured due to : {}", e.getMessage(), e);
-
-        } finally {
-
-            // Flush and close session
-            if (session != null) {
-
-                try {
-                    session.flush();
-                    session.close();
-                } catch (HibernateException e) {
-                    LOG.error("Exception while closing the session after a read: {}", e.getMessage(), e);
-                }
-            }
-        }
-
-        LOG.debug("PersonnameDAO.read() - End");
-
+        Personname foundRecord = super.read(id);
+        LOG.trace("PersonnameDAO.read() - End");
         return foundRecord;
-
     }
 
     /**
@@ -231,64 +110,10 @@ public class PersonnameDAO {
      *
      * @return boolean
      */
+    @Override
     public boolean update(Personname personnameRecord) {
-
-        LOG.debug("PersonnameDAO.update() - Begin");
-
-        Session session = null;
-
-        Transaction tx = null;
-
-        boolean result = true;
-
-        if (personnameRecord != null) {
-
-            try {
-
-                SessionFactory sessionFactory = getSessionFactory();
-
-                session = sessionFactory.openSession();
-
-                tx = session.beginTransaction();
-
-                LOG.info("Updating Record...");
-
-                session.saveOrUpdate(personnameRecord);
-
-                LOG.info("Personname Updated seccussfully...");
-
-                tx.commit();
-
-            } catch (HibernateException | NullPointerException e) {
-
-                result = false;
-
-                if (tx != null) {
-
-                    tx.rollback();
-
-                }
-
-                LOG.error("Exception during update caused by : {}", e.getMessage(), e);
-
-            } finally {
-
-                // Actual Personname update will happen at this step
-                if (session != null) {
-                    try {
-                        session.close();
-                    } catch (HibernateException e) {
-                        LOG.error("Exception while closing the session after an update: {}", e.getMessage(), e);
-                    }
-                }
-            }
-
-        }
-
-        LOG.debug("PersonnameDAO.update() - End");
-
-        return result;
-
+        LOG.trace("PersonnameDAO.update()");
+        return personnameRecord != null ? super.update(personnameRecord) : true;
     }
 
     /**
@@ -297,43 +122,14 @@ public class PersonnameDAO {
      *
      * @param personnameRecord
      */
-    public void delete(Personname personnameRecord) {
-
-        LOG.debug("PersonnameDAO.delete() - Begin");
-
-        Session session = null;
-
-        try {
-
-            SessionFactory sessionFactory = getSessionFactory();
-
-            session = sessionFactory.openSession();
-
-            LOG.info("Deleting Record...");
-
-            // Delete the Personname record
-            session.delete(personnameRecord);
-
-        } catch (HibernateException | NullPointerException e) {
-
-            LOG.error("Exception during delete occured due to : {}", e.getMessage(), e);
-
-        } finally {
-
-            // Flush and close session
-            if (session != null) {
-                try {
-                    session.flush();
-                    session.close();
-                } catch (HibernateException e) {
-                    LOG.error("Exception while closing the session after a delete: {}", e.getMessage(), e);
-                }
-
-            }
+    @Override
+    public boolean delete(Personname personnameRecord) {
+        LOG.trace("PersonnameDAO.delete() - Begin");
+        if (personnameRecord != null) {
+            return super.delete(personnameRecord);
         }
-
-        LOG.debug("PersonnameDAO.delete() - End");
-
+        LOG.trace("PersonnameDAO.delete() - End");
+        return false;
     }
 
     // =========================
@@ -350,74 +146,6 @@ public class PersonnameDAO {
      * @return List<Personname>
      */
     public List<Personname> findPatientPersonnames(Long patientId) {
-
-        LOG.debug("PersonnameDAO.findPatientPersonnames() - Begin");
-
-        if (patientId == null) {
-
-            LOG.info("-- patientId Parameter is required for Personname Query --");
-
-            LOG.debug("PersonnameDAO.findPatientPersonnames() - End");
-
-            return null;
-
-        }
-
-        Session session = null;
-
-        List<Personname> queryList = null;
-
-        try {
-
-            SessionFactory sessionFactory = getSessionFactory();
-
-            session = sessionFactory.openSession();
-
-            LOG.info("Reading Record...");
-
-            // Build the criteria
-            Criteria aCriteria = session.createCriteria(Personname.class);
-
-            aCriteria.add(Expression.eq("patient.patientId", patientId));
-
-            queryList = aCriteria.list();
-
-        } catch (HibernateException | NullPointerException e) {
-
-            LOG.error("Exception during read occured due to : {}", e.getMessage(), e);
-
-        } finally {
-
-            // Flush and close session
-            if (session != null) {
-                try {
-                    session.flush();
-                    session.close();
-                } catch (HibernateException e) {
-                    LOG.error("Exception while closing the session after looking for patients' names: {}",
-                            e.getMessage(), e);
-                }
-            }
-        }
-
-        LOG.debug("PersonnameDAO.findPatientPersonnames() - End");
-
-        return queryList;
-
+        return super.findRecords(patientId);
     }
-
-    /**
-     * Returns the sessionFactory belonging to PatientDiscovery HibernateUtil
-     *
-     * @return
-     */
-    protected SessionFactory getSessionFactory() {
-        SessionFactory fact = null;
-        HibernateUtil hibernateUtil = HibernateUtilFactory.getPatientDiscHibernateUtil();
-        if (hibernateUtil != null) {
-            fact = hibernateUtil.getSessionFactory();
-        }
-        return fact;
-    }
-
 }

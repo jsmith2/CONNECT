@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.connectopensource</groupId>
         <artifactId>RegressionSuite</artifactId>
-        <version>4.8.0-SNAPSHOT</version>
+        <version>5.4.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>Passthru</artifactId>
@@ -25,12 +25,18 @@
             </activation>
             <modules>
                 <module>Admin-Distribution-Passthrough</module>
-                <!--module>AuditLogging-Passthrough</module-->
+                <!--Manual <module>AuditLogging-Passthrough</module> -->
+                <module>NHINSAMLSubjectConfirmationTest</module>
                 <module>DocQueryAdditionalStoredQueries</module>
                 <module>DocQueryRetrieveSelfTest</module>
                 <module>DocQueryXDSErrors</module>
                 <module>EventLogging-Passthrough</module>
                 <module>X12ErrorHandlingTest</module>
+                <module>NHINSAMLAttributeTest</module>
+                <module>AdapterSpringInjectionTest</module>
+                <module>NHINCReceivingXDRAsyncRequestTests</module>
+                <module>NHINCReceivingXDRAsyncResponseTests</module>
+                <module>DocQueryErrorCodesPassthru</module>
             </modules>
         </profile>
     </profiles>

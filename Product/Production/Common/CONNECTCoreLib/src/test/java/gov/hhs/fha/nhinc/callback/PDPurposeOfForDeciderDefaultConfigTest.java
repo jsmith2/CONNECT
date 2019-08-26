@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,8 +28,8 @@ package gov.hhs.fha.nhinc.callback;
 
 import static org.junit.Assert.assertTrue;
 
-import gov.hhs.fha.nhinc.callback.openSAML.CallbackMapProperties;
-import gov.hhs.fha.nhinc.callback.openSAML.CallbackProperties;
+import gov.hhs.fha.nhinc.callback.opensaml.CallbackMapProperties;
+import gov.hhs.fha.nhinc.callback.opensaml.CallbackProperties;
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
 import java.util.HashMap;
 import org.junit.Test;
@@ -46,7 +46,7 @@ public class PDPurposeOfForDeciderDefaultConfigTest {
     @Test
     public void testIsPurposeFor_g0() {
         HashMap<String, Object> tokenVals = new HashMap<>();
-        tokenVals.put(NhincConstants.TARGET_API_LEVEL, NhincConstants.GATEWAY_API_LEVEL.LEVEL_g0);
+        tokenVals.put(SamlConstants.TARGET_API_LEVEL, NhincConstants.GATEWAY_API_LEVEL.LEVEL_g0);
         tokenVals.put(NhincConstants.WS_SOAP_TARGET_HOME_COMMUNITY_ID, "1.1");
         tokenVals.put(NhincConstants.SERVICE_NAME, NhincConstants.PATIENT_DISCOVERY_SERVICE_NAME);
 
@@ -62,7 +62,7 @@ public class PDPurposeOfForDeciderDefaultConfigTest {
     public void testIsPurposeForNoApiProvided() {
         HashMap<String, Object> tokenVals = new HashMap<>();
         tokenVals.put(NhincConstants.WS_SOAP_TARGET_HOME_COMMUNITY_ID, "1.1");
-        tokenVals.put(NhincConstants.ACTION_PROP, NhincConstants.PATIENT_DISCOVERY_SERVICE_NAME);
+        tokenVals.put(SamlConstants.ACTION_PROP, NhincConstants.PATIENT_DISCOVERY_SERVICE_NAME);
 
         CallbackProperties properties = new CallbackMapProperties(tokenVals);
         PurposeOfForDecider decider = new PurposeOfForDecider();
@@ -75,9 +75,9 @@ public class PDPurposeOfForDeciderDefaultConfigTest {
     @Test
     public void testIsPurposeFor_g1() {
         HashMap<String, Object> tokenVals = new HashMap<>();
-        tokenVals.put(NhincConstants.TARGET_API_LEVEL, NhincConstants.GATEWAY_API_LEVEL.LEVEL_g1);
+        tokenVals.put(SamlConstants.TARGET_API_LEVEL, NhincConstants.GATEWAY_API_LEVEL.LEVEL_g1);
         tokenVals.put(NhincConstants.WS_SOAP_TARGET_HOME_COMMUNITY_ID, "1.1");
-        tokenVals.put(NhincConstants.ACTION_PROP, NhincConstants.PATIENT_DISCOVERY_SERVICE_NAME);
+        tokenVals.put(SamlConstants.ACTION_PROP, NhincConstants.PATIENT_DISCOVERY_SERVICE_NAME);
 
         CallbackProperties properties = new CallbackMapProperties(tokenVals);
         PurposeOfForDecider decider = new PurposeOfForDecider();

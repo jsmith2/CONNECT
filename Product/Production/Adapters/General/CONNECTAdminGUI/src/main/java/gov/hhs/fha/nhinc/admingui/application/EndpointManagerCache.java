@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,6 +29,7 @@ package gov.hhs.fha.nhinc.admingui.application;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -36,29 +37,33 @@ import java.util.HashMap;
  */
 public class EndpointManagerCache implements EndpointManager {
 
-    private static final HashMap<String, EndpointCacheInfo> endpointCache = new HashMap<>();
+    private final Map<String, Map<Integer, EndpointCacheInfo>> endpointCache = new HashMap<>();
 
-    private EndpointManagerCache() {
-    }
-
-    public static EndpointManagerCache getInstance() {
-        return EndpointManagerCacheHolder.INSTANCE;
+    public EndpointManagerCache() {
     }
 
     @Override
-    public void addOrUpdateEndpoint(String url, Date timestamp, boolean pingResult) {
-        endpointCache.put(url, new EndpointCacheInfo(url, timestamp, pingResult));
+    public void addOrUpdateEndpoint(String exchangeName, int id, String url, Date timestamp, boolean pingResult,
+        int code) {
+        getCache(exchangeName).put(id, new EndpointCacheInfo(id, url, timestamp, pingResult, code));
+    }
+
+    private Map<Integer, EndpointCacheInfo> getCache(String exchangeName) {
+        if (null == endpointCache.get(exchangeName)) {
+            endpointCache.put(exchangeName, new HashMap<Integer, EndpointCacheInfo>());
+        }
+        return endpointCache.get(exchangeName);
     }
 
     @Override
-    public EndpointCacheInfo getEndpointInfo(String url) {
-        return endpointCache.get(url);
+    public EndpointCacheInfo getEndpointInfo(String exchangeName, int id) {
+        return getCache(exchangeName).get(id);
     }
 
     @Override
-    public void loadCache(Collection<EndpointCacheInfo> endpoints) {
+    public void loadCache(String exchangeName, Collection<EndpointCacheInfo> endpoints) {
         for (EndpointCacheInfo endpoint : endpoints) {
-            endpointCache.put(endpoint.getUrl(), endpoint);
+            getCache(exchangeName).put(endpoint.getId(), endpoint);
         }
     }
 
@@ -67,21 +72,27 @@ public class EndpointManagerCache implements EndpointManager {
         return endpointCache.values();
     }
 
-    private static class EndpointManagerCacheHolder {
-
-        private static final EndpointManagerCache INSTANCE = new EndpointManagerCache();
+    @Override
+    public void deleteCache(String exchangeName) {
+        endpointCache.put(exchangeName, null);
     }
 
     public class EndpointCacheInfo {
 
+        private String exchangeName;
         private String url;
         private Date timestamp;
         private boolean successfulPing;
+        private int httpCode;
+        private Integer id;
 
-        public EndpointCacheInfo(String url, Date timestamp, boolean successfulPing) {
+        public EndpointCacheInfo(int id, String url, Date timestamp, boolean successfulPing, int httpCode)
+        {
+            this.id = id;
             this.url = url;
             this.timestamp = timestamp;
             this.successfulPing = successfulPing;
+            this.httpCode = httpCode;
         }
 
         public String getUrl() {
@@ -108,5 +119,30 @@ public class EndpointManagerCache implements EndpointManager {
             this.successfulPing = successfulPing;
         }
 
+        public int getHttpCode() {
+            return httpCode;
+        }
+
+        public void setHttpCode(int httpCode) {
+            this.httpCode = httpCode;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getExchangeName() {
+            return exchangeName;
+        }
+
+        public void setExchangeName(String exchangeName) {
+            this.exchangeName = exchangeName;
+        }
+
     }
+
 }

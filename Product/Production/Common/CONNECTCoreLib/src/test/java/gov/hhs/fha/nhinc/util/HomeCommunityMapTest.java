@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.util;
 
 import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
@@ -32,7 +32,8 @@ import gov.hhs.fha.nhinc.common.nhinccommon.NhinTargetCommunitiesType;
 import gov.hhs.fha.nhinc.common.nhinccommon.NhinTargetCommunityType;
 import gov.hhs.fha.nhinc.common.nhinccommon.NhinTargetSystemType;
 import gov.hhs.fha.nhinc.common.nhinccommon.UserType;
-import gov.hhs.fha.nhinc.connectmgr.ConnectionManagerCache;
+import gov.hhs.fha.nhinc.exchange.directory.OrganizationType;
+import gov.hhs.fha.nhinc.exchangemgr.ExchangeManager;
 import gov.hhs.fha.nhinc.properties.PropertyAccessException;
 import gov.hhs.fha.nhinc.properties.PropertyAccessor;
 import ihe.iti.xds_b._2007.RetrieveDocumentSetRequestType;
@@ -46,8 +47,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import org.uddi.api_v3.BusinessEntity;
-import org.uddi.api_v3.Name;
 
 /**
  *
@@ -55,22 +54,18 @@ import org.uddi.api_v3.Name;
  */
 public class HomeCommunityMapTest {
 
-    ConnectionManagerCache connection = mock(ConnectionManagerCache.class);
+    ExchangeManager exManager = mock(ExchangeManager.class);
 
     PropertyAccessor accessor = mock(PropertyAccessor.class);
 
     public HomeCommunityMapTest() {
     }
 
-    protected BusinessEntity createBusinessEntity(String orgName) {
-        BusinessEntity bEntity = new BusinessEntity();
+    protected OrganizationType createOrganization(String orgName) {
+        OrganizationType org = new OrganizationType();
+        org.setName(orgName);
 
-        bEntity.setBusinessKey("businessKey");
-        Name name = new Name();
-        name.setValue(orgName);
-        bEntity.getName().add(name);
-
-        return bEntity;
+        return org;
     }
 
     @Test
@@ -81,9 +76,9 @@ public class HomeCommunityMapTest {
         try {
             String homeCommunityId = "1.1";
 
-            HomeCommunityMap.setConnectionManager(connection);
+            HomeCommunityMap.setExchangeManager(exManager);
 
-            when(connection.getBusinessEntity(Mockito.anyString())).thenReturn(createBusinessEntity(homeCommunityName));
+            when(exManager.getOrganization(Mockito.anyString())).thenReturn(createOrganization(homeCommunityName));
 
             String foundName = HomeCommunityMap.getHomeCommunityName(homeCommunityId);
             assertEquals(homeCommunityName, foundName);
@@ -100,9 +95,9 @@ public class HomeCommunityMapTest {
         try {
             String homeCommunityId = "123456";
 
-            HomeCommunityMap.setConnectionManager(connection);
+            HomeCommunityMap.setExchangeManager(exManager);
 
-            when(connection.getBusinessEntity(Mockito.anyString())).thenReturn(null);
+            when(exManager.getOrganization(Mockito.anyString())).thenReturn(null);
 
             String foundName = HomeCommunityMap.getHomeCommunityName(homeCommunityId);
             assertEquals("", foundName);

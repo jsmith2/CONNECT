@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,8 +26,14 @@
  */
 package gov.hhs.fha.nhinc.cryptostore;
 
-import gov.hhs.fha.nhinc.callback.openSAML.CertificateManager;
-import org.apache.commons.lang.StringUtils;
+import gov.hhs.fha.nhinc.exchangemgr.InternalExchangeManager;
+import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility class to help managing cryptographic key and trust stores.
@@ -37,32 +43,49 @@ import org.apache.commons.lang.StringUtils;
  */
 public class StoreUtil {
 
-    /**
-     * Easy way to instantiate for code readability.
-     *
-     * @return
-     */
-    public static StoreUtil getInstance() {
-        return new StoreUtil();
-    }
+    private static final Logger LOG = LoggerFactory.getLogger(StoreUtil.class);
+    private static Map<String, String> gatewayAliasMapping = new HashMap<>();
 
-    /**
-     * Default constructor.
-     */
-    public StoreUtil() {
+    private StoreUtil() {
 
     }
 
     /**
      * Gets the private key alias used for digital signatures. The method will return the value of the system property
-     * defined in CertifcateManager.CLIENT_KEY_ALIAS or the default alias defined in
+     * defined in CertificateManager.CLIENT_KEY_ALIAS or the default alias defined in
      * CertificateManager.DEFAULT_CLIENT_KEY_ALIAS.
      *
      * @return String containing the private key alias.
      */
-    public String getPrivateKeyAlias() {
-        String alias = System.getProperty(CertificateManager.CLIENT_KEY_ALIAS);
-        return StringUtils.isBlank(alias) ? CertificateManager.DEFAULT_CLIENT_KEY_ALIAS : alias;
+    public static String getPrivateKeyAlias() {
+        String alias = System.getProperty(NhincConstants.CLIENT_KEY_ALIAS);
+        return StringUtils.isBlank(alias) ? NhincConstants.DEFAULT_CLIENT_KEY_ALIAS : alias;
     }
 
+    public static String getGatewayAliasDefaultTo(String overrideAlias) {
+        if (StringUtils.isNotBlank(overrideAlias)) {
+            return overrideAlias;
+        }
+
+        return getPrivateKeyAlias();
+    }
+
+    public static void addGatewayCertificateAlias(String exchangeName, String alias) {
+        if (!StringUtils.equalsIgnoreCase(InternalExchangeManager.getInstance().getDefaultExchange(), exchangeName)
+            && !ArrayUtils.contains(new String[] { exchangeName, alias }, null)) {
+            gatewayAliasMapping.put(exchangeName, alias);
+        }
+    }
+
+    public static String getGatewayCertificateAlias(String exchangeName) {
+        LOG.debug("Get Certification for exchange {}", exchangeName);
+        if (!StringUtils.equalsIgnoreCase(InternalExchangeManager.getInstance().getDefaultExchange(), exchangeName)) {
+            String gatewayAlias = gatewayAliasMapping.get(exchangeName);
+            if(StringUtils.isNotBlank(gatewayAlias)){
+                LOG.debug("found exchange mapping for '{}' to use '{}' JKS alias", exchangeName, gatewayAlias);
+                return gatewayAlias;
+            }
+        }
+        return getPrivateKeyAlias();
+    }
 }

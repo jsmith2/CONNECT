@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,12 +23,13 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.transform.subdisc;
 
 import gov.hhs.fha.nhinc.nhinclib.NullChecker;
 import java.util.List;
 import javax.xml.bind.JAXBElement;
+import org.apache.commons.collections.CollectionUtils;
 import org.hl7.v3.ADExplicit;
 import org.hl7.v3.CE;
 import org.hl7.v3.II;
@@ -57,7 +58,7 @@ public class HL7QueryParamsTransforms {
     private static HL7MessageIdGenerator idGenerator = new HL7MessageIdGenerator();
 
     public static JAXBElement<PRPAMT201306UV02QueryByParameter> createQueryParams(PRPAMT201301UV02Patient patient,
-            String localDeviceId) {
+        String localDeviceId) {
         PRPAMT201306UV02QueryByParameter params = new PRPAMT201306UV02QueryByParameter();
 
         params.setQueryId(idGenerator.generateHL7MessageId(localDeviceId));
@@ -82,34 +83,34 @@ public class HL7QueryParamsTransforms {
 
         // Set the Subject Gender Code
         if (person != null && person.getAdministrativeGenderCode() != null
-                && NullChecker.isNotNullish(person.getAdministrativeGenderCode().getCode())) {
+            && NullChecker.isNotNullish(person.getAdministrativeGenderCode().getCode())) {
             paramList.getLivingSubjectAdministrativeGender()
-                    .add(createGender(person.getAdministrativeGenderCode().getCode()));
+            .add(createGender(person.getAdministrativeGenderCode().getCode()));
         }
 
         // Set the Subject Birth Time
         if (person != null && person.getBirthTime() != null
-                && NullChecker.isNotNullish(person.getBirthTime().getValue())) {
+            && NullChecker.isNotNullish(person.getBirthTime().getValue())) {
             paramList.getLivingSubjectBirthTime().add(createBirthTime(person.getBirthTime().getValue()));
         }
 
         // Set the address
-        if (person != null && person.getAddr() != null && person.getAddr().size() > 0) {
+        if (person != null && CollectionUtils.isNotEmpty(person.getAddr())) {
             paramList.getPatientAddress().add(createAddress(person.getAddr()));
         }
 
         // Set telephone number
-        if (person != null && person.getTelecom() != null && person.getTelecom().size() > 0) {
+        if (person != null && CollectionUtils.isNotEmpty(person.getTelecom())) {
             paramList.getPatientTelecom().add(createTelecom(person.getTelecom()));
         }
         // Set the Subject Name
-        if (person != null && person.getName() != null && person.getName().size() > 0) {
+        if (person != null && CollectionUtils.isNotEmpty(person.getName())) {
             paramList.getLivingSubjectName().add(createName(person.getName()));
         }
 
         // Set the subject Id
-        if (patient != null && patient.getId() != null && patient.getId().size() > 0
-                && patient.getId().get(0) != null) {
+        if (patient != null && CollectionUtils.isNotEmpty(patient.getId())
+            && patient.getId().get(0) != null) {
             paramList.getLivingSubjectId().add(createSubjectId(patient.getId().get(0)));
         }
 

@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,16 +23,13 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.connectmgr.persistance.dao;
 
 import java.io.File;
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.stream.StreamSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uddi.api_v3.BusinessDetail;
@@ -42,36 +39,24 @@ import org.uddi.api_v3.ObjectFactory;
  *
  * @author mweaver
  */
-public class ConnectionManagerDAOBase {
+public class ConnectionManagerDAOBase extends AbstractConnectionManagerDAO<BusinessDetail> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConnectionManagerDAOBase.class);
 
-    protected BusinessDetail loadBusinessDetail(File file) throws JAXBException {
-        BusinessDetail resp;
-        synchronized (file) {
-            JAXBContext context = JAXBContext.newInstance(BusinessDetail.class);
-            Unmarshaller unmarshaller = context.createUnmarshaller();
-            JAXBElement<BusinessDetail> jaxbElement = unmarshaller.unmarshal(new StreamSource(file),
-                    BusinessDetail.class);
-            resp = jaxbElement.getValue();
-        }
-        return resp;
-    }
-
-    protected void saveBusinessDetail(BusinessDetail BusinessDetail, File file) {
+    @Override
+    public void saveExchangeInfo(final BusinessDetail businessDetail, final File file) {
         try {
             synchronized (file) {
-                JAXBContext context = JAXBContext.newInstance(BusinessDetail.class);
-                ObjectFactory factory = new ObjectFactory();
-                Marshaller marshaller = context.createMarshaller();
+                final JAXBContext context = JAXBContext.newInstance(BusinessDetail.class);
+                final ObjectFactory factory = new ObjectFactory();
+                final Marshaller marshaller = context.createMarshaller();
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-                marshaller.marshal(factory.createBusinessDetail(BusinessDetail), file);
+                marshaller.marshal(factory.createBusinessDetail(businessDetail), file);
             }
-        } catch (JAXBException ex) {
+        } catch (final JAXBException ex) {
             throw new RuntimeException("Unable to save to Connection Information File " + file.getName(), ex);
         }
 
         LOG.info("Connection info saved to " + file.getName());
     }
-
 }

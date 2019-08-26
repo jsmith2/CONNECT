@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.admindistribution.entity.proxy;
 
 import gov.hhs.fha.nhinc.admindistribution.AdminDistributionHelper;
@@ -66,7 +66,7 @@ public class EntityAdminDistributionProxyWebServiceSecuredImpl {
 
     /**
      * This method returns EntityAdminDistributionSecuredServicePortDescriptor based on gateway apiLevel.
-     * 
+     *
      * @param apiLevel gateway apiLevel received (g0/g1).
      * @return instance of EntityAdminDistributionSecuredServicePortDescriptor based on gateway apiLevel.
      */
@@ -82,7 +82,7 @@ public class EntityAdminDistributionProxyWebServiceSecuredImpl {
 
     /**
      * This method returns CXFClient to implement AdminDist Secured Service.
-     * 
+     *
      * @param portDescriptor comprises of NameSpaceUri, WSDL File, Port, ServiceName and WS_ADDRESSING_ACTION.
      * @param url target community url .
      * @param assertion Assertion received.
@@ -97,7 +97,7 @@ public class EntityAdminDistributionProxyWebServiceSecuredImpl {
 
     /**
      * This method implements sendAlertMessage from initiater to responder.
-     * 
+     *
      * @param body Emergency Message Distribution Element transaction message body received.
      * @param assertion Assertion received.
      * @param target NhinTargetCommunity receievd.

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project abortOnError="false" name="DocRegistryAndRepository" resourceRoot="${projectDir}" runType="SEQUENTIAL" soapui-version="5.1.2" activeEnvironment="Default" id="c42c580c-833f-485d-bb90-a4a76c4125d4" xmlns:con="http://eviware.com/soapui/config">
+<con:soapui-project abortOnError="false" name="DocRegistryAndRepository" resourceRoot="${projectDir}" runType="SEQUENTIAL" soapui-version="5.3.0" activeEnvironment="Default" id="c42c580c-833f-485d-bb90-a4a76c4125d4" xmlns:con="http://eviware.com/soapui/config">
   <con:settings/>
   <con:interface anonymous="optional" bindingName="{urn:ihe:iti:xds-b:2007}DocumentRepository_Binding" definition="../../../target/wsdl/AdapterComponentDocRepository.wsdl" name="DocumentRepository_Binding" soapVersion="1_2" type="wsdl" wsaVersion="NONE" xsi:type="con:WsdlInterface" id="ca87465f-3732-4970-897e-5ff782d05efb" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <con:settings/>
@@ -44,8 +44,7 @@
       <con:settings/>
       <con:testStep name="Clear Document" type="groovy" id="8e2e13d6-7637-4739-b2d6-95c0f83eaecd">
         <con:settings/>
-        <con:config>
-          <script>context.withSql('DocRepositoryDB') { sql -> 
+        <con:config><script>context.withSql('DocRepositoryDB') { sql -> 
   def table = context.findProperty('DocumentTable')
   def col = context.findProperty('DocCol')
   def val = context.findProperty('DocVal')
@@ -54,9 +53,8 @@
   
  
   sql.execute('delete from ' + table1)
-  sql.execute("delete from " + table + " where " + col + " = " + val )
-}</script>
-        </con:config>
+  sql.execute("delete from " + table + " where DocumentUniqueId like 'CONNECT%'")
+}</script></con:config>
       </con:testStep>
       <con:testStep name="Store Document" type="request" id="4831dfc4-1edc-44de-a4c6-abc953001b23">
         <con:settings/>
@@ -318,7 +316,7 @@
               </con:configuration>
             </con:assertion>
             <con:credentials>
-              <con:authType>Global HTTP Settings</con:authType>
+              <con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:jmsPropertyConfig/>
@@ -329,8 +327,7 @@
       </con:testStep>
       <con:testStep name="Delete Document" type="groovy" id="c63cdcb9-31f8-4b65-8072-4cf2b3836df1">
         <con:settings/>
-        <con:config>
-          <script>context.withSql('DocRepositoryDB') { sql -> 
+        <con:config><script>context.withSql('DocRepositoryDB') { sql -> 
   def table = context.findProperty('DocumentTable')
   def col = context.findProperty('DocCol')
   def val = context.findProperty('DocVal')
@@ -340,27 +337,29 @@
   def val1 = context.findProperty('EventVal')
 
   sql.execute('delete from ' + table1 + ' where ' + col1 + ' = ' + val1)
+  sql.execute("delete from docrepository where DocumentUniqueId like (select DocumentUniqueId from " + table + " where " + col + " = " + val +")" )
   sql.execute("delete from " + table + " where " + col + " = " + val )
-}</script>
-        </con:config>
+  
+  
+}</script></con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty("GatewayPropDir"), log);</con:setupScript>
       <con:properties>
         <con:property>
           <con:name>startDate</con:name>
-          <con:value>2013-09-27T05:00:46Z</con:value>
+          <con:value>2018-05-25T18:26:57Z</con:value>
         </con:property>
         <con:property>
           <con:name>endDate</con:name>
-          <con:value>2013-09-27T05:10:46Z</con:value>
+          <con:value>2018-05-25T18:36:57Z</con:value>
         </con:property>
         <con:property>
           <con:name>sigDate</con:name>
-          <con:value>09/27/2013 05:00:46</con:value>
+          <con:value>05/25/2018 18:26:57</con:value>
         </con:property>
         <con:property>
           <con:name>expireDate</con:name>
-          <con:value>2013-10-27T00:00:00Z</con:value>
+          <con:value>2018-06-24T00:00:00Z</con:value>
         </con:property>
       </con:properties>
       <con:reportParameters/>
@@ -370,20 +369,16 @@
       <con:settings/>
       <con:testStep name="Clear Documents" type="groovy" id="b1e55f81-e288-4489-805f-3fa3e1798010">
         <con:settings/>
-        <con:config>
-          <script>context.withSql('DocRepositoryDB') { sql -> 
+        <con:config><script>context.withSql('DocRepositoryDB') { sql -> 
   def table = context.findProperty('DocumentTable')
   def col = context.findProperty('DocCol')
-  def val = context.findProperty('DocVal1')
 
   def table1 = context.findProperty('EventCodeTable')
   def col1 = context.findProperty('EventCol')
-  def val1 = context.findProperty('EventVal1')
 
-  sql.execute('delete from ' + table1 + ' where ' + col1 + ' = ' + val1 )
-  sql.execute("delete from " + table + " where " + col + " = " + val )
-}</script>
-        </con:config>
+  sql.execute('delete from ' + table1 + ' where true')
+  sql.execute("delete from " + table + " where " + col + " like 'CONNECT%'")
+}</script></con:config>
       </con:testStep>
       <con:testStep name="Store Document" type="request" id="ea116e09-ddb1-488e-b051-f866821e5f9b">
         <con:settings/>
@@ -644,7 +639,7 @@
               </con:configuration>
             </con:assertion>
             <con:credentials>
-              <con:authType>Global HTTP Settings</con:authType>
+              <con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:jmsPropertyConfig/>
@@ -659,7 +654,7 @@
           <con:interface>DocumentRegistry_Binding_Soap</con:interface>
           <con:operation>DocumentRegistry_RegistryStoredQuery</con:operation>
           <con:request name="QueryByPatientId" id="cbbeafb7-47ee-47c8-8148-65769085c8e7">
-            <con:settings/>
+            <con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings>
             <con:encoding>UTF-8</con:encoding>
             <con:endpoint>${#Project#Endpoint-DocRegistry}</con:endpoint>
             <con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope" xmlns:urn="urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0" xmlns:urn1="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0">
@@ -683,14 +678,9 @@
             </con:assertion>
             <con:assertion type="SOAP Fault Assertion" id="a1c7cccb-1f7c-47f0-93d4-7bae45d14041"/>
             <con:assertion type="XPath Match" id="c84e6675-8572-4f67-9e6e-6b037d1f36d6">
-              <con:configuration>
-                <path>declare namespace ns3='urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0';
+              <con:configuration><path>declare namespace ns3='urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0';
 declare namespace ns4='urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0';
-//ns4:AdhocQueryResponse[1]/ns3:RegistryObjectList[1]/ns3:ExtrinsicObject[1]/ns3:ExternalIdentifier[1]/@value</path>
-                <content>${Store Document#Request#//xdsb:ProvideAndRegisterDocumentSetRequest[1]/lcm:SubmitObjectsRequest[1]/rim:RegistryObjectList[1]/rim:ExtrinsicObject[1]/rim:ExternalIdentifier[1]/@value}</content>
-                <allowWildcards>false</allowWildcards>
-                <ignoreNamspaceDifferences>true</ignoreNamspaceDifferences>
-              </con:configuration>
+//ns4:AdhocQueryResponse[1]/ns3:RegistryObjectList[1]/ns3:ExtrinsicObject[1]/ns3:ExternalIdentifier[1]/@value</path><content>CONNECT0</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>true</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration>
             </con:assertion>
             <con:assertion name="Document count is 1" type="XPath Match" id="f3cf2202-44df-4cf3-a074-f7fe7ca1e3cc">
               <con:configuration>
@@ -703,10 +693,10 @@ count(//ns4:AdhocQueryResponse[1]/ns2:RegistryObjectList[1]/ns2:ExtrinsicObject)
               </con:configuration>
             </con:assertion>
             <con:credentials>
-              <con:authType>Global HTTP Settings</con:authType>
+              <con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
-            <con:wsaConfig mustUnderstand="NONE" version="200508"/>
+            <con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/>
             <con:wsrmConfig version="1.2"/>
           </con:request>
         </con:config>
@@ -730,7 +720,7 @@ count(//ns4:AdhocQueryResponse[1]/ns2:RegistryObjectList[1]/ns2:ExtrinsicObject)
          <urn1:AdhocQuery id="urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d" home="1.1">
             <urn1:Slot name="$XDSDocumentEntryUniqueId">
                <urn1:ValueList>
-                  <urn1:Value>2.1.11111.1.1</urn1:Value>
+                  <urn1:Value>CONNECT0</urn1:Value>
                </urn1:ValueList>
             </urn1:Slot>
             <urn1:Slot name="$XDSDocumentEntryPatientId">
@@ -748,14 +738,9 @@ count(//ns4:AdhocQueryResponse[1]/ns2:RegistryObjectList[1]/ns2:ExtrinsicObject)
             </con:assertion>
             <con:assertion type="SOAP Fault Assertion" id="9d7edd35-9ebd-429e-b134-275c5cbb77b2"/>
             <con:assertion type="XPath Match" id="e06fca0b-265c-4f41-95cc-cc2d1ecd7bd7">
-              <con:configuration>
-                <path>declare namespace ns3='urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0';
+              <con:configuration><path>declare namespace ns3='urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0';
 declare namespace ns4='urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0';
-//ns4:AdhocQueryResponse[1]/ns3:RegistryObjectList[1]/ns3:ExtrinsicObject[1]/ns3:ExternalIdentifier[1]/@value</path>
-                <content>${Store Document#Request#//xdsb:ProvideAndRegisterDocumentSetRequest[1]/lcm:SubmitObjectsRequest[1]/rim:RegistryObjectList[1]/rim:ExtrinsicObject[1]/rim:ExternalIdentifier[1]/@value}</content>
-                <allowWildcards>false</allowWildcards>
-                <ignoreNamspaceDifferences>true</ignoreNamspaceDifferences>
-              </con:configuration>
+//ns4:AdhocQueryResponse[1]/ns3:RegistryObjectList[1]/ns3:ExtrinsicObject[1]/ns3:ExternalIdentifier[1]/@value</path><content>CONNECT0</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>true</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration>
             </con:assertion>
             <con:assertion name="Document count is 1" type="XPath Match" id="38bbdb9b-66da-425f-9f28-a53d98630489">
               <con:configuration>
@@ -798,7 +783,7 @@ declare namespace ns4='urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0';
               </con:configuration>
             </con:assertion>
             <con:credentials>
-              <con:authType>Global HTTP Settings</con:authType>
+              <con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:jmsPropertyConfig/>
@@ -844,14 +829,9 @@ declare namespace ns4='urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0';
             </con:assertion>
             <con:assertion type="SOAP Fault Assertion" id="d576a2e5-c101-45d0-bd62-7d29fa71b570"/>
             <con:assertion type="XPath Match" id="8228fb14-7e74-4dee-b602-9a1754999aab">
-              <con:configuration>
-                <path>declare namespace ns3='urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0';
+              <con:configuration><path>declare namespace ns3='urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0';
 declare namespace ns4='urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0';
-//ns4:AdhocQueryResponse[1]/ns3:RegistryObjectList[1]/ns3:ExtrinsicObject[1]/ns3:ExternalIdentifier[1]/@value</path>
-                <content>${Store Document#Request#//xdsb:ProvideAndRegisterDocumentSetRequest[1]/lcm:SubmitObjectsRequest[1]/rim:RegistryObjectList[1]/rim:ExtrinsicObject[1]/rim:ExternalIdentifier[1]/@value}</content>
-                <allowWildcards>false</allowWildcards>
-                <ignoreNamspaceDifferences>true</ignoreNamspaceDifferences>
-              </con:configuration>
+//ns4:AdhocQueryResponse[1]/ns3:RegistryObjectList[1]/ns3:ExtrinsicObject[1]/ns3:ExternalIdentifier[1]/@value</path><content>CONNECT0</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>true</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration>
             </con:assertion>
             <con:assertion name="Document count is 1" type="XPath Match" id="266782e0-cba4-49e9-9ad5-95baaf5bfc86">
               <con:configuration>
@@ -894,7 +874,7 @@ declare namespace ns4='urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0';
               </con:configuration>
             </con:assertion>
             <con:credentials>
-              <con:authType>Global HTTP Settings</con:authType>
+              <con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:jmsPropertyConfig/>
@@ -1052,8 +1032,7 @@ count(//ns4:AdhocQueryResponse[1]/ns2:RegistryObjectList[1]/ns2:ExtrinsicObject)
       </con:testStep>
       <con:testStep name="Delete Document" type="groovy" id="e8783308-52e2-4cec-a77d-e5a475bece7a">
         <con:settings/>
-        <con:config>
-          <script>context.withSql('DocRepositoryDB') { sql -> 
+        <con:config><script>context.withSql('DocRepositoryDB') { sql -> 
   def table = context.findProperty('DocumentTable')
   def col = context.findProperty('DocCol')
   def val = context.findProperty('DocVal1')
@@ -1065,27 +1044,27 @@ count(//ns4:AdhocQueryResponse[1]/ns2:RegistryObjectList[1]/ns2:ExtrinsicObject)
   def val2 = context.findProperty('EventVal2');
 
   sql.execute('delete from ' + table1 + ' where ' + col1 + ' = ' + val1 )
+  sql.execute("delete from docrepository where DocumentUniqueId  like 'CONNECT%'" )
   sql.execute("delete from " + table + " where " + col + " = " + val )
-}</script>
-        </con:config>
+}</script></con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty("GatewayPropDir"), log);</con:setupScript>
       <con:properties>
         <con:property>
           <con:name>startDate</con:name>
-          <con:value>2013-09-27T05:00:46Z</con:value>
+          <con:value>2018-05-25T18:26:59Z</con:value>
         </con:property>
         <con:property>
           <con:name>endDate</con:name>
-          <con:value>2013-09-27T05:10:46Z</con:value>
+          <con:value>2018-05-25T18:36:59Z</con:value>
         </con:property>
         <con:property>
           <con:name>sigDate</con:name>
-          <con:value>09/27/2013 05:00:46</con:value>
+          <con:value>05/25/2018 18:26:59</con:value>
         </con:property>
         <con:property>
           <con:name>expireDate</con:name>
-          <con:value>2013-10-27T00:00:00Z</con:value>
+          <con:value>2018-06-24T00:00:00Z</con:value>
         </con:property>
       </con:properties>
       <con:reportParameters/>
@@ -1386,8 +1365,7 @@ count(//ns4:AdhocQueryResponse[1]/ns2:RegistryObjectList[1]/ns2:ExtrinsicObject)
       </con:testStep>
       <con:testStep name="Delete Document" type="groovy" id="a1ce91d6-ba73-4d2d-bd33-27b0d062429c">
         <con:settings/>
-        <con:config>
-          <script>context.withSql('DocRepositoryDB') { sql -> 
+        <con:config><script>context.withSql('DocRepositoryDB') { sql -> 
   def table = context.findProperty('DocumentTable')
   def col = context.findProperty('DocCol')
   def val = context.findProperty('DocVal')
@@ -1397,28 +1375,28 @@ count(//ns4:AdhocQueryResponse[1]/ns2:RegistryObjectList[1]/ns2:ExtrinsicObject)
   def val1 = context.findProperty('EventVal')
 
   sql.execute('delete from ' + table1 + ' where ' + col1 + ' = ' + val1)
+  sql.execute("delete from docrepository where DocumentUniqueId like (select DocumentUniqueId from " + table + " where " + col + " = " + val +")" )
   sql.execute("delete from " + table + " where " + col + " = " + val )
-}</script>
-        </con:config>
+}</script></con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty("GatewayPropDir"), log);
 context.setGatewayStandard(false);</con:setupScript>
       <con:properties>
         <con:property>
           <con:name>startDate</con:name>
-          <con:value>2013-09-27T05:00:49Z</con:value>
+          <con:value>2018-05-25T18:27:01Z</con:value>
         </con:property>
         <con:property>
           <con:name>endDate</con:name>
-          <con:value>2013-09-27T05:10:49Z</con:value>
+          <con:value>2018-05-25T18:37:01Z</con:value>
         </con:property>
         <con:property>
           <con:name>sigDate</con:name>
-          <con:value>09/27/2013 05:00:49</con:value>
+          <con:value>05/25/2018 18:27:01</con:value>
         </con:property>
         <con:property>
           <con:name>expireDate</con:name>
-          <con:value>2013-10-27T00:00:00Z</con:value>
+          <con:value>2018-06-24T00:00:00Z</con:value>
         </con:property>
       </con:properties>
       <con:reportParameters/>
@@ -1429,8 +1407,7 @@ context.setGatewayStandard(true);</con:tearDownScript>
       <con:settings/>
       <con:testStep name="Clear Documents" type="groovy" id="105339c6-0896-4c52-a1cb-74e1c13cdc2d">
         <con:settings/>
-        <con:config>
-          <script>context.withSql('DocRepositoryDB') { sql -> 
+        <con:config><script>context.withSql('DocRepositoryDB') { sql -> 
   def table = context.findProperty('DocumentTable')
   def col = context.findProperty('DocCol')
   def val = context.findProperty('DocVal1')
@@ -1441,8 +1418,9 @@ context.setGatewayStandard(true);</con:tearDownScript>
 
   sql.execute('delete from ' + table1 + ' where ' + col1 + ' = ' + val1 )
   sql.execute("delete from " + table + " where " + col + " = " + val )
-}</script>
-        </con:config>
+  sql.execute("delete from " + table + " where DocumentUniqueId like 'CONNECT%'")
+  sql.execute("delete from eventcode")
+}</script></con:config>
       </con:testStep>
       <con:testStep name="Store Document" type="request" id="c1641204-cfdf-419c-8b70-dcc5d9c8a523">
         <con:settings/>
@@ -1703,7 +1681,7 @@ context.setGatewayStandard(true);</con:tearDownScript>
               </con:configuration>
             </con:assertion>
             <con:credentials>
-              <con:authType>Global HTTP Settings</con:authType>
+              <con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:jmsPropertyConfig/>
@@ -1718,7 +1696,7 @@ context.setGatewayStandard(true);</con:tearDownScript>
           <con:interface>DocumentRegistry_Binding_Soap</con:interface>
           <con:operation>DocumentRegistry_RegistryStoredQuery</con:operation>
           <con:request name="QueryByPatientId" id="c8af9122-2972-45a4-82cb-38d52f34fc50">
-            <con:settings/>
+            <con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings>
             <con:encoding>UTF-8</con:encoding>
             <con:endpoint>${#Project#Endpoint-DocRegistry}</con:endpoint>
             <con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope" xmlns:urn="urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0" xmlns:urn1="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0">
@@ -1742,14 +1720,9 @@ context.setGatewayStandard(true);</con:tearDownScript>
             </con:assertion>
             <con:assertion type="SOAP Fault Assertion" id="ab542964-6da8-4df9-8d04-d65260ad8e5f"/>
             <con:assertion type="XPath Match" id="5d375b41-97ff-4df8-9d8b-452304ce2b0b">
-              <con:configuration>
-                <path>declare namespace ns3='urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0';
+              <con:configuration><path>declare namespace ns3='urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0';
 declare namespace ns4='urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0';
-//ns4:AdhocQueryResponse[1]/ns3:RegistryObjectList[1]/ns3:ExtrinsicObject[1]/ns3:ExternalIdentifier[1]/@value</path>
-                <content>${Store Document#Request#//xdsb:ProvideAndRegisterDocumentSetRequest[1]/lcm:SubmitObjectsRequest[1]/rim:RegistryObjectList[1]/rim:ExtrinsicObject[1]/rim:ExternalIdentifier[1]/@value}</content>
-                <allowWildcards>false</allowWildcards>
-                <ignoreNamspaceDifferences>true</ignoreNamspaceDifferences>
-              </con:configuration>
+//ns4:AdhocQueryResponse[1]/ns3:RegistryObjectList[1]/ns3:ExtrinsicObject[1]/ns3:ExternalIdentifier[1]/@value</path><content>${#Project#DocUniqueId}</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>true</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration>
             </con:assertion>
             <con:assertion name="Document count is 1" type="XPath Match" id="751b4a7b-038f-4c81-a211-cedd6c27cb67">
               <con:configuration>
@@ -1762,10 +1735,10 @@ count(//ns4:AdhocQueryResponse[1]/ns2:RegistryObjectList[1]/ns2:ExtrinsicObject)
               </con:configuration>
             </con:assertion>
             <con:credentials>
-              <con:authType>Global HTTP Settings</con:authType>
+              <con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
-            <con:wsaConfig mustUnderstand="NONE" version="200508"/>
+            <con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/>
             <con:wsrmConfig version="1.2"/>
           </con:request>
         </con:config>
@@ -1789,7 +1762,7 @@ count(//ns4:AdhocQueryResponse[1]/ns2:RegistryObjectList[1]/ns2:ExtrinsicObject)
          <urn1:AdhocQuery id="urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d" home="1.1">
             <urn1:Slot name="$XDSDocumentEntryUniqueId">
                <urn1:ValueList>
-                  <urn1:Value>2.1.11111.1.1</urn1:Value>
+                  <urn1:Value>${#Project#DocUniqueId}</urn1:Value>
                </urn1:ValueList>
             </urn1:Slot>
             <urn1:Slot name="$XDSDocumentEntryPatientId">
@@ -1807,14 +1780,9 @@ count(//ns4:AdhocQueryResponse[1]/ns2:RegistryObjectList[1]/ns2:ExtrinsicObject)
             </con:assertion>
             <con:assertion type="SOAP Fault Assertion" id="b72e528c-9734-4273-976f-aa1da780607e"/>
             <con:assertion type="XPath Match" id="629c7b5d-b0a5-4520-a88d-41402742d214">
-              <con:configuration>
-                <path>declare namespace ns3='urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0';
+              <con:configuration><path>declare namespace ns3='urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0';
 declare namespace ns4='urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0';
-//ns4:AdhocQueryResponse[1]/ns3:RegistryObjectList[1]/ns3:ExtrinsicObject[1]/ns3:ExternalIdentifier[1]/@value</path>
-                <content>${Store Document#Request#//xdsb:ProvideAndRegisterDocumentSetRequest[1]/lcm:SubmitObjectsRequest[1]/rim:RegistryObjectList[1]/rim:ExtrinsicObject[1]/rim:ExternalIdentifier[1]/@value}</content>
-                <allowWildcards>false</allowWildcards>
-                <ignoreNamspaceDifferences>true</ignoreNamspaceDifferences>
-              </con:configuration>
+//ns4:AdhocQueryResponse[1]/ns3:RegistryObjectList[1]/ns3:ExtrinsicObject[1]/ns3:ExternalIdentifier[1]/@value</path><content>${#Project#DocUniqueId}</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>true</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration>
             </con:assertion>
             <con:assertion name="Document count is 1" type="XPath Match" id="671ddd52-168d-4a6d-b23b-b457a7068798">
               <con:configuration>
@@ -1857,7 +1825,7 @@ declare namespace ns4='urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0';
               </con:configuration>
             </con:assertion>
             <con:credentials>
-              <con:authType>Global HTTP Settings</con:authType>
+              <con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:jmsPropertyConfig/>
@@ -1903,14 +1871,9 @@ declare namespace ns4='urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0';
             </con:assertion>
             <con:assertion type="SOAP Fault Assertion" id="d59015d4-b28b-45a6-95ab-38a21a5e7e9a"/>
             <con:assertion type="XPath Match" id="e971e5f4-5a7a-4dba-8c7c-626e1e6650af">
-              <con:configuration>
-                <path>declare namespace ns3='urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0';
+              <con:configuration><path>declare namespace ns3='urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0';
 declare namespace ns4='urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0';
-//ns4:AdhocQueryResponse[1]/ns3:RegistryObjectList[1]/ns3:ExtrinsicObject[1]/ns3:ExternalIdentifier[1]/@value</path>
-                <content>${Store Document#Request#//xdsb:ProvideAndRegisterDocumentSetRequest[1]/lcm:SubmitObjectsRequest[1]/rim:RegistryObjectList[1]/rim:ExtrinsicObject[1]/rim:ExternalIdentifier[1]/@value}</content>
-                <allowWildcards>false</allowWildcards>
-                <ignoreNamspaceDifferences>true</ignoreNamspaceDifferences>
-              </con:configuration>
+//ns4:AdhocQueryResponse[1]/ns3:RegistryObjectList[1]/ns3:ExtrinsicObject[1]/ns3:ExternalIdentifier[1]/@value</path><content>${#Project#DocUniqueId}</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>true</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration>
             </con:assertion>
             <con:assertion name="Document count is 1" type="XPath Match" id="c37f298b-4fca-44e1-9fca-dea7093cb69c">
               <con:configuration>
@@ -1953,7 +1916,7 @@ declare namespace ns4='urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0';
               </con:configuration>
             </con:assertion>
             <con:credentials>
-              <con:authType>Global HTTP Settings</con:authType>
+              <con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:jmsPropertyConfig/>
@@ -2100,7 +2063,7 @@ count(//ns4:AdhocQueryResponse[1]/ns2:RegistryObjectList[1]/ns2:ExtrinsicObject)
               </con:configuration>
             </con:assertion>
             <con:credentials>
-              <con:authType>Global HTTP Settings</con:authType>
+              <con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:jmsPropertyConfig/>
@@ -2111,8 +2074,7 @@ count(//ns4:AdhocQueryResponse[1]/ns2:RegistryObjectList[1]/ns2:ExtrinsicObject)
       </con:testStep>
       <con:testStep name="Delete Document" type="groovy" id="ef504314-e7e5-4296-ab63-b518feb30cb6">
         <con:settings/>
-        <con:config>
-          <script>context.withSql('DocRepositoryDB') { sql -> 
+        <con:config><script>context.withSql('DocRepositoryDB') { sql -> 
   def table = context.findProperty('DocumentTable')
   def col = context.findProperty('DocCol')
   def val = context.findProperty('DocVal1')
@@ -2124,28 +2086,28 @@ count(//ns4:AdhocQueryResponse[1]/ns2:RegistryObjectList[1]/ns2:ExtrinsicObject)
   def val2 = context.findProperty('EventVal2');
 
   sql.execute('delete from ' + table1 + ' where ' + col1 + ' = ' + val1 )
+  sql.execute("delete from docrepository where DocumentUniqueId like (select DocumentUniqueId from " + table + " where " + col + " = " + val +")" )
   sql.execute("delete from " + table + " where " + col + " = " + val )
-}</script>
-        </con:config>
+}</script></con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty("GatewayPropDir"), log);
 context.setGatewayStandard(false);</con:setupScript>
       <con:properties>
         <con:property>
           <con:name>startDate</con:name>
-          <con:value>2013-09-27T05:00:49Z</con:value>
+          <con:value>2018-05-25T18:27:03Z</con:value>
         </con:property>
         <con:property>
           <con:name>endDate</con:name>
-          <con:value>2013-09-27T05:10:49Z</con:value>
+          <con:value>2018-05-25T18:37:03Z</con:value>
         </con:property>
         <con:property>
           <con:name>sigDate</con:name>
-          <con:value>09/27/2013 05:00:49</con:value>
+          <con:value>05/25/2018 18:27:03</con:value>
         </con:property>
         <con:property>
           <con:name>expireDate</con:name>
-          <con:value>2013-10-27T00:00:00Z</con:value>
+          <con:value>2018-06-24T00:00:00Z</con:value>
         </con:property>
       </con:properties>
       <con:reportParameters/>
@@ -2183,7 +2145,7 @@ context.setGatewayStandard(true);</con:tearDownScript>
     </con:property>
     <con:property>
       <con:name>DocumentTable</con:name>
-      <con:value>document</con:value>
+      <con:value>docregistry</con:value>
     </con:property>
     <con:property>
       <con:name>DocVal</con:name>
@@ -2227,7 +2189,7 @@ context.setGatewayStandard(true);</con:tearDownScript>
     </con:property>
     <con:property>
       <con:name>GatewayPropDir</con:name>
-      <con:value>c:\glassfish3\glassfish\domains\domain1\config\nhin</con:value>
+      <con:value/>
     </con:property>
     <con:property>
       <con:name>ASUsername</con:name>
@@ -2245,7 +2207,7 @@ context.setGatewayStandard(true);</con:tearDownScript>
       <con:name>JMXPort</con:name>
       <con:value>9990</con:value>
     </con:property>
-  </con:properties>
+  <con:property><con:name>DocUniqueID</con:name><con:value>CONNECT0</con:value></con:property></con:properties>
   <con:afterLoadScript>def propertiesFilename = project.path[0..(project.path.size()-4)] + 'properties'
 def propertiesFile = new File(propertiesFilename)
 if (propertiesFile.exists()) {
@@ -2388,7 +2350,7 @@ com.eviware.soapui.impl.wsdl.testcase.WsdlTestRunContext.metaClass.setGatewaySta
   <con:wssContainer/>
   <con:databaseConnectionContainer/>
   <con:oAuth2ProfileContainer/>
-  <con:reporting>
+  <con:oAuth1ProfileContainer/><con:reporting>
     <con:xmlTemplates/>
     <con:xmlTemplates/>
     <con:xmlTemplates/>

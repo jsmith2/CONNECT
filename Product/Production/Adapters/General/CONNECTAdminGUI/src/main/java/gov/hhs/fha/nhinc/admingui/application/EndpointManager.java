@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,11 +35,14 @@ import java.util.Date;
  */
 public interface EndpointManager {
 
-    public void addOrUpdateEndpoint(String url, Date timestamp, boolean pingResult);
+    public void addOrUpdateEndpoint(String exchangeName, int id, String url, Date timestamp, boolean pingResult,
+        int httpCode);
 
-    public EndpointManagerCache.EndpointCacheInfo getEndpointInfo(String url);
+    public EndpointManagerCache.EndpointCacheInfo getEndpointInfo(String exchangeName, int id);
 
-    public void loadCache(Collection<EndpointManagerCache.EndpointCacheInfo> endpoints);
+    public void deleteCache(String exchangeName);
+
+    public void loadCache(String exchangeName, Collection<EndpointManagerCache.EndpointCacheInfo> endpoints);
 
     public Collection getAllCache();
 

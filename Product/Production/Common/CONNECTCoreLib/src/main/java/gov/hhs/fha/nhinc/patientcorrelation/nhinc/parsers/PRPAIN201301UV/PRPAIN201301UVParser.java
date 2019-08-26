@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.patientcorrelation.nhinc.parsers.PRPAIN201301UV;
 
 import java.util.List;
@@ -51,7 +51,6 @@ public class PRPAIN201301UVParser {
      */
     public static PRPAMT201301UV02Patient parseHL7PatientPersonFrom201301Message(org.hl7.v3.PRPAIN201301UV02 message) {
         // assume one subject for now
-        // PRPAMT201301UVPerson patientPerson = ParseHL7PatientPersonFromHL7Patient(patient);
         return parseHL7PatientFromMessage(message);
     }
 
@@ -74,28 +73,25 @@ public class PRPAIN201301UVParser {
             LOG.info("registrationevent is null - no patient");
             return null;
         }
-        // HL7Parser.PrintId(registrationevent.getTypeId(), "registrationevent");
 
         PRPAIN201301UV02MFMIMT700701UV01Subject2 subject1 = registrationevent.getSubject1();
         if (subject1 == null) {
             LOG.info("subject1 is null - no patient");
             return null;
         }
-        // HL7Parser.PrintId(subject1.getTypeId(), "subject1");
 
         patient = subject1.getPatient();
         if (patient == null) {
             LOG.info("patient is null - no patient");
             return null;
         }
-        // HL7Parser.PrintId(patient.getId(), "patient");
 
         LOG.info("done with ExtractPatient");
         return patient;
     }
 
     public static PRPAIN201301UV02MFMIMT700701UV01Subject1 parseSubjectFromMessage(
-            org.hl7.v3.PRPAIN201301UV02 message) {
+        org.hl7.v3.PRPAIN201301UV02 message) {
         // assume one subject for now
 
         if (message == null) {
@@ -107,7 +103,6 @@ public class PRPAIN201301UVParser {
             LOG.info("controlActProcess is null - no patient");
             return null;
         }
-        // HL7Parser.PrintId(controlActProcess.getId(), "controlActProcess");
 
         List<PRPAIN201301UV02MFMIMT700701UV01Subject1> subjects = controlActProcess.getSubject();
         if (subjects == null || subjects.isEmpty()) {
@@ -116,7 +111,6 @@ public class PRPAIN201301UVParser {
         }
 
         // for now, assume we only need one subject, this will need to be modified later
-        // HL7Parser.PrintId(subject.getTypeId(), "subject");
 
         return subjects.get(0);
     }

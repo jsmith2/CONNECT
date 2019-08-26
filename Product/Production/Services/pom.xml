@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.connectopensource</groupId>
         <artifactId>Production</artifactId>
-        <version>4.8.0-SNAPSHOT</version>
+        <version>5.4.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>Services</artifactId>
@@ -17,18 +17,16 @@
     </properties>
 
     <modules>
-        <module>AdapterAuthenticationCore</module>
         <module>AuditRepositoryCore</module>
         <module>AuditRepositoryEJB</module>
         <module>ConnectionManagerCore</module>
-        <module>RedactionEngineCore</module>
         <module>DocRepositoryCore</module>
         <module>PatientCorrelationCore</module>
         <module>PolicyEngineCore</module>
-        <module>SharedEngineCore</module>
         <module>DocumentQueryCore</module>
         <module>DocRegistryCore</module>
         <module>PatientDiscoveryCore</module>
+        <module>DocumentDataSubmissionCore</module>
         <module>DocumentSubmissionCore</module>
         <module>CORE_X12DocumentSubmissionCore</module>
         <module>DocumentRetrieveCore</module>

@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,10 +23,10 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.connectmgr.uddi.proxy;
 
-import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
+import gov.hhs.fha.nhinc.exchange.ExchangeType;
 import gov.hhs.fha.nhinc.messaging.client.CONNECTClient;
 import gov.hhs.fha.nhinc.messaging.client.UDDIBaseClient;
 import gov.hhs.fha.nhinc.messaging.service.port.ServicePortDescriptor;
@@ -35,10 +35,10 @@ import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
 import gov.hhs.fha.nhinc.nhinclib.NullChecker;
 import gov.hhs.fha.nhinc.properties.PropertyAccessException;
 import gov.hhs.fha.nhinc.properties.PropertyAccessor;
+import org.apache.cxf.common.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uddi.api_v3.BusinessDetail;
-import org.uddi.api_v3.BusinessList;
 import org.uddi.api_v3.GetBusinessDetail;
 
 /**
@@ -54,24 +54,17 @@ public abstract class UDDIFindBusinessProxyBase implements UDDIFindBusinessProxy
     protected static String GATEWAY_PROPFILE_NAME = "gateway";
     protected static String UDDI_INQUIRY_ENDPOINT_URL = "UDDIInquiryEndpointURL";
 
-
-    /* (non-Javadoc)
-     * @see gov.hhs.fha.nhinc.connectmgr.uddi.proxy.UDDIFindBusinessProxy#findBusinessesFromUDDI()
-     */
     @Override
-    public abstract BusinessList findBusinessesFromUDDI() throws UDDIFindBusinessException;
-
-    /* (non-Javadoc)
-     * @see gov.hhs.fha.nhinc.connectmgr.uddi.proxy.UDDIFindBusinessProxy#getBusinessDetail(org.uddi.api_v3.GetBusinessDetail)
-     */
-    @Override
-    public BusinessDetail getBusinessDetail(GetBusinessDetail searchParams) throws UDDIFindBusinessException {
+    public BusinessDetail getBusinessDetail(GetBusinessDetail searchParams, ExchangeType exchange) throws
+        UDDIFindBusinessException {
 
         BusinessDetail businessDetail;
         try {
-            loadProperties();
+            if (StringUtils.isEmpty(exchange.getUrl())) {
+                throw new UDDIFindBusinessException("Invalid target URL");
+            }
             ServicePortDescriptor<UDDIInquiryPortType> portDescriptor = new UDDIFindBusinessProxyServicePortDescriptor();
-            CONNECTClient<UDDIInquiryPortType> client = getCONNECTClientUnsecured(portDescriptor, uddiInquiryUrl, null);
+            CONNECTClient<UDDIInquiryPortType> client = getCONNECTClientUnsecured(portDescriptor, exchange.getUrl(), exchange.getName());
             businessDetail = (BusinessDetail) client.invokePort(UDDIInquiryPortType.class, "getBusinessDetail",
                 searchParams);
 
@@ -87,12 +80,14 @@ public abstract class UDDIFindBusinessProxyBase implements UDDIFindBusinessProxy
 
     /**
      * This method loads information from the gateway.properties file that are pertinent to this class.
+     *
+     * @throws gov.hhs.fha.nhinc.connectmgr.uddi.proxy.UDDIFindBusinessException
      */
     protected void loadProperties() throws UDDIFindBusinessException {
 
         try {
             String sValue = PropertyAccessor.getInstance().getProperty(GATEWAY_PROPFILE_NAME, UDDI_INQUIRY_ENDPOINT_URL);
-            if ((sValue != null) && (sValue.length() > 0)) {
+            if (sValue != null && sValue.length() > 0) {
                 uddiInquiryUrl = sValue;
             }
         } catch (PropertyAccessException e) {
@@ -105,19 +100,19 @@ public abstract class UDDIFindBusinessProxyBase implements UDDIFindBusinessProxy
     }
 
     protected CONNECTClient<UDDIInquiryPortType> getCONNECTClientUnsecured(
-        ServicePortDescriptor<UDDIInquiryPortType> portDescriptor, String url, AssertionType assertion) {
+        ServicePortDescriptor<UDDIInquiryPortType> portDescriptor, String url, String exchangeName) {
 
-        return new UDDIBaseClient<>(portDescriptor, url);
+        return new UDDIBaseClient<>(portDescriptor, url, exchangeName);
     }
 
-    protected int getMaxResults(){
+    protected int getMaxResults() {
         int maxResults; //default value
         try {
-            String resultEntry =
-                PropertyAccessor.getInstance().getProperty(NhincConstants.GATEWAY_PROPERTY_FILE, NhincConstants.MAX_UDDI_RESULTS_PROPERTY);
-            if(NullChecker.isNotNullish(resultEntry)){
+            String resultEntry = PropertyAccessor.getInstance().getProperty(NhincConstants.GATEWAY_PROPERTY_FILE,
+                NhincConstants.MAX_UDDI_RESULTS_PROPERTY);
+            if (NullChecker.isNotNullish(resultEntry)) {
                 maxResults = Integer.parseInt(resultEntry);
-            }else {
+            } else {
                 maxResults = -1;
             }
         } catch (PropertyAccessException ex) {

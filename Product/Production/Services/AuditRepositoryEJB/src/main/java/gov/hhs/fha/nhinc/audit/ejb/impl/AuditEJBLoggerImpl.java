@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
  * @param <K> Response
  */
 @Stateless
-@TransactionManagement(value = TransactionManagementType.CONTAINER)
+@TransactionManagement(value = TransactionManagementType.BEAN)
 public class AuditEJBLoggerImpl<T, K> implements AuditEJBLogger<T, K> {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuditEJBLoggerImpl.class);
@@ -105,7 +105,7 @@ public class AuditEJBLoggerImpl<T, K> implements AuditEJBLogger<T, K> {
         LOG.trace("--- After asynchronous audit call of response message ---");
     }
 
-    private void auditLogMessages(LogEventRequestType auditLogMsg, AssertionType assertion) {
+    private static void auditLogMessages(LogEventRequestType auditLogMsg, AssertionType assertion) {
         if (auditLogMsg != null && auditLogMsg.getAuditMessage() != null) {
             new AuditRepositoryProxyObjectFactory().getAuditRepositoryProxy().auditLog(auditLogMsg, assertion);
         } else {

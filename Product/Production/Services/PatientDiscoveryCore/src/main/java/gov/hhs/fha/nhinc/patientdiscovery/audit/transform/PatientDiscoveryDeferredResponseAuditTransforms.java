@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.patientdiscovery.audit.transform;
 
 import com.services.nhinc.schema.auditmessage.AuditMessageType;
@@ -33,9 +33,9 @@ import gov.hhs.fha.nhinc.common.nhinccommon.HomeCommunityType;
 import gov.hhs.fha.nhinc.common.nhinccommon.NhinTargetCommunityType;
 import gov.hhs.fha.nhinc.common.nhinccommon.NhinTargetSystemType;
 import gov.hhs.fha.nhinc.common.nhinccommon.UserType;
-import gov.hhs.fha.nhinc.connectmgr.ConnectionManagerException;
+import gov.hhs.fha.nhinc.exchangemgr.ExchangeManagerException;
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
-import gov.hhs.fha.nhinc.patientdiscovery.MessageGeneratorUtils;
+import gov.hhs.fha.nhinc.patientdiscovery.PDMessageGeneratorUtils;
 import gov.hhs.fha.nhinc.patientdiscovery.parser.PRPAIN201306UV02Parser;
 import gov.hhs.fha.nhinc.properties.PropertyAccessException;
 import gov.hhs.fha.nhinc.properties.PropertyAccessor;
@@ -93,7 +93,7 @@ public class PatientDiscoveryDeferredResponseAuditTransforms extends
     }
 
     @Override
-    protected AuditMessageType.ActiveParticipant getActiveParticipant(UserType oUserInfo) {
+    protected AuditMessageType.ActiveParticipant getActiveParticipant(NhinTargetSystemType target, UserType oUserInfo) {
         return null;
     }
 
@@ -168,7 +168,7 @@ public class PatientDiscoveryDeferredResponseAuditTransforms extends
     protected String getPDDeferredRequestInitiatorAddress() {
         try {
             String hcid = PRPAIN201306UV02Parser.getReceiverHCID(getRequest());
-            return new URL(getWebServiceUrlFromRemoteObject(MessageGeneratorUtils.getInstance().
+            return new URL(getWebServiceUrlFromRemoteObject(PDMessageGeneratorUtils.getInstance().
                 convertToNhinTargetSystemType(createNhinTargetCommunity(hcid)),
                 NhincConstants.PATIENT_DISCOVERY_DEFERRED_REQ_SERVICE_NAME)).getHost();
         } catch (MalformedURLException ex) {
@@ -181,9 +181,9 @@ public class PatientDiscoveryDeferredResponseAuditTransforms extends
     @Override
     protected String getWebServiceUrlFromRemoteObject(NhinTargetSystemType target, String serviceName) {
         try {
-            return getConnectionManagerCache().getEndpointURLFromNhinTarget(target,
+            return getExchangeManager().getEndpointURLFromNhinTarget(target,
                 NhincConstants.PATIENT_DISCOVERY_DEFERRED_RESP_SERVICE_NAME);
-        } catch (ConnectionManagerException ex) {
+        } catch (ExchangeManagerException ex) {
             LOG.error("Exception while Reading Url for the PatientDiscovery Deferred Response Service Endpoint: "
                 + ex.getLocalizedMessage(), ex);
         }
@@ -211,7 +211,7 @@ public class PatientDiscoveryDeferredResponseAuditTransforms extends
     }
 
     private NhinTargetSystemType convertToNhinTarget(String hcid) {
-        return MessageGeneratorUtils.getInstance().convertToNhinTargetSystemType(createNhinTargetCommunity(hcid));
+        return PDMessageGeneratorUtils.getInstance().convertToNhinTargetSystemType(createNhinTargetCommunity(hcid));
     }
 
 }

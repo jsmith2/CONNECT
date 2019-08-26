@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,10 +27,12 @@
 package gov.hhs.fha.nhinc.messaging.client;
 
 import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
+import gov.hhs.fha.nhinc.cryptostore.StoreUtil;
 import gov.hhs.fha.nhinc.messaging.service.BaseServiceEndpoint;
 import gov.hhs.fha.nhinc.messaging.service.ServiceEndpoint;
 import gov.hhs.fha.nhinc.messaging.service.decorator.TimeoutServiceEndpointDecorator;
 import gov.hhs.fha.nhinc.messaging.service.decorator.URLServiceEndpointDecorator;
+import gov.hhs.fha.nhinc.messaging.service.decorator.cxf.TLSUDDIClientEndpointDecorator;
 import gov.hhs.fha.nhinc.messaging.service.decorator.cxf.WsAddressingServiceEndpointDecorator;
 import gov.hhs.fha.nhinc.messaging.service.port.CXFServicePortBuilder;
 import gov.hhs.fha.nhinc.messaging.service.port.ServicePortDescriptor;
@@ -45,16 +47,16 @@ public class UDDIBaseClient<T> implements CONNECTClient<T> {
     private WebServiceProxyHelper proxyHelper;
     private ServiceEndpoint<T> serviceEndpoint = null;
 
-    public UDDIBaseClient(ServicePortDescriptor<T> portDescriptor, String url) {
+    public UDDIBaseClient(ServicePortDescriptor<T> portDescriptor, String url, String exchangeName) {
 
         proxyHelper = new WebServiceProxyHelper();
 
         CXFServicePortBuilder<T> portBuilder = new CXFServicePortBuilder<>(portDescriptor);
 
-        serviceEndpoint = new BaseServiceEndpoint<>(portBuilder.createPort());
+        serviceEndpoint = new BaseServiceEndpoint<>(portBuilder.createPort(StoreUtil.getGatewayCertificateAlias(exchangeName), null));
         serviceEndpoint = new URLServiceEndpointDecorator<>(serviceEndpoint, url);
         serviceEndpoint = new TimeoutServiceEndpointDecorator<>(serviceEndpoint, -1);
-
+        serviceEndpoint = new TLSUDDIClientEndpointDecorator<>(serviceEndpoint, exchangeName);
         serviceEndpoint.configure();
 
     }
@@ -71,7 +73,7 @@ public class UDDIBaseClient<T> implements CONNECTClient<T> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see gov.hhs.fha.nhinc.messaging.client.CONNECTClient#supportMtom()
      */
     @Override
@@ -81,7 +83,7 @@ public class UDDIBaseClient<T> implements CONNECTClient<T> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * gov.hhs.fha.nhinc.messaging.client.CONNECTClient#enableWSA(gov.hhs.fha.nhinc.common.nhinccommon.AssertionType,
      * java.lang.String, java.lang.String)
@@ -89,7 +91,7 @@ public class UDDIBaseClient<T> implements CONNECTClient<T> {
     @Override
     public void enableWSA(AssertionType assertion, String wsAddressingTo, String wsAddressingActionId) {
         serviceEndpoint = new WsAddressingServiceEndpointDecorator<>(serviceEndpoint, wsAddressingTo,
-                wsAddressingActionId, assertion);
+            wsAddressingActionId, assertion);
     }
 
 }

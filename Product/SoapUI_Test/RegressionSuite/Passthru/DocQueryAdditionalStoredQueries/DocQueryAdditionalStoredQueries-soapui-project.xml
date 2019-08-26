@@ -41285,7 +41285,7 @@ StaticMifToXsd.xsl version 2.0</xs:documentation>
 def adapterxdsbdocregistryURL = "http://" + mockHost + ":18088/mockDocQuery";
 def LocalHCID = context.findProperty( "LocalHCID" );
 
-nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log)</script>
+nhinc.FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log)</script>
         </con:config>
       </con:testStep>
       <con:testStep name="FindDocuments" type="request" id="34d2f7f8-d880-4e5b-8682-66dedac739c6">
@@ -41503,12 +41503,12 @@ nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.f
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -41516,7 +41516,7 @@ nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.f
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -42651,7 +42651,7 @@ def mockHost = context.findProperty("mockHost");
 def adapterxdsbdocregistryURL = "http://" + NHINGatewayHost + ":18088/mockDocQuery";
 def LocalHCID = context.findProperty( "LocalHCID" );
 
-FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log)</script>
+FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log)</script>
         </con:config>
       </con:testStep>
       <con:testStep name="FindSubmissionSets" type="request" id="7c24e6d6-3c9c-4f50-b25f-3fa0b8ff44ee">
@@ -42869,12 +42869,12 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -42882,7 +42882,7 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -44016,7 +44016,7 @@ def mockHost = context.findProperty("mockHost");
 def adapterxdsbdocregistryURL = "http://" + NHINGatewayHost + ":18088/mockDocQuery";
 def LocalHCID = context.findProperty( "LocalHCID" );
 
-FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log)</script>
+FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log)</script>
         </con:config>
       </con:testStep>
       <con:testStep name="FindFolders" type="request" id="9adef215-b6d2-411b-81d1-9072abf939f8">
@@ -44234,12 +44234,12 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -44247,7 +44247,7 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -45381,7 +45381,7 @@ def mockHost = context.findProperty("mockHost");
 def adapterxdsbdocregistryURL = "http://" + NHINGatewayHost + ":18088/mockDocQuery";
 def LocalHCID = context.findProperty( "LocalHCID" );
 
-FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log)</script>
+FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log)</script>
         </con:config>
       </con:testStep>
       <con:testStep name="GetFolders" type="request" id="1e2ce9d9-f191-4593-89e1-70ad1aabb519">
@@ -45594,12 +45594,12 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -45607,7 +45607,7 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -46731,7 +46731,7 @@ def mockHost = context.findProperty("mockHost");
 def adapterxdsbdocregistryURL = "http://" + NHINGatewayHost + ":18088/mockDocQuery";
 def LocalHCID = context.findProperty( "LocalHCID" );
 
-FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log)</script>
+FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log)</script>
         </con:config>
       </con:testStep>
       <con:testStep name="GetAll" type="request" id="1a2931bb-0298-4fa5-be51-3744bb492ef1">
@@ -46959,12 +46959,12 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -46972,7 +46972,7 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -48126,7 +48126,7 @@ def mockHost = context.findProperty("mockHost");
 def adapterxdsbdocregistryURL = "http://" + NHINGatewayHost + ":18088/mockDocQuery";
 def LocalHCID = context.findProperty( "LocalHCID" );
 
-FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log)</script>
+FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log)</script>
         </con:config>
       </con:testStep>
       <con:testStep name="GetFoldersForDocument" type="request" id="12f072cd-4d51-45b7-9022-4232acb302fd">
@@ -48339,12 +48339,12 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -48352,7 +48352,7 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -49476,7 +49476,7 @@ def mockHost = context.findProperty("mockHost");
 def adapterxdsbdocregistryURL = "http://" + NHINGatewayHost + ":18088/mockDocQuery";
 def LocalHCID = context.findProperty( "LocalHCID" );
 
-FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log)</script>
+FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log)</script>
         </con:config>
       </con:testStep>
       <con:testStep name="GetDocuments" type="request" id="6d8aeb82-f993-4962-b687-49a8d86117b1">
@@ -49689,12 +49689,12 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -49702,7 +49702,7 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -50826,7 +50826,7 @@ def mockHost = context.findProperty("mockHost");
 def adapterxdsbdocregistryURL = "http://" + NHINGatewayHost + ":18088/mockDocQuery";
 def LocalHCID = context.findProperty( "LocalHCID" );
 
-FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log);</script>
+FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="GetAssociations" type="request" id="03567de5-87e8-4db5-9de0-4d41586b097c">
@@ -51039,12 +51039,12 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -51052,7 +51052,7 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -52176,7 +52176,7 @@ def mockHost = context.findProperty("mockHost");
 def adapterxdsbdocregistryURL = "http://" + NHINGatewayHost + ":18088/mockDocQuery";
 def LocalHCID = context.findProperty( "LocalHCID" );
 
-FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log);</script>
+FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="GetDocumentsAndAssociations" type="request" id="05759f0f-b714-4049-99b2-5406ac168c0c">
@@ -52394,12 +52394,12 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -52407,7 +52407,7 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -53541,7 +53541,7 @@ def mockHost = context.findProperty("mockHost");
 def adapterxdsbdocregistryURL = "http://" + NHINGatewayHost + ":18088/mockDocQuery";
 def LocalHCID = context.findProperty( "LocalHCID" );
 
-FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log);</script>
+FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="GetSubmissionSets" type="request" id="f454503c-b36f-4d87-8fac-99271bbacca6">
@@ -53754,12 +53754,12 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -53767,7 +53767,7 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -54891,7 +54891,7 @@ def mockHost = context.findProperty("mockHost");
 def adapterxdsbdocregistryURL = "http://" + NHINGatewayHost + ":18088/mockDocQuery";
 def LocalHCID = context.findProperty( "LocalHCID" );
 
-FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log);</script>
+FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="GetSubmissionSetAndContents" type="request" id="26d19e02-76fc-48c5-bdc0-2773db2794ad">
@@ -55104,12 +55104,12 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -55117,7 +55117,7 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -56241,7 +56241,7 @@ def mockHost = context.findProperty("mockHost");
 def adapterxdsbdocregistryURL = "http://" + NHINGatewayHost + ":18088/mockDocQuery";
 def LocalHCID = context.findProperty( "LocalHCID" );
 
-FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log);</script>
+FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="GetFolderAndContents" type="request" id="2a738a07-447e-46de-be39-f791ac56365e">
@@ -56454,12 +56454,12 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -56467,7 +56467,7 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -57591,7 +57591,7 @@ def mockHost = context.findProperty("mockHost");
 def adapterxdsbdocregistryURL = "http://" + NHINGatewayHost + ":18088/mockDocQuery";
 def LocalHCID = context.findProperty( "LocalHCID" );
 
-FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log);</script>
+FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", context.findProperty("GatewayPropDir"), LocalHCID, "adapterxdsbdocregistry", adapterxdsbdocregistryURL, "LEVEL_a0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="GetRelatedDocuments" type="request" id="93904d7d-2ff6-4622-8c56-fad7e059154f">
@@ -57804,12 +57804,12 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -57817,7 +57817,7 @@ FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findPro
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>

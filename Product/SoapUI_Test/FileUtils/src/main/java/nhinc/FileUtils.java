@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,16 +23,18 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package nhinc;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Properties;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -59,8 +61,11 @@ import org.xml.sax.SAXException;
  *
  */
 public class FileUtils {
-
     static final String TEMP_DIR = "prop_temp";
+    private static final String NS_NEW_ELEMENT = "urn:uddi-org:api_v3";
+    private static final String XML_ALL_NS = "*";
+    private static final String COMPLETION_CHECKPOINT = "completion-checkpoint: {0}";
+    private static final boolean REQUIRED_ELEMENT_TRUE = true;
 
     /**
      * Reads in a file with a given file name and converts to a String.
@@ -71,30 +76,29 @@ public class FileUtils {
      */
     public static String readFile(String fileName, Logger log) {
         try {
-            log.info("read file: " + fileName);
+            log.debug(MessageFormat.format("read file: {0}", fileName));
             File sourceFile = new File(fileName);
             String filecontents = null;
             if (sourceFile.exists()) {
-                log.info("file exists");
+                log.debug("file exists");
                 StringBuilder sb = new StringBuilder();
 
                 try (BufferedReader input = new BufferedReader(new FileReader(sourceFile))) {
                     // not declared within while loop
                     String line;
                     /*
-                     * readLine is a bit quirky : it returns the content of a
-                     * line MINUS the newline. it returns null only for the END
-                     * of the stream. it returns an empty String if two newlines
-                     * appear in a row.
+                     * readLine is a bit quirky : it returns the content of a line MINUS the newline. it returns null
+                     * only for the END of the stream. it returns an empty String if two newlines appear in a row.
                      */
                     while ((line = input.readLine()) != null) {
                         sb.append(line);
                         sb.append(System.getProperty("line.separator"));
                     }
+                    log.debug(getCheckpoint("readFile"));
                 }
                 filecontents = sb.toString();
             } else {
-                log.info("unable to find source file " + fileName);
+                log.warn(MessageFormat.format("unable to find source fileName: {0}", fileName));
             }
 
             return filecontents;
@@ -115,8 +119,8 @@ public class FileUtils {
      * @param log SoapUI logger.
      */
     public static void setG0ConnectionInfo(String sourceDirectory, String destDirectory, Logger log) {
-        copyFile(sourceDirectory, "uddiConnectionInfo_g0.xml", destDirectory, "uddiConnectionInfo.xml", log);
-        copyFile(sourceDirectory, "internalConnectionInfo_g0.xml", destDirectory, "internalConnectionInfo.xml", log);
+        copyFile(sourceDirectory, "exchangeInfo_g0.xml", destDirectory, "exchangeInfo.xml", log);
+        copyFile(sourceDirectory, "internalExchangeInfo_g0.xml", destDirectory, "internalExchangeInfo.xml", log);
     }
 
     /**
@@ -127,10 +131,9 @@ public class FileUtils {
      * @param destDirectory The config directory the files are copied to.
      * @param log SoapUI logger.
      */
-    public static void setG1ConnectionInfo(String sourceDirectory,
-        String destDirectory, Logger log) {
-        copyFile(sourceDirectory, "uddiConnectionInfo_g1.xml", destDirectory, "uddiConnectionInfo.xml", log);
-        copyFile(sourceDirectory, "internalConnectionInfo_g1.xml", destDirectory, "internalConnectionInfo.xml", log);
+    public static void setG1ConnectionInfo(String sourceDirectory, String destDirectory, Logger log) {
+        copyFile(sourceDirectory, "exchangeInfo_g1.xml", destDirectory, "exchangeInfo.xml", log);
+        copyFile(sourceDirectory, "internalExchangeInfo_g1.xml", destDirectory, "internalExchangeInfo.xml", log);
     }
 
     /**
@@ -148,19 +151,19 @@ public class FileUtils {
         File sourceFile = new File(sourceDirectory, sourceFileName);
         File destinationFile = new File(destinationDirectory, destinationFileName);
 
-        log.info("copying property file from " + sourceFile + " to " + destinationFile);
+        log.debug(MessageFormat.format("copying property file from ''{0}'' to ''{1}''", sourceFile, destinationFile));
 
         if (sourceFile.exists()) {
             try {
                 org.apache.commons.io.FileUtils.copyFile(sourceFile, destinationFile, false);
-                log.info("File " + sourceFileName + " copied to " + destinationFileName + ".");
+                log.debug(MessageFormat.format("File ''{0}'' copied to ''{1}''.", sourceFileName, destinationFileName));
             } catch (FileNotFoundException ex) {
-                log.error(ex.getLocalizedMessage() + " in the specified directory.", ex);
+                log.error(MessageFormat.format("{0} in the specified directory.", ex.getLocalizedMessage()), ex);
             } catch (IOException e) {
                 log.error(e.getLocalizedMessage(), e);
             }
         } else {
-            log.error("Unable to find source file " + sourceFile);
+            log.error(MessageFormat.format("Unable to find source file: {0}", sourceFile));
         }
     }
 
@@ -174,10 +177,10 @@ public class FileUtils {
     public static void deleteFile(String sourceDirectory, String sourceFileName, Logger log) {
         File file = new File(sourceDirectory, sourceFileName);
         if (file.exists()) {
-            log.info("deleting file " + file);
             file.delete();
+            log.debug(MessageFormat.format("file deleted: {0}", file.getName()));
         } else {
-            log.info("file not found, skipping delete for " + file);
+            log.warn(MessageFormat.format("file not found, skipping delete for: {0}", file));
         }
     }
 
@@ -197,8 +200,9 @@ public class FileUtils {
         FileReader frPropFile = null;
 
         try {
-            log.info("begin updateProperty; directory='" + directory + "';filename='" + filename + "';key='"
-                + propertyKey + "';value='" + propertyValue + "';");
+            log.debug(MessageFormat.format(
+                "begin updateProperty; directory=''{0}'';filename=''{1}'';key=''{2}'';value=''{3}'';", directory,
+                filename, propertyKey, propertyValue));
 
             File file = new File(directory, filename);
             frPropFile = new FileReader(file);
@@ -212,21 +216,8 @@ public class FileUtils {
         } catch (IOException e) {
             log.error(e.getLocalizedMessage(), e);
         } finally {
-            if (frPropFile != null) {
-                try {
-                    frPropFile.close();
-                } catch (IOException ioe) {
-                    log.error("Could not close property file: " + ioe.getLocalizedMessage(), ioe);
-                }
-            }
-
-            if (fwPropFile != null) {
-                try {
-                    fwPropFile.close();
-                } catch (IOException ioe) {
-                    log.error("Could not close property file: " + ioe.getLocalizedMessage(), ioe);
-                }
-            }
+            closeFile(frPropFile, log);
+            closeFile(fwPropFile, log);
         }
     }
 
@@ -244,8 +235,8 @@ public class FileUtils {
         String propertyValue = null;
 
         try {
-            log.info("begin ReadProperty; directory='" + directory + "';filename='" + filename + "';key='"
-                + propertyKey + "';");
+            log.debug(MessageFormat.format("begin ReadProperty; directory=''{0}'';filename=''{1}'';key=''{2}'';",
+                directory, filename, propertyKey));
 
             frPropFile = new FileReader(new File(directory, filename));
 
@@ -256,13 +247,7 @@ public class FileUtils {
         } catch (IOException e) {
             log.error(e.getLocalizedMessage(), e);
         } finally {
-            if (frPropFile != null) {
-                try {
-                    frPropFile.close();
-                } catch (IOException ioe) {
-                    log.error("Could not close property file: " + ioe.getLocalizedMessage(), ioe);
-                }
-            }
+            closeFile(frPropFile, log);
         }
 
         return propertyValue;
@@ -282,40 +267,43 @@ public class FileUtils {
         String newAliasName, Logger log) {
 
         Boolean foundAlias = false;
-        String oldAliasLine = "<alias alias=\"" + alias + "\" name=\"" + oldAliasName + "\" />";
-        String newAliasLine = "<alias alias=\"" + alias + "\" name=\"" + newAliasName + "\" />";
+        String oldAliasLine = MessageFormat.format("<alias alias=\"{0}\" name=\"{1}\" />", alias, oldAliasName);
+        String newAliasLine = MessageFormat.format("<alias alias=\"{0}\" name=\"{1}\" />", alias, newAliasName);
 
-        log.info("OLD: " + oldAliasLine + "NEW: " + newAliasLine);
+        log.debug(MessageFormat.format("OLD: {0} NEW: {1}", oldAliasLine, newAliasLine));
 
         File configDirFile = new File(configDir);
         File tempConfigFile = new File(configDirFile.getAbsolutePath(), "tempConfigFile.xml");
         File sourceFile = new File(configDirFile.getAbsolutePath(), fileName);
 
         if (sourceFile.exists()) {
-            try {
-                BufferedReader input = new BufferedReader(new FileReader(sourceFile));
-                FileWriter output = new FileWriter(tempConfigFile);
+            try (BufferedReader input = new BufferedReader(new FileReader(sourceFile));
+                FileWriter output = new FileWriter(tempConfigFile)) {
 
                 try {
+                    int lineCount = 1;
+                    log.debug(MessageFormat.format("looking for: ''{0}''", oldAliasLine));
                     // not declared within while loop
                     String line;
                     /*
-                     * readLine is a bit quirky : it returns the content of a
-                     * line MINUS the newline. it returns null only for the END
-                     * of the stream. it returns an empty String if two newlines
-                     * appear in a row.
+                     * readLine is a bit quirky : it returns the content of a line MINUS the newline. it returns null
+                     * only for the END of the stream. it returns an empty String if two newlines appear in a row.
                      */
                     while ((line = input.readLine()) != null) {
-                        if (line.contains(oldAliasLine)) {
+                        log.debug(MessageFormat.format("File ''{0}'': ''{1}''", fileName, line));
+                        if (containsIgnoreCaseOf(line, oldAliasLine)) {
                             line = newAliasLine;
                             foundAlias = true;
+                            log.debug(getCheckpoint("updateSpringConfig-found"));
                         }
                         output.append(line);
                         output.append(System.getProperty("line.separator"));
+                        lineCount++;
                     }
+                    log.debug(MessageFormat.format("File ''{0}'': end with count: {1}", fileName, lineCount));
                 } finally {
-                    input.close();
-                    output.close();
+                    closeFile(input, log);
+                    closeFile(output, log);
                 }
 
                 sourceFile.delete();
@@ -323,13 +311,15 @@ public class FileUtils {
                 tempConfigFile.delete();
 
                 if (!foundAlias) {
-                    log.error("Did not find alias line in Spring Config file.  No modification made.");
+                    log.warn(MessageFormat.format(
+                        "Did not find alias line in Spring Config file.  No modification made. ''{0}''", oldAliasLine));
                 }
+                log.debug(getCheckpoint("updateSpringConfig"));
             } catch (IOException e) {
                 log.error(e.getLocalizedMessage(), e);
             }
         } else {
-            log.info("Unable to find source file " + fileName);
+            log.debug(MessageFormat.format("Unable to find source file: {0}.", fileName));
         }
     }
 
@@ -347,148 +337,42 @@ public class FileUtils {
     public static void createOrUpdateConnection(String fileName, String directory, String communityId,
         String serviceName, String serviceUrl, String defaultVersion, Logger log) {
 
-        log.info("begin CreateOrUpdateConnection; directory='" + directory + "';community id='" + communityId
-            + "';service name='" + serviceName + "';service url='" + serviceUrl + "';");
+        log.debug(MessageFormat.format(
+            "begin CreateOrUpdateConnection; directory=''{0}'';community-id=''{1}'';service-name=''{2}'';service-url=''{3}'';",
+            directory, communityId, serviceName, serviceUrl));
 
-        String fullPath = directory + "/" + fileName;
-        log.info("Path to connection info file: " + fullPath);
-        boolean serviceNodeFound;
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        Document doc;
-
-        try {
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            doc = builder.parse(fullPath);
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            log.error(e.getLocalizedMessage(), e);
+        String fullPath = MessageFormat.format("{0}/{1}", directory, fileName);
+        Document doc = getDocument(log, fullPath);
+        if (null == doc) {
             return;
         }
 
-        Element businessDetail = (Element) doc.getElementsByTagName("businessDetail").item(0);
-        NodeList businessEntities = businessDetail.getElementsByTagName("businessEntity");
+        NodeList organizationList = getOrganizationList(log, doc);
 
-        for (int i = 0; i < businessEntities.getLength(); i++) {
-            Element businessEntity = (Element) businessEntities.item(i);
-            String communityIdValue = businessEntity.getAttribute("businessKey");
-            if (communityIdValue.equals("uddi:nhincnode:" + communityId)) {
-                Element services = (Element) businessEntity.getElementsByTagName("businessServices").item(0);
-                NodeList serviceList = services.getElementsByTagName("businessService");
-                serviceNodeFound = false;
+        if (organizationList != null) {
+            for (int i = 0; i < organizationList.getLength(); i++) {
+                Element organization = (Element) organizationList.item(i);
+                String hcidValue = getTextContentOf(organization, "hcid");
 
-                for (int serviceNodeIndex = 0; serviceNodeIndex < serviceList.getLength(); serviceNodeIndex++) {
-                    Element serviceElement = (Element) serviceList.item(serviceNodeIndex);
-                    String name = serviceElement.getElementsByTagName("name").item(0).getTextContent();
-                    if (serviceName.equals(name)) {
-                        log.info("Found service: " + serviceName);
-                        serviceNodeFound = true;
-                        Element bindingTemplates = (Element) serviceElement.getElementsByTagName("bindingTemplates")
-                            .item(0);
-                        NodeList bindingTemplatesList = bindingTemplates.getElementsByTagName("bindingTemplate");
-                        float bindingTemplateVersion = 0;
-                        Element latestVersionBindingTemplate = null;
+                if (equalsIgnoreCaseForHCID(communityId, hcidValue)) {
+                    log.debug(MessageFormat.format("Found-HCID: {0}", hcidValue));
+                    boolean serviceNodeFound = checkServiceEndpointByLatest(log, organization, serviceName, serviceUrl);
 
-                        if (bindingTemplatesList.getLength() > 1) {
-                            for (int bindingNodeIndex = 0; bindingNodeIndex < bindingTemplatesList.getLength();
-                                bindingNodeIndex++) {
-
-                                Element currBindingTemplate = (Element) bindingTemplatesList.item(bindingNodeIndex);
-                                Element bindingCategoryBag = (Element) currBindingTemplate
-                                    .getElementsByTagName("categoryBag").item(0);
-                                Element bindingKeyedRef = (Element) bindingCategoryBag
-                                    .getElementsByTagName("keyedReference").item(0);
-                                String currVersionString = bindingKeyedRef.getAttribute("keyValue");
-                                if (currVersionString.contains("LEVEL")) {
-                                    if (latestVersionBindingTemplate != null) {
-                                        if (currVersionString.equals("LEVEL_a1")) {
-                                            latestVersionBindingTemplate = currBindingTemplate;
-                                        }
-                                        // else template is prior version and doesn't need to be set
-                                    } else {
-                                        latestVersionBindingTemplate = currBindingTemplate;
-                                    }
-                                } else {
-                                    float currVersion = new Float(currVersionString);
-                                    if (currVersion > bindingTemplateVersion) {
-                                        bindingTemplateVersion = currVersion;
-                                        latestVersionBindingTemplate = currBindingTemplate;
-                                    }
-                                }
-                            }
-                        } else {
-                            latestVersionBindingTemplate = (Element) bindingTemplatesList.item(0);
+                    if (!serviceNodeFound) {
+                        log.debug(MessageFormat.format("Service not found for: Adding HCID ''{0}'' and service ''{1}''",
+                            communityId, serviceName));
+                        try {
+                            getFirstElementOf(organization, "endpointList", REQUIRED_ELEMENT_TRUE)
+                            .appendChild(createElementEndpointBy(doc, serviceName, serviceUrl, defaultVersion));
+                            log.debug(getCheckpoint(MessageFormat
+                            .format("createOrUpdateConnection-createElementEndpointBy: {0}", serviceName)));
+                        } catch (DOMException de) {
+                            log.error(de.getLocalizedMessage(), de);
                         }
-
-                        if (latestVersionBindingTemplate != null) {
-                            Element accessPoint = (Element) latestVersionBindingTemplate
-                                .getElementsByTagName("accessPoint").item(0);
-                            if (!serviceUrl.equals(accessPoint.getTextContent())) {
-                                accessPoint.setTextContent(serviceUrl);
-                                log.info("AccessPoint Found, set to " + serviceUrl);
-                            }
-                        }
-                        break;
                     }
 
+                    break;
                 }
-
-                if (!serviceNodeFound) {
-                    log.info("Service not found for: " + communityId + ".  Adding HCID and service");
-                    // Create new service and add it to the services node
-                    try {
-                        Element serviceElement = doc.createElementNS("urn:uddi-org:api_v3", "businessService");
-                        serviceElement.setAttribute("serviceKey", "uddi:nhincnode:" + serviceName);
-                        serviceElement.setAttribute("businessKey", "uddi:nhincnode:" + communityId);
-
-                        Element name = doc.createElementNS("urn:uddi-org:api_v3", "name");
-                        name.setAttribute("xml:lang", "en");
-                        name.setTextContent(serviceName);
-                        serviceElement.appendChild(name);
-
-                        Element bindingTemplates = doc.createElementNS("urn:uddi-org:api_v3", "bindingTemplates");
-                        Element bindingTemplate = doc.createElementNS("urn:uddi-org:api_v3", "bindingTemplate");
-                        bindingTemplate.setAttribute("bindingKey", "uddi:nhincnode:" + serviceName);
-                        bindingTemplate.setAttribute("serviceKey", "uddi:nhincnode:" + serviceName);
-                        Element accessPoint = doc.createElementNS("urn:uddi-org:api_v3", "accessPoint");
-                        accessPoint.setAttribute("useType", "endPoint");
-                        accessPoint.setTextContent(serviceUrl);
-                        Element btCategoryBags = doc.createElementNS("urn:uddi-org:api_v3", "categoryBag");
-
-                        if (serviceName.toLowerCase().contains("adapter")) {
-                            Element keyedRefAdap = doc.createElementNS("urn:uddi-org:api_v3", "keyedReference");
-                            keyedRefAdap.setAttribute("tModelKey", "CONNECT:adapter:apilevel");
-                            keyedRefAdap.setAttribute("keyName", "");
-                            keyedRefAdap.setAttribute("keyValue", "LEVEL_a0");
-                            btCategoryBags.appendChild(keyedRefAdap);
-                        } else {
-                            Element btKeyedReference = doc.createElementNS("urn:uddi-org:api_v3", "keyedReference");
-                            btKeyedReference.setAttribute("keyName", "");
-                            btKeyedReference.setAttribute("tModelKey", "uddi:nhin:versionofservice");
-                            btKeyedReference.setAttribute("keyValue", defaultVersion);
-                            btCategoryBags.appendChild(btKeyedReference);
-                        }
-
-                        bindingTemplate.appendChild(accessPoint);
-                        bindingTemplate.appendChild(btCategoryBags);
-                        bindingTemplates.appendChild(bindingTemplate);
-
-                        Element categoryBag = doc.createElementNS("urn:uddi-org:api_v3", "categoryBag");
-                        Element keyedReference = doc.createElementNS("urn:uddi-org:api_v3", "keyedReference");
-                        keyedReference.setAttribute("tModelKey", "uddi:nhin:standard-servicenames");
-                        keyedReference.setAttribute("keyName", serviceName);
-                        keyedReference.setAttribute("keyValue", serviceName);
-                        categoryBag.appendChild(keyedReference);
-
-                        serviceElement.appendChild(bindingTemplates);
-                        serviceElement.appendChild(categoryBag);
-
-                        services.appendChild(serviceElement);
-                    } catch (DOMException de) {
-                        log.error(de.getLocalizedMessage(), de);
-                    }
-                }
-
-                break;
             }
         }
 
@@ -501,11 +385,11 @@ public class FileUtils {
             try (FileOutputStream fileOutput = new FileOutputStream(fullPath)) {
                 StreamResult stream = new StreamResult(fileOutput);
                 transformer.transform(source, stream);
-                // fileOutput.finalize();
             }
-            log.info("Done createorupdate: " + fileName);
+            log.debug(MessageFormat.format("Done createorupdate: {0}", fileName));
         } catch (IllegalArgumentException | TransformerException | IOException e) {
-            log.error("Exception writing out connection info file: " + e.getLocalizedMessage(), e);
+            log.error(MessageFormat.format("Exception writing out connection info file: {0}", e.getLocalizedMessage()),
+                e);
         }
     }
 
@@ -520,138 +404,44 @@ public class FileUtils {
      * @param endpointVersion The default spec version.
      * @param log SoapUI logger.
      */
-    public static void configureConnection(String fileName,
-        String directory, String communityId, String serviceName,
+    public static void configureConnection(String fileName, String directory, String communityId, String serviceName,
         String serviceUrl, String endpointVersion, Logger log) {
 
-        log.info("begin CreateOrUpdateConnection; directory='" + directory + "';community id='" + communityId
-            + "';service name='" + serviceName + "';service url='" + serviceUrl + "';");
+        log.debug(MessageFormat.format(
+            "begin CreateOrUpdateConnection; directory=''{0}'';community-id=''{1}'';service-name=''{2}'';service-url=''{3}'';",
+            directory, communityId, serviceName, serviceUrl));
 
-        String fullPath = directory + "/" + fileName;
-        log.info("Path to connection info file: " + fullPath);
-        boolean serviceNodeFound;
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        Document doc;
-
-        try {
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            doc = builder.parse(fullPath);
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            log.error(e.getLocalizedMessage(), e);
+        String fullPath = MessageFormat.format("{0}/{1}", directory, fileName);
+        Document doc = getDocument(log, fullPath);
+        if (null == doc) {
             return;
         }
 
-        Element businessDetail = (Element) doc.getElementsByTagName("businessDetail").item(0);
-        NodeList businessEntities = businessDetail.getElementsByTagName("businessEntity");
+        NodeList organizationList = getOrganizationList(log, doc);
+        if (organizationList != null) {
+            for (int i = 0; i < organizationList.getLength(); i++) {
+                Element organization = (Element) organizationList.item(i);
+                String hcidValue = getFirstElementOf(organization, "hcid").getTextContent();
 
-        for (int i = 0; i < businessEntities.getLength(); i++) {
-            Element businessEntity = (Element) businessEntities.item(i);
-            String communityIdValue = businessEntity.getAttribute("businessKey");
-            if (communityIdValue.equals("uddi:nhincnode:" + communityId)) {
-                Element services = (Element) businessEntity.getElementsByTagName("businessServices").item(0);
-                NodeList serviceList = services.getElementsByTagName("businessService");
-                serviceNodeFound = false;
+                if (equalsIgnoreCaseForHCID(communityId, hcidValue)) {
+                    log.debug(MessageFormat.format("Found-HCID: {0}", hcidValue));
+                    boolean serviceNodeFound = checkServiceEndpoint(log, organization, serviceName, serviceUrl,
+                        endpointVersion);
 
-                for (int serviceNodeIndex = 0; serviceNodeIndex < serviceList.getLength(); serviceNodeIndex++) {
-                    Element serviceElement = (Element) serviceList.item(serviceNodeIndex);
-                    String name = serviceElement.getElementsByTagName("name").item(0).getTextContent();
-                    if (serviceName.equals(name)) {
-                        log.info("Found service: " + serviceName);
-                        serviceNodeFound = true;
-                        Element bindingTemplates = (Element) serviceElement.getElementsByTagName("bindingTemplates")
-                            .item(0);
-                        NodeList bindingTemplatesList = bindingTemplates.getElementsByTagName("bindingTemplate");
-                        Element latestVersionBindingTemplate = null;
-
-                        if (bindingTemplatesList.getLength() > 1) {
-                            for (int bindingNodeIndex = 0; bindingNodeIndex < bindingTemplatesList.getLength();
-                                bindingNodeIndex++) {
-
-                                Element currBindingTemplate = (Element) bindingTemplatesList.item(bindingNodeIndex);
-                                Element bindingCategoryBag = (Element) currBindingTemplate
-                                    .getElementsByTagName("categoryBag").item(0);
-                                Element bindingKeyedRef = (Element) bindingCategoryBag
-                                    .getElementsByTagName("keyedReference").item(0);
-                                String currVersionString = bindingKeyedRef.getAttribute("keyValue");
-
-                                if (StringUtils.equalsIgnoreCase(currVersionString, endpointVersion)) {
-                                    latestVersionBindingTemplate = currBindingTemplate;
-                                }
-                            }
-                        } else {
-                            latestVersionBindingTemplate = (Element) bindingTemplatesList.item(0);
+                    if (!serviceNodeFound) {
+                        log.debug(MessageFormat.format("Service not found for: Adding HCID ''{0}'' and service ''{1}''",
+                            communityId, serviceName));
+                        try {
+                            getFirstElementOf(organization, "endpointList", REQUIRED_ELEMENT_TRUE)
+                            .appendChild(createElementEndpointBy(doc, serviceName, serviceUrl, endpointVersion));
+                            log.debug(getCheckpoint(
+                                MessageFormat.format("configureConnection-createElementEndpointBy: {0}", serviceName)));
+                        } catch (DOMException de) {
+                            log.error(de.getLocalizedMessage(), de);
                         }
-
-                        if (latestVersionBindingTemplate != null) {
-                            Element accessPoint = (Element) latestVersionBindingTemplate
-                                .getElementsByTagName("accessPoint").item(0);
-                            if (!serviceUrl.equals(accessPoint.getTextContent())) {
-                                accessPoint.setTextContent(serviceUrl);
-                                log.info("AccessPoint Found, set to " + serviceUrl);
-                            }
-                        }
-
-                        break;
                     }
-
+                    break;
                 }
-                if (!serviceNodeFound) {
-                    log.info("Service not found for: " + communityId + ".  Adding HCID and service");
-                    // Create new service and add it to the services node
-                    try {
-                        Element serviceElement = doc.createElementNS("urn:uddi-org:api_v3", "businessService");
-                        serviceElement.setAttribute("serviceKey", "uddi:nhincnode:" + serviceName);
-                        serviceElement.setAttribute("businessKey", "uddi:nhincnode:" + communityId);
-
-                        Element name = doc.createElementNS("urn:uddi-org:api_v3", "name");
-                        name.setAttribute("xml:lang", "en");
-                        name.setTextContent(serviceName);
-                        serviceElement.appendChild(name);
-
-                        Element bindingTemplates = doc.createElementNS("urn:uddi-org:api_v3", "bindingTemplates");
-                        Element bindingTemplate = doc.createElementNS("urn:uddi-org:api_v3", "bindingTemplate");
-                        bindingTemplate.setAttribute("bindingKey", "uddi:nhincnode:" + serviceName);
-                        bindingTemplate.setAttribute("serviceKey", "uddi:nhincnode:" + serviceName);
-                        Element accessPoint = doc.createElementNS("urn:uddi-org:api_v3", "accessPoint");
-                        accessPoint.setAttribute("useType", "endPoint");
-                        accessPoint.setTextContent(serviceUrl);
-                        Element btCategoryBags = doc.createElementNS("urn:uddi-org:api_v3", "categoryBag");
-
-                        if (serviceName.toLowerCase().contains("adapter")) {
-                            Element keyedRefAdap = doc.createElementNS("urn:uddi-org:api_v3", "keyedReference");
-                            keyedRefAdap.setAttribute("tModelKey", "CONNECT:adapter:apilevel");
-                            keyedRefAdap.setAttribute("keyName", "");
-                            keyedRefAdap.setAttribute("keyValue", "LEVEL_a0");
-                            btCategoryBags.appendChild(keyedRefAdap);
-                        } else {
-                            Element btKeyedReference = doc.createElementNS("urn:uddi-org:api_v3", "keyedReference");
-                            btKeyedReference.setAttribute("keyName", "");
-                            btKeyedReference.setAttribute("tModelKey", "uddi:nhin:versionofservice");
-                            btKeyedReference.setAttribute("keyValue", endpointVersion);
-                            btCategoryBags.appendChild(btKeyedReference);
-                        }
-
-                        bindingTemplate.appendChild(accessPoint);
-                        bindingTemplate.appendChild(btCategoryBags);
-                        bindingTemplates.appendChild(bindingTemplate);
-
-                        Element categoryBag = doc.createElementNS("urn:uddi-org:api_v3", "categoryBag");
-                        Element keyedReference = doc.createElementNS("urn:uddi-org:api_v3", "keyedReference");
-                        keyedReference.setAttribute("tModelKey", "uddi:nhin:standard-servicenames");
-                        keyedReference.setAttribute("keyName", serviceName);
-                        keyedReference.setAttribute("keyValue", serviceName);
-                        categoryBag.appendChild(keyedReference);
-
-                        serviceElement.appendChild(bindingTemplates);
-                        serviceElement.appendChild(categoryBag);
-
-                        services.appendChild(serviceElement);
-                    } catch (DOMException de) {
-                        log.error(de.getLocalizedMessage(), de);
-                    }
-                }
-                break;
             }
         }
         try {
@@ -663,11 +453,11 @@ public class FileUtils {
             try (FileOutputStream fileOutput = new FileOutputStream(fullPath)) {
                 StreamResult stream = new StreamResult(fileOutput);
                 transformer.transform(source, stream);
-                // fileOutput.finalize();
             }
-            log.info("Done createorupdate: " + fileName);
+            log.debug(MessageFormat.format("Done configureConnection: {0}", fileName));
         } catch (IllegalArgumentException | TransformerException | IOException e) {
-            log.error("Exception writing out connection info file: " + e.getLocalizedMessage(), e);
+            log.error(MessageFormat.format("Exception writing out connection info file: {0}", e.getLocalizedMessage()),
+                e);
         }
     }
 
@@ -678,17 +468,18 @@ public class FileUtils {
      * @param log SoapUI logger.
      */
     public static void backupConfiguration(String configDir, Logger log) {
-        log.info("Start backupConfiguration");
+        log.debug("Start backupConfiguration");
         try {
             File backupDir = new File(configDir, TEMP_DIR);
             File confDir = new File(configDir);
             backupDir.mkdir();
-            //copies the files from the source directory to the destination directory
+            // copies the files from the source directory to the destination directory
             copyFolder(confDir, backupDir, log);
+            log.debug(getCheckpoint("backupConfiguration"));
         } catch (IOException ioe) {
             log.error(ioe.getLocalizedMessage(), ioe);
         }
-        log.info("End backupConfiguration");
+        log.debug("End backupConfiguration");
     }
 
     /**
@@ -700,24 +491,26 @@ public class FileUtils {
      * @param optionDel Flag for deleting the temporary directory.
      */
     public static void restoreConfiguration(String configDir, Logger log, Boolean optionDel) {
-        log.info("Start restoreConfiguration");
+        log.debug("Start restoreConfiguration");
         try {
+            log.debug(MessageFormat.format("configDir: {0}", configDir));
             File backupDir = new File(configDir, TEMP_DIR);
             File confDir = new File(configDir);
-            //restore the files back
+            // restore the files back
             copyFolder(backupDir, confDir, log);
 
-            //Deletes the temp folder
+            // Deletes the temp folder
             deleteFolder(backupDir, log);
-            //if the optionDel is true then create the temp folder
+            // if the optionDel is true then create the temp folder
             if (!optionDel) {
-                //create the temp directory again
+                // create the temp directory again
                 backupDir.mkdir();
             }
+            log.debug(getCheckpoint("restoreConfiguration"));
         } catch (IOException ioe) {
             log.error(ioe.getLocalizedMessage(), ioe);
         }
-        log.info("End restoreConfiguration");
+        log.debug("End restoreConfiguration");
     }
 
     /**
@@ -734,11 +527,11 @@ public class FileUtils {
      * Backs up a single file.
      *
      * @param configDir The directory that the file to be backed up is in.
-     * @param fileName	The name of the file to be backed up.
+     * @param fileName The name of the file to be backed up.
      * @param log SoapUI logger.
      */
     public static void backupFile(String configDir, String fileName, Logger log) {
-        log.info("Backing up file " + fileName + " in " + configDir + " directory.");
+        log.debug(MessageFormat.format("Backing up file {0} in {1} directory.", fileName, configDir));
         copyFile(configDir, fileName, configDir + File.separator + TEMP_DIR, fileName, log);
     }
 
@@ -750,14 +543,14 @@ public class FileUtils {
      * @param log SoapUI logger.
      */
     public static void restoreFile(String configDir, String fileName, Logger log) {
-        log.info("Restoring file " + fileName);
+        log.debug(MessageFormat.format("Restoring file: {0}", fileName));
         File configDirFile = new File(configDir);
         File backupDir = new File(configDir, TEMP_DIR);
         copyFile(backupDir.getAbsolutePath(), fileName, configDirFile.getAbsolutePath(), fileName, log);
 
         new File(backupDir.getAbsolutePath(), fileName).delete();
 
-        if (backupDir.listFiles().length == 0) {
+        if (isEmpty(backupDir.listFiles())) {
             backupDir.delete();
         }
     }
@@ -771,11 +564,11 @@ public class FileUtils {
      * @throws java.io.IOException
      */
     public static void copyFolder(File src, File dest, Logger log) throws IOException {
-        //loop the through source folder list and copy the files/folders to the destination folder
+        // loop the through source folder list and copy the files/folders to the destination folder
         for (File fileName : src.listFiles()) {
             if (fileName.isDirectory()) {
-                //Don't copy the backup folder
-                if (!fileName.getName().equals(TEMP_DIR)) {
+                // Don't copy the backup folder
+                if (!fileName.getName().equalsIgnoreCase(TEMP_DIR)) {
                     org.apache.commons.io.FileUtils.copyDirectoryToDirectory(fileName, dest);
                 }
             } else {
@@ -793,5 +586,269 @@ public class FileUtils {
      */
     public static void deleteFolder(File directory, Logger log) throws IOException {
         org.apache.commons.io.FileUtils.deleteDirectory(directory);
+        log.debug(getCheckpoint("deleteFolder"));
+    }
+
+    public static String getCheckpoint(String namedCheckpoint) {
+        return MessageFormat.format(COMPLETION_CHECKPOINT, namedCheckpoint);
+    }
+
+    private static void closeFile(Closeable file, Logger log) {
+        if (file != null) {
+            try {
+                file.close();
+            } catch (IOException ioe) {
+                log.error(MessageFormat.format("Could not close property file: {0}", ioe.getLocalizedMessage()), ioe);
+            }
+        }
+    }
+
+    private static String appendPrefixHomeCommunityID(final String homeCommunityId) {
+        return checkPrefixBeforeAppend(homeCommunityId, "urn:oid:");
+    }
+
+    private static boolean equalsIgnoreCaseForHCID(final String communityId, final String hcidValue) {
+        String homeCommunityIdPrefix = appendPrefixHomeCommunityID(communityId);
+        String hcidValuePrefix = appendPrefixHomeCommunityID(hcidValue);
+        return homeCommunityIdPrefix.equalsIgnoreCase(hcidValuePrefix);
+    }
+
+    private static String checkPrefixBeforeAppend(final String checkValue, final String checkPrefix) {
+        final String tempValue = checkValue.trim().toLowerCase();
+        final String tempPrefix = checkPrefix.toLowerCase();
+        if (!tempValue.startsWith(tempPrefix)) {
+            return MessageFormat.format("{0}{1}", checkPrefix, checkValue);
+        } else {
+            return checkValue;
+        }
+    }
+
+    private static Element createElementBy(Document document, String qualifiedName) {
+        return document.createElementNS(NS_NEW_ELEMENT, qualifiedName);
+    }
+
+    private static Element createElementBy(Element appendTo, String qualifiedName) {
+        return createElementBy(appendTo, qualifiedName, null);
+    }
+
+    private static Element createElementBy(Element appendTo, String qualifiedName, String textContent) {
+        Element retElement = appendTo.getOwnerDocument().createElementNS(NS_NEW_ELEMENT, qualifiedName);
+        if (textContent != null) {
+            retElement.setTextContent(textContent);
+        }
+
+        appendTo.appendChild(retElement);
+
+        return retElement;
+    }
+
+    private static Element getFirstElementOf(Element target, String nameOf) {
+        return getFirstElementOf(target, nameOf, false);
+    }
+
+    private static Element getFirstElementOf(Element target, String nameOf, boolean isRequired) {
+        Element firstElement = (Element) target.getElementsByTagNameNS(XML_ALL_NS, nameOf).item(0);
+        if (isRequired && null == firstElement) {
+            firstElement = createElementBy(target, nameOf);
+        }
+
+        return firstElement;
+    }
+
+    private static String getTextContentOf(Element target, String nameOf) {
+        Element namedElement = getFirstElementOf(target, nameOf);
+        if (namedElement != null) {
+            return namedElement.getTextContent();
+        }
+        return "";
+    }
+
+    private static NodeList getElementsByTagNameOf(Logger log, Element parent, String ofList, String ofName) {
+        NodeList listElements = null;
+        Element rootElement = getFirstElementOf(parent, ofList);
+        if (rootElement != null) {
+            listElements = rootElement.getElementsByTagNameNS(XML_ALL_NS, ofName);
+            if (null == listElements) {
+                log.warn(MessageFormat.format("''{0}-{1}'' is null", ofList, ofName));
+            }
+        } else {
+            log.warn(MessageFormat.format("''{0}'' is null", ofList));
+        }
+        return listElements;
+    }
+
+    private static Element createElementEndpointBy(Document document, String serviceName, String serviceUrl,
+        String endpointVersion) {
+
+        Element endpoint = createElementBy(document, "endpoint");
+
+        createElementBy(endpoint, "name", serviceName);
+        Element configurationList = createElementBy(endpoint, "endpointConfigurationList");
+
+        Element configuration = createElementBy(configurationList, "endpointConfiguration");
+        createElementBy(configuration, "url", serviceUrl);
+        if (serviceName != null) {
+            createElementBy(configuration, "version",
+                containsIgnoreCaseOf(serviceName, "adapter") ? "LEVEL_a0" : endpointVersion);
+        }
+        return endpoint;
+    }
+
+    private static <T> boolean isEmpty(final T[] arrayCollection) {
+        return !(arrayCollection != null && arrayCollection.length > 0);
+    }
+
+    private static Element getEndpointConfigurationBy(Logger log, Element endpoint, String matchEndpointVersion) {
+        Element latestVersion = null;
+        NodeList configurationList = getElementsByTagNameOf(log, endpoint, "endpointConfigurationList",
+            "endpointConfiguration");
+
+        if (configurationList != null) {
+            log.debug(MessageFormat.format("found-endpoint-configuration: {0}", configurationList.getLength()));
+            if (configurationList.getLength() > 1) {
+                if (matchEndpointVersion != null) {
+                    latestVersion = getEndpointConfigurationVersionBy(configurationList, matchEndpointVersion);
+                } else {
+                    latestVersion = getEndpointConfigurationVersionByLatest(configurationList, log);
+                }
+            } else {
+                latestVersion = (Element) configurationList.item(0);
+            }
+
+            if (latestVersion != null) {
+                log.debug(MessageFormat.format("version: {0}", getTextContentOf(latestVersion, "version")));
+            }
+        } else {
+            log.error(
+                MessageFormat.format("endpointConfigurationList is required: {0}", getTextContentOf(endpoint, "name")));
+        }
+        return latestVersion;
+    }
+
+    private static Element getEndpointConfigurationVersionBy(NodeList configurationList, String matchEndpointVersion) {
+        Element retEndpointVersion = null;
+        for (int confIndex = 0; confIndex < configurationList.getLength(); confIndex++) {
+            Element epConfigurationCurrent = (Element) configurationList.item(confIndex);
+            String versionCurrent = getFirstElementOf(epConfigurationCurrent, "version").getTextContent();
+            if (StringUtils.equalsIgnoreCase(versionCurrent, matchEndpointVersion)) {
+                retEndpointVersion = epConfigurationCurrent;
+            }
+        }
+        return retEndpointVersion;
+    }
+
+    private static Element getEndpointConfigurationVersionByLatest(NodeList configurationList, Logger log) {
+        Element latestVersion = null;
+        Float valueVersion = 0.0F;
+        for (int confIndex = 0; confIndex < configurationList.getLength(); confIndex++) {
+            Element epConfiguration = (Element) configurationList.item(confIndex);
+            String currentVersionString = getTextContentOf(epConfiguration, "version");
+
+            if (containsIgnoreCaseOf(currentVersionString, "LEVEL")) {
+                if (latestVersion != null) {
+                    if (currentVersionString.equalsIgnoreCase("LEVEL_a1")) {
+                        latestVersion = epConfiguration;
+                    }
+                } else {
+                    latestVersion = epConfiguration;
+                }
+            } else {
+                float currentVersionFloat = toFloat(currentVersionString, log);
+                if (currentVersionFloat > valueVersion) {
+                    valueVersion = currentVersionFloat;
+                    latestVersion = epConfiguration;
+                }
+            }
+        }
+        return latestVersion;
+    }
+
+    private static boolean checkServiceEndpointByLatest(Logger log, Element organization, String serviceName,
+        String serviceUrl) {
+        return checkServiceEndpoint(log, organization, serviceName, serviceUrl, null);
+    }
+
+    private static boolean checkServiceEndpoint(Logger log, Element organization, String serviceName, String serviceUrl,
+        String matchEndpointVersion) {
+        boolean serviceNodeFound = false;
+        NodeList endpointList = getElementsByTagNameOf(log, organization, "endpointList", "endpoint");
+
+        if (endpointList != null) {
+            for (int epIndex = 0; epIndex < endpointList.getLength(); epIndex++) {
+                Element endpoint = (Element) endpointList.item(epIndex);
+                String endpointName = getFirstElementOf(endpoint, "name").getTextContent();
+
+                if (endpointName.equalsIgnoreCase(serviceName)) {
+                    log.debug(MessageFormat.format("Found service: {0}", serviceName));
+                    serviceNodeFound = true;
+                    Element epConfigurationLatestVersion = getEndpointConfigurationBy(log, endpoint,
+                        matchEndpointVersion);
+
+                    if (epConfigurationLatestVersion != null) {
+                        Element url = getFirstElementOf(epConfigurationLatestVersion, "url");
+                        if (url != null) {
+                            if (!serviceUrl.equalsIgnoreCase(url.getTextContent())) {
+                                url.setTextContent(serviceUrl);
+                                log.debug(
+                                    MessageFormat.format("setting the endpoint-configuration-url: {0}", serviceUrl));
+                            }
+                        } else {
+                            createElementBy(epConfigurationLatestVersion, "url", serviceUrl);
+                            log.debug(MessageFormat.format("created the endpoint-configuration-url: {0}", serviceUrl));
+                        }
+                    }
+                    log.debug(getCheckpoint(MessageFormat.format("checkServiceEndpoint-found: {0}", serviceName)));
+                    break;
+                }
+
+            }
+        }
+
+        return serviceNodeFound;
+    }
+
+    private static Document getDocument(Logger log, String fullPath) {
+        log.debug(MessageFormat.format("Path to connection info file: {0}", fullPath));
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+
+        Document doc = null;
+        try {
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            doc = builder.parse(fullPath);
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            log.error(e.getLocalizedMessage(), e);
+        }
+        return doc;
+    }
+
+    private static NodeList getOrganizationList(Logger log, Document doc) {
+        Element orgRoot = (Element) doc.getElementsByTagNameNS(XML_ALL_NS, "organizationList").item(0);
+        NodeList organizationList = null;
+        if (orgRoot != null) {
+            organizationList = orgRoot.getElementsByTagNameNS(XML_ALL_NS, "organization");
+            if (organizationList != null) {
+                log.debug(MessageFormat.format("organization-list: {0}", organizationList.getLength()));
+            } else {
+                log.warn("organizationList-organization element is null");
+            }
+        } else {
+            log.warn("organizationList element is null");
+        }
+        return organizationList;
+    }
+
+    private static Float toFloat(String numberString, Logger log) {
+        try {
+            return Float.parseFloat(numberString);
+        } catch (NumberFormatException e) {
+            log.error(e.getLocalizedMessage(), e);
+        }
+        return 0.0F;
+    }
+
+    private static boolean containsIgnoreCaseOf(final String stringOf, final String charSequence) {
+        return stringOf.toLowerCase().contains(charSequence.toLowerCase());
     }
 }

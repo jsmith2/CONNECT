@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.docquery.entity;
 
 import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
@@ -32,12 +32,12 @@ import gov.hhs.fha.nhinc.common.nhinccommon.NhinTargetCommunitiesType;
 import gov.hhs.fha.nhinc.common.nhinccommon.NhinTargetSystemType;
 import gov.hhs.fha.nhinc.common.nhinccommon.QualifiedSubjectIdentifierType;
 import gov.hhs.fha.nhinc.common.patientcorrelationfacade.RetrievePatientCorrelationsRequestType;
-import gov.hhs.fha.nhinc.connectmgr.ConnectionManager;
-import gov.hhs.fha.nhinc.connectmgr.ConnectionManagerCache;
-import gov.hhs.fha.nhinc.connectmgr.ConnectionManagerException;
 import gov.hhs.fha.nhinc.connectmgr.UrlInfo;
-import gov.hhs.fha.nhinc.docquery.MessageGeneratorUtils;
+import gov.hhs.fha.nhinc.docquery.DQMessageGeneratorUtils;
 import gov.hhs.fha.nhinc.docquery.outbound.StandardOutboundDocQueryHelper;
+import gov.hhs.fha.nhinc.document.DocumentConstants;
+import gov.hhs.fha.nhinc.event.error.ErrorEventException;
+import gov.hhs.fha.nhinc.exchangemgr.ExchangeManager;
 import gov.hhs.fha.nhinc.logging.transaction.TransactionLogger;
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
 import gov.hhs.fha.nhinc.nhinclib.NullChecker;
@@ -52,6 +52,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import oasis.names.tc.ebxml_regrep.xsd.query._3.AdhocQueryRequest;
+import oasis.names.tc.ebxml_regrep.xsd.query._3.AdhocQueryResponse;
 import oasis.names.tc.ebxml_regrep.xsd.rim._3.SlotType1;
 import oasis.names.tc.ebxml_regrep.xsd.rim._3.ValueListType;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -67,7 +68,7 @@ import org.slf4j.LoggerFactory;
  */
 public class AggregationService {
 
-    private ConnectionManager connectionManager;
+    private ExchangeManager exchangeManager;
     private static final Logger LOG = LoggerFactory.getLogger(AggregationService.class);
     private PatientCorrelationProxyFactory patientCorrelationProxyFactory;
 
@@ -81,11 +82,11 @@ public class AggregationService {
      * @param connectionManager
      * @param patientCorrelationProxy
      */
-    AggregationService(ConnectionManager connectionManager,
+    AggregationService(ExchangeManager exchangeManager,
         PatientCorrelationProxyFactory patientCorrelationProxyFactory, PixRetrieveBuilder pixRetrieveBuilder,
         StandardOutboundDocQueryHelper standardOutboundDocQueryHelper, TransactionLogger transactionLogger) {
         super();
-        this.connectionManager = connectionManager;
+        this.exchangeManager = exchangeManager;
         this.patientCorrelationProxyFactory = patientCorrelationProxyFactory;
         this.pixRetrieveBuilder = pixRetrieveBuilder;
         this.standardOutboundDocQueryHelper = standardOutboundDocQueryHelper;
@@ -98,18 +99,18 @@ public class AggregationService {
      */
     public AggregationService() {
 
-        this.connectionManager = ConnectionManagerCache.getInstance();
-        this.patientCorrelationProxyFactory = new PatientCorrelationProxyObjectFactory();
-        this.pixRetrieveBuilder = new PixRetrieveBuilder();
-        this.standardOutboundDocQueryHelper = new StandardOutboundDocQueryHelper();
-        this.transactionLogger = new TransactionLogger();
+        exchangeManager = ExchangeManager.getInstance();
+        patientCorrelationProxyFactory = new PatientCorrelationProxyObjectFactory();
+        pixRetrieveBuilder = new PixRetrieveBuilder();
+        standardOutboundDocQueryHelper = new StandardOutboundDocQueryHelper();
+        transactionLogger = new TransactionLogger();
     }
 
     public List<OutboundOrchestratable> createChildRequests(AdhocQueryRequest adhocQueryRequest,
         AssertionType assertion, NhinTargetCommunitiesType targets) {
 
         List<OutboundOrchestratable> list = new ArrayList<>();
-
+        String exchangeName = targets.getExchangeName();
         try {
 
             QualifiedSubjectIdentifierType qualSubId = getQualifiedSubjectIndentifer(adhocQueryRequest);
@@ -119,7 +120,7 @@ public class AggregationService {
 
             patientCorrelationReq.setAssertion(assertion);
 
-            for (UrlInfo urlInfo : connectionManager.getEndpointURLFromNhinTargetCommunities(targets,
+            for (UrlInfo urlInfo : exchangeManager.getEndpointURLFromNhinTargetCommunities(targets,
                 NhincConstants.DOC_QUERY_SERVICE_NAME)) {
                 patientCorrelationReq.getTargetHomeCommunity().add(urlInfo.getHcid());
             }
@@ -142,7 +143,7 @@ public class AggregationService {
                     qualSubId.getAssigningAuthorityIdentifier());
                 target.setHomeCommunity(targetCommunity);
                 target.setUseSpecVersion(targets.getUseSpecVersion());
-
+                target.setExchangeName(exchangeName);
                 AdhocQueryRequest childRequest = cloneRequest(adhocQueryRequest);
                 setPatientIdOnRequest(childRequest, id.getExtension(), id.getRoot());
 
@@ -159,8 +160,11 @@ public class AggregationService {
 
                 list.add(orchestratable);
             }
-        } catch (ConnectionManagerException e) {
-            LOG.error("Unable to create child requests:" + e.getLocalizedMessage(), e);
+        } catch (Exception e) {
+            AdhocQueryResponse response = DQMessageGeneratorUtils.getInstance()
+                .createAdhocQueryErrorResponse("XDSRegistryError", "Unable to create fanout requests for query",
+                DocumentConstants.XDS_QUERY_RESPONSE_STATUS_FAILURE);
+            throw new ErrorEventException(e, response,"Unable to create fanout requests for query");
         }
 
         return list;
@@ -174,9 +178,9 @@ public class AggregationService {
             && results.getPRPAIN201310UV02().getControlActProcess().getSubject().get(0) != null
             && results.getPRPAIN201310UV02().getControlActProcess().getSubject().get(0).getRegistrationEvent() != null
             && results.getPRPAIN201310UV02().getControlActProcess().getSubject().get(0).getRegistrationEvent()
-            .getSubject1() != null
+                .getSubject1() != null
             && results.getPRPAIN201310UV02().getControlActProcess().getSubject().get(0).getRegistrationEvent()
-            .getSubject1().getPatient() != null
+                .getSubject1().getPatient() != null
             && NullChecker.isNotNullish(results.getPRPAIN201310UV02().getControlActProcess().getSubject().get(0)
                 .getRegistrationEvent().getSubject1().getPatient().getId());
     }
@@ -224,7 +228,7 @@ public class AggregationService {
      */
     protected AdhocQueryRequest setTargetHomeCommunityId(AdhocQueryRequest request, String sTargetHomeCommunityId) {
         if (NullChecker.isNotNullish(sTargetHomeCommunityId)) {
-            if (!(sTargetHomeCommunityId.startsWith(NhincConstants.HCID_PREFIX))) {
+            if (!sTargetHomeCommunityId.startsWith(NhincConstants.HCID_PREFIX)) {
                 sTargetHomeCommunityId = NhincConstants.HCID_PREFIX + sTargetHomeCommunityId;
             }
             request.getAdhocQuery().setHome(sTargetHomeCommunityId);
@@ -237,7 +241,7 @@ public class AggregationService {
      * @return AdhocQUery Request.
      */
     protected AdhocQueryRequest cloneRequest(AdhocQueryRequest request) {
-        return MessageGeneratorUtils.getInstance().clone(request);
+        return DQMessageGeneratorUtils.getInstance().clone(request);
     }
 
     /**
@@ -251,10 +255,9 @@ public class AggregationService {
     private AssertionType createNewAssertion(AssertionType assertion, int numTargets) {
         AssertionType newAssertion;
         if (numTargets == 1) {
-            newAssertion = MessageGeneratorUtils.getInstance().clone(
-                MessageGeneratorUtils.getInstance().generateMessageId(assertion));
+            newAssertion = DQMessageGeneratorUtils.getInstance().clone(DQMessageGeneratorUtils.getInstance().generateMessageId(assertion));
         } else {
-            newAssertion = MessageGeneratorUtils.getInstance().cloneWithNewMsgId(assertion);
+            newAssertion = DQMessageGeneratorUtils.getInstance().cloneWithNewMsgId(assertion);
         }
 
         return newAssertion;

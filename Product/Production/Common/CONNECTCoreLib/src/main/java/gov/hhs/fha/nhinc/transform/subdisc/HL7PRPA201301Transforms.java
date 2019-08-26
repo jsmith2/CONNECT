@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -28,6 +28,7 @@ package gov.hhs.fha.nhinc.transform.subdisc;
 
 import gov.hhs.fha.nhinc.nhinclib.NullChecker;
 import javax.xml.bind.JAXBElement;
+import org.apache.commons.collections.CollectionUtils;
 import org.hl7.v3.CS;
 import org.hl7.v3.II;
 import org.hl7.v3.MCCIMT000100UV01Agent;
@@ -229,9 +230,6 @@ public class HL7PRPA201301Transforms {
         }
 
         PRPAMT201301UV02Patient patient;
-        PRPAMT201306UV02QueryByParameter params;
-
-        params = original.getQueryByParameter().getValue();
 
         if (NullChecker.isNotNullish(original.getSubject()) && original.getSubject().get(0) != null
                 && original.getSubject().get(0).getRegistrationEvent() != null
@@ -316,7 +314,7 @@ public class HL7PRPA201301Transforms {
     private static PRPAIN201301UV02MFMIMT700701UV01ControlActProcess copyInformationReceipent(
             PRPAIN201306UV02MFMIMT700711UV01ControlActProcess from,
             PRPAIN201301UV02MFMIMT700701UV01ControlActProcess to) {
-        if (from != null && from.getInformationRecipient().size() > 0) {
+        if (from != null && CollectionUtils.isNotEmpty(from.getInformationRecipient())) {
             to.getInformationRecipient().clear();
             for (MFMIMT700711UV01InformationRecipient item : from.getInformationRecipient()) {
                 to.getInformationRecipient().add(copyInformationRecepient(item));
@@ -517,25 +515,28 @@ public class HL7PRPA201301Transforms {
                 newDevice.setTypeId(orig.getDevice().getTypeId());
                 newDevice.getId().add(orig.getDevice().getId().get(0));
 
-                MCCIMT000100UV01Agent newAgent = new MCCIMT000100UV01Agent();
-                MCCIMT000100UV01Organization newOrg = new MCCIMT000100UV01Organization();
-                newOrg.setClassCode(HL7Constants.ORG_CLASS_CODE);
-                newOrg.setDeterminerCode(HL7Constants.SENDER_DETERMINER_CODE);
-                newOrg.getId().add(orig.getDevice().getAsAgent().getValue().getRepresentedOrganization().getValue()
-                        .getId().get(0));
+                if (orig.getDevice().getAsAgent() != null && orig.getDevice().getAsAgent().getValue() != null) {
+                    MCCIMT000100UV01Agent newAgent = new MCCIMT000100UV01Agent();
+                    MCCIMT000100UV01Organization newOrg = new MCCIMT000100UV01Organization();
+                    newOrg.setClassCode(HL7Constants.ORG_CLASS_CODE);
+                    newOrg.setDeterminerCode(HL7Constants.SENDER_DETERMINER_CODE);
+                    newOrg.getId().add(orig.getDevice().getAsAgent().getValue().getRepresentedOrganization().getValue()
+                            .getId().get(0));
 
-                javax.xml.namespace.QName xmlqnameorg = new javax.xml.namespace.QName("urn:hl7-org:v3",
-                        "representedOrganization");
-                JAXBElement<MCCIMT000100UV01Organization> orgElem = new JAXBElement<>(xmlqnameorg,
-                        MCCIMT000100UV01Organization.class, newOrg);
-                newAgent.setRepresentedOrganization(orgElem);
-                newAgent.getClassCode().add(HL7Constants.AGENT_CLASS_CODE);
+                    javax.xml.namespace.QName xmlqnameorg = new javax.xml.namespace.QName("urn:hl7-org:v3",
+                            "representedOrganization");
+                    JAXBElement<MCCIMT000100UV01Organization> orgElem = new JAXBElement<>(xmlqnameorg,
+                            MCCIMT000100UV01Organization.class, newOrg);
+                    newAgent.setRepresentedOrganization(orgElem);
+                    newAgent.getClassCode().add(HL7Constants.AGENT_CLASS_CODE);
 
-                javax.xml.namespace.QName xmlqnameagent = new javax.xml.namespace.QName("urn:hl7-org:v3", "asAgent");
-                JAXBElement<MCCIMT000100UV01Agent> agentElem = new JAXBElement<>(xmlqnameagent,
-                        MCCIMT000100UV01Agent.class, newAgent);
+                    javax.xml.namespace.QName xmlqnameagent = new javax.xml.namespace.QName("urn:hl7-org:v3", "asAgent");
+                    JAXBElement<MCCIMT000100UV01Agent> agentElem = new JAXBElement<>(xmlqnameagent,
+                            MCCIMT000100UV01Agent.class, newAgent);
 
-                newDevice.setAsAgent(agentElem);
+                    newDevice.setAsAgent(agentElem);
+                }
+                
                 result.setDevice(newDevice);
             }
 

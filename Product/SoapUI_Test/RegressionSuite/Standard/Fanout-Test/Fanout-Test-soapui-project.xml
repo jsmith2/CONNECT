@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project abortOnError="false" name="Fanout_Test" resourceRoot="${projectDir}" runType="SEQUENTIAL" soapui-version="5.1.2" activeEnvironment="Default" id="04864499-83eb-4d04-8822-8d32765bd47b" xmlns:con="http://eviware.com/soapui/config">
+<con:soapui-project abortOnError="false" name="Fanout_Test" resourceRoot="${projectDir}" runType="SEQUENTIAL" soapui-version="5.3.0" activeEnvironment="Default" id="04864499-83eb-4d04-8822-8d32765bd47b" xmlns:con="http://eviware.com/soapui/config">
   <con:settings/>
   <con:interface anonymous="optional" bindingName="{urn:gov:hhs:fha:nhinc:entitypatientdiscovery}EntityPatientDiscoveryBindingSoap" definition="../../../target/wsdl/EntityPatientDiscovery.wsdl" name="EntityPatientDiscoveryBindingSoap" soapVersion="1_2" type="wsdl" wsaVersion="NONE" xsi:type="con:WsdlInterface" id="ff2f20f9-cdb1-4453-a8f6-cab70dcb9273" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <con:settings/>
@@ -489,12 +489,12 @@ context.withSql('AAMappingDB') { sql ->
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -502,7 +502,7 @@ context.withSql('AAMappingDB') { sql ->
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -612,31 +612,31 @@ context.withSql('AAMappingDB') { sql ->
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="copy uddiConnectionInfo" type="groovy" id="13763081-823c-40af-9f34-15e3d93fe2d0">
+      <con:testStep name="copy exchangeInfo" type="groovy" id="13763081-823c-40af-9f34-15e3d93fe2d0">
         <con:settings/>
         <con:config>
           <script>def sourceDir =  context.expand('${projectDir}');
-def sourceFile = "uddiConnectionInfo_FANOUT.xml";
+def sourceFile = "exchangeInfo_FANOUT.xml";
 def destDir = context.findProperty( "GatewayPropDir" );
-def destFile = "uddiConnectionInfo.xml";
+def destFile = "exchangeInfo.xml";
 
 nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="modify uddiConnectionInfo" type="groovy" id="a4edac99-d1c8-48cc-9b04-7afc62644c0f">
+      <con:testStep name="modify exchangeInfo" type="groovy" id="a4edac99-d1c8-48cc-9b04-7afc62644c0f">
         <con:settings/>
         <con:config>
           <script>def destConfigFileLocation = context.findProperty("GatewayPropDir");
 def PDURL = "https://localhost:8181/Gateway/PatientDiscovery/1_0/NhinService/NhinPatientDiscovery";
 
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "1.1", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "2.2", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "3.3", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "4.4", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "5.5", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "6.6", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "7.7", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "8.8", "PatientDiscovery", PDURL, "2.0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "1.1", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "2.2", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "3.3", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "4.4", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "5.5", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "6.6", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "7.7", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "8.8", "PatientDiscovery", PDURL, "2.0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="Patient Discovery" type="request" id="913415ab-8b0d-4bba-9f9f-93bcf817d3bf">
@@ -855,12 +855,12 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -868,7 +868,7 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -1000,18 +1000,18 @@ context.withSql('eventdb') { sql ->
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="copy uddiConnectionInfo" type="groovy" id="7418438d-553b-4e6e-a5a8-c8fb4a262386">
+      <con:testStep name="copy exchangeInfo" type="groovy" id="7418438d-553b-4e6e-a5a8-c8fb4a262386">
         <con:settings/>
         <con:config>
           <script>def sourceDir =  context.expand('${projectDir}');
-def sourceFile = "uddiConnectionInfo_FANOUT.xml";
+def sourceFile = "exchangeInfo_FANOUT.xml";
 def destDir = context.findProperty( "GatewayPropDir" );
-def destFile = "uddiConnectionInfo.xml";
+def destFile = "exchangeInfo.xml";
 
 nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="modify internalConnectionInfo" type="groovy" id="eca0fad3-5b1e-4ed4-8a13-f2377966b89e">
+      <con:testStep name="modify internalExchangeInfo" type="groovy" id="eca0fad3-5b1e-4ed4-8a13-f2377966b89e">
         <con:settings/>
         <con:config>
           <script>def destConfigFileLocation = context.findProperty("GatewayPropDir");
@@ -1020,23 +1020,23 @@ def localHCID = context.findProperty("LocalHCID");
 
 def MPIURL = "http://" + mockHost + ":7783/MockMPIResp";
 
-nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", destConfigFileLocation, localHCID, "adaptercomponentmpiservice", MPIURL, "LEVEL_a0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", destConfigFileLocation, localHCID, "adaptercomponentmpiservice", MPIURL, "LEVEL_a0", log);</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="modify uddiConnectionInfo" type="groovy" id="1e6c7672-5cf7-417f-beb2-f62ed863921f">
+      <con:testStep name="modify exchangeInfo" type="groovy" id="1e6c7672-5cf7-417f-beb2-f62ed863921f">
         <con:settings/>
         <con:config>
           <script>def destConfigFileLocation = context.findProperty("GatewayPropDir");
 def PDURL = "https://localhost:8181/Gateway/PatientDiscovery/1_0/NhinService/NhinPatientDiscovery";
 
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "1.1", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "2.2", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "3.3", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "4.4", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "5.5", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "6.6", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "7.7", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "8.8", "PatientDiscovery", PDURL, "2.0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "1.1", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "2.2", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "3.3", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "4.4", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "5.5", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "6.6", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "7.7", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "8.8", "PatientDiscovery", PDURL, "2.0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="Patient Discovery" type="request" id="3fc964bb-6140-4879-adfb-ade9be0dd500">
@@ -1255,12 +1255,12 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -1268,7 +1268,7 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -1402,18 +1402,18 @@ context.withSql('AAMappingDB') { sql ->
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="copy uddiConnectionInfo" type="groovy" id="79fc6958-6088-4dae-a571-83792deee7a5">
+      <con:testStep name="copy exchangeInfo" type="groovy" id="79fc6958-6088-4dae-a571-83792deee7a5">
         <con:settings/>
         <con:config>
           <script>def sourceDir =  context.expand('${projectDir}');
-def sourceFile = "uddiConnectionInfo_FANOUT.xml";
+def sourceFile = "exchangeInfo_FANOUT.xml";
 def destDir = context.findProperty( "GatewayPropDir" );
-def destFile = "uddiConnectionInfo.xml";
+def destFile = "exchangeInfo.xml";
 
 nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="modify internalConnectionInfo" type="groovy" id="ddc31590-284c-4579-9a2d-75e73e93c9f2">
+      <con:testStep name="modify internalExchangeInfo" type="groovy" id="ddc31590-284c-4579-9a2d-75e73e93c9f2">
         <con:settings/>
         <con:config>
           <script>def destConfigFileLocation = context.findProperty("GatewayPropDir");
@@ -1421,23 +1421,23 @@ def mockHost = context.findProperty("mockHost");
 def localHCID = context.findProperty("LocalHCID");
 def adapPDURL = "http://" + mockHost + ":7785/mockPDAdapter";
 
-nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", destConfigFileLocation, localHCID, "adapterpatientdiscovery", adapPDURL, "LEVEL_a0", log)</script>
+nhinc.FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", destConfigFileLocation, localHCID, "adapterpatientdiscovery", adapPDURL, "LEVEL_a0", log)</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="modify uddiConnectionInfo" type="groovy" id="c3b058fd-30a4-49a6-a2cb-c7fbfafa01ef">
+      <con:testStep name="modify exchangeInfo" type="groovy" id="c3b058fd-30a4-49a6-a2cb-c7fbfafa01ef">
         <con:settings/>
         <con:config>
           <script>def destConfigFileLocation = context.findProperty("GatewayPropDir");
 def PDURL = "https://localhost:8181/Gateway/PatientDiscovery/1_0/NhinService/NhinPatientDiscovery";
 
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "1.1", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "2.2", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "3.3", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "4.4", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "5.5", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "6.6", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "7.7", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "8.8", "PatientDiscovery", PDURL, "2.0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "1.1", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "2.2", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "3.3", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "4.4", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "5.5", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "6.6", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "7.7", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "8.8", "PatientDiscovery", PDURL, "2.0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="Patient Discovery" type="request" id="66005733-63eb-472c-bc20-a8fbbe1b521b">
@@ -1656,12 +1656,12 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -1669,7 +1669,7 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -1784,18 +1784,18 @@ context.withSql('AAMappingDB') { sql ->
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="copy uddiConnectionInfo" type="groovy" id="87a2063f-2fd8-47c8-b755-aeca1e26f08e">
+      <con:testStep name="copy exchangeInfo" type="groovy" id="87a2063f-2fd8-47c8-b755-aeca1e26f08e">
         <con:settings/>
         <con:config>
           <script>def sourceDir =  context.expand('${projectDir}');
-def sourceFile = "uddiConnectionInfo_FANOUT.xml";
+def sourceFile = "exchangeInfo_FANOUT.xml";
 def destDir = context.findProperty( "GatewayPropDir" );
-def destFile = "uddiConnectionInfo.xml";
+def destFile = "exchangeInfo.xml";
 
 nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="modify internalConnectionInfo" type="groovy" id="08d488c6-1aec-4efd-9285-9159ba172e85">
+      <con:testStep name="modify internalExchangeInfo" type="groovy" id="08d488c6-1aec-4efd-9285-9159ba172e85">
         <con:settings/>
         <con:config>
           <script>def destConfigFileLocation = context.findProperty("GatewayPropDir");
@@ -1804,23 +1804,23 @@ def localHCID = context.findProperty("LocalHCID");
 
 def MPIURL = "http://" + mockHost + ":7781/MockMPIResp";
 
-nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", destConfigFileLocation, localHCID, "adaptercomponentmpiservice", MPIURL, "LEVEL_a0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", destConfigFileLocation, localHCID, "adaptercomponentmpiservice", MPIURL, "LEVEL_a0", log);</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="modify uddiConnectionInfo" type="groovy" id="311f9aac-62a3-4518-911a-d1bc9c915b12">
+      <con:testStep name="modify exchangeInfo" type="groovy" id="311f9aac-62a3-4518-911a-d1bc9c915b12">
         <con:settings/>
         <con:config>
           <script>def destConfigFileLocation = context.findProperty("GatewayPropDir");
 def PDURL = "https://localhost:8181/Gateway/PatientDiscovery/1_0/NhinService/NhinPatientDiscovery";
 
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "1.1", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "2.2", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "3.3", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "4.4", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "5.5", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "6.6", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "7.7", "PatientDiscovery", PDURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "8.8", "PatientDiscovery", PDURL, "2.0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "1.1", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "2.2", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "3.3", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "4.4", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "5.5", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "6.6", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "7.7", "PatientDiscovery", PDURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "8.8", "PatientDiscovery", PDURL, "2.0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="Patient Discovery" type="request" id="3c5ddb67-6a86-46ed-ab31-85d21a0abd27">
@@ -2039,12 +2039,12 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -2052,7 +2052,7 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -2431,12 +2431,12 @@ nhinc.FileUtils.updateSpringConfig(context.findProperty('GatewayPropDir'), "Adap
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
          <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -2444,7 +2444,7 @@ nhinc.FileUtils.updateSpringConfig(context.findProperty('GatewayPropDir'), "Adap
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -2575,18 +2575,18 @@ assert (documentID == msgDocID)</scriptText>
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="copy uddiConnectionInfo" type="groovy" id="f6ae7e75-650f-4e99-8430-e1275819d510">
+      <con:testStep name="copy exchangeInfo" type="groovy" id="f6ae7e75-650f-4e99-8430-e1275819d510">
         <con:settings/>
         <con:config>
           <script>def sourceDir =  context.expand('${projectDir}');
-def sourceFile = "uddiConnectionInfo_FANOUT.xml";
+def sourceFile = "exchangeInfo_FANOUT.xml";
 def destDir = context.findProperty( "GatewayPropDir" );
-def destFile = "uddiConnectionInfo.xml";
+def destFile = "exchangeInfo.xml";
 
 nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="modify uddiConnectionInfo" type="groovy" id="a0501242-a89d-47b6-9407-b0ef474380ec">
+      <con:testStep name="modify exchangeInfo" type="groovy" id="a0501242-a89d-47b6-9407-b0ef474380ec">
         <con:settings/>
         <con:config>
           <script>def destConfigFileLocation = context.findProperty("GatewayPropDir");
@@ -2595,14 +2595,14 @@ def localHCID = context.findProperty("LocalHCID");
 
 def DQURL = "https://" + mockHost + ":8181/Gateway/DocumentQuery/2_0/NhinService/RespondingGateway_Query_Service/DocQuery";
 
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "1.1", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "2.2", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "3.3", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "4.4", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "5.5", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "6.6", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "7.7", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "8.8", "QueryForDocuments", DQURL, "2.0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "1.1", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "2.2", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "3.3", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "4.4", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "5.5", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "6.6", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "7.7", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "8.8", "QueryForDocuments", DQURL, "2.0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="Document Query fanout" type="request" id="095c5dd7-0dd2-4f17-a198-cd166374f465">
@@ -2830,12 +2830,12 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -2843,7 +2843,7 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -2975,18 +2975,18 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="copy uddiConnectionInfo" type="groovy" id="6c00a5b4-8120-4efb-be25-c8cb4571e1ee">
+      <con:testStep name="copy exchangeInfo" type="groovy" id="6c00a5b4-8120-4efb-be25-c8cb4571e1ee">
         <con:settings/>
         <con:config>
           <script>def sourceDir =  context.expand('${projectDir}');
-def sourceFile = "uddiConnectionInfo_FANOUT.xml";
+def sourceFile = "exchangeInfo_FANOUT.xml";
 def destDir = context.findProperty( "GatewayPropDir" );
-def destFile = "uddiConnectionInfo.xml";
+def destFile = "exchangeInfo.xml";
 
 nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="modify uddiConnectionInfo" type="groovy" id="d9590e91-78d4-464a-b7be-618730824866">
+      <con:testStep name="modify exchangeInfo" type="groovy" id="d9590e91-78d4-464a-b7be-618730824866">
         <con:settings/>
         <con:config>
           <script>def destConfigFileLocation = context.findProperty("GatewayPropDir");
@@ -2995,14 +2995,14 @@ def localHCID = context.findProperty("LocalHCID");
 
 def DQURL = "https://" + mockHost + ":8181/Gateway/DocumentQuery/2_0/NhinService/RespondingGateway_Query_Service/DocQuery";
 
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "1.1", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "2.2", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "3.3", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "4.4", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "5.5", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "6.6", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "7.7", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "8.8", "QueryForDocuments", DQURL, "2.0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "1.1", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "2.2", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "3.3", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "4.4", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "5.5", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "6.6", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "7.7", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "8.8", "QueryForDocuments", DQURL, "2.0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="Document Query fanout" type="request" id="fad8fab1-61d7-4067-a504-68e20c95ce84">
@@ -3230,12 +3230,12 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -3243,7 +3243,7 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -3373,18 +3373,18 @@ WARN   PassthroughOutboundDocQuery     Multiple targets in request message in pa
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="copy uddiConnectionInfo" type="groovy" id="99dcd1c5-de2e-4f4a-902b-624468f6bba7">
+      <con:testStep name="copy exchangeInfo" type="groovy" id="99dcd1c5-de2e-4f4a-902b-624468f6bba7">
         <con:settings/>
         <con:config>
           <script>def sourceDir =  context.expand('${projectDir}');
-def sourceFile = "uddiConnectionInfo_FANOUT.xml";
+def sourceFile = "exchangeInfo_FANOUT.xml";
 def destDir = context.findProperty( "GatewayPropDir" );
-def destFile = "uddiConnectionInfo.xml";
+def destFile = "exchangeInfo.xml";
 
 nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="modify uddiConnectionInfo" type="groovy" id="b1ce0c1f-15ad-4afb-b46e-efa320b41fcb">
+      <con:testStep name="modify exchangeInfo" type="groovy" id="b1ce0c1f-15ad-4afb-b46e-efa320b41fcb">
         <con:settings/>
         <con:config>
           <script>def destConfigFileLocation = context.findProperty("GatewayPropDir");
@@ -3393,17 +3393,17 @@ def localHCID = context.findProperty("LocalHCID");
 
 def DQURL = "https://" + mockHost + ":8181/Gateway/DocumentQuery/2_0/NhinService/RespondingGateway_Query_Service/DocQuery";
 
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "1.1", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "2.2", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "3.3", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "4.4", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "5.5", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "6.6", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "7.7", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "8.8", "QueryForDocuments", DQURL, "2.0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "1.1", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "2.2", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "3.3", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "4.4", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "5.5", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "6.6", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "7.7", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "8.8", "QueryForDocuments", DQURL, "2.0", log);</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="modify internalConnectionInfo" type="groovy" id="0a90b934-f1fd-4e3b-8a8b-4272b8288291">
+      <con:testStep name="modify internalExchangeInfo" type="groovy" id="0a90b934-f1fd-4e3b-8a8b-4272b8288291">
         <con:settings/>
         <con:config>
           <script>def destConfigFileLocation = context.findProperty("GatewayPropDir");
@@ -3412,7 +3412,7 @@ def localHCID = context.findProperty("LocalHCID");
 
 def AdapterDQURL = "http://" + mockHost + ":7782/MockDQResp";
 
-nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", destConfigFileLocation, localHCID, "adapterdocquery", AdapterDQURL, "LEVEL_a0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", destConfigFileLocation, localHCID, "adapterdocquery", AdapterDQURL, "LEVEL_a0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep type="delay" name="Delay" id="d408c79c-ea4b-4d4e-98cf-0bb328245cf0">
@@ -3646,12 +3646,12 @@ nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", destConfi
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
          <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -3659,7 +3659,7 @@ nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", destConfi
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -3793,18 +3793,18 @@ nhinc.FileUtils.updateSpringConfig(context.findProperty('GatewayPropDir'), "Docu
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="copy uddiConnectionInfo" type="groovy" id="1d676f6f-7678-4292-bd3f-55e16af50aa7">
+      <con:testStep name="copy exchangeInfo" type="groovy" id="1d676f6f-7678-4292-bd3f-55e16af50aa7">
         <con:settings/>
         <con:config>
           <script>def sourceDir =  context.expand('${projectDir}');
-def sourceFile = "uddiConnectionInfo_FANOUT.xml";
+def sourceFile = "exchangeInfo_FANOUT.xml";
 def destDir = context.findProperty( "GatewayPropDir" );
-def destFile = "uddiConnectionInfo.xml";
+def destFile = "exchangeInfo.xml";
 
 nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="modify uddiConnectionInfo" type="groovy" id="0c394e74-558b-4fa3-a68c-23853e1390ad">
+      <con:testStep name="modify exchangeInfo" type="groovy" id="0c394e74-558b-4fa3-a68c-23853e1390ad">
         <con:settings/>
         <con:config>
           <script>def destConfigFileLocation = context.findProperty("GatewayPropDir");
@@ -3813,17 +3813,17 @@ def localHCID = context.findProperty("LocalHCID");
 
 def DQURL = "https://" + mockHost + ":8181/Gateway/DocumentQuery/2_0/NhinService/RespondingGateway_Query_Service/DocQuery";
 
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "1.1", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "2.2", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "3.3", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "4.4", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "5.5", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "6.6", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "7.7", "QueryForDocuments", DQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "8.8", "QueryForDocuments", DQURL, "2.0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "1.1", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "2.2", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "3.3", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "4.4", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "5.5", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "6.6", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "7.7", "QueryForDocuments", DQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "8.8", "QueryForDocuments", DQURL, "2.0", log);</script>
         </con:config>
       </con:testStep>
-      <con:testStep name="modify internalConnectionInfo" type="groovy" id="6b555dc5-ff47-47f4-a201-563480739d84">
+      <con:testStep name="modify internalExchangeInfo" type="groovy" id="6b555dc5-ff47-47f4-a201-563480739d84">
         <con:settings/>
         <con:config>
           <script>def destConfigFileLocation = context.findProperty("GatewayPropDir");
@@ -3832,7 +3832,7 @@ def localHCID = context.findProperty("LocalHCID");
 
 def AdapterDQURL = "http://" + mockHost + ":7784/MockDQResp";
 
-nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", destConfigFileLocation, localHCID, "adapterdocquery", AdapterDQURL, "LEVEL_a0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", destConfigFileLocation, localHCID, "adapterdocquery", AdapterDQURL, "LEVEL_a0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep type="delay" name="Delay" id="bae5baf9-e8f0-4787-8bfa-7447b32748f3">
@@ -4066,12 +4066,12 @@ nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", destConfi
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -4079,7 +4079,7 @@ nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", destConfi
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -4186,8 +4186,8 @@ nhinc.FileUtils.updateSpringConfig(context.findProperty('GatewayPropDir'), "Docu
     </con:settings>
     <con:mockOperation interface="AdapterMpiPortTypeBinding" name="FindCandidates" operation="FindCandidates" id="07236df9-e75d-4dca-a12c-d834164611d9">
       <con:settings/>
-      <con:dispatchStyle>SEQUENCE</con:dispatchStyle>
-      <con:defaultResponse>Gallow 1</con:defaultResponse>
+      <con:dispatchStyle>QUERY_MATCH</con:dispatchStyle>
+      <con:defaultResponse>Bad Response</con:defaultResponse>
       <con:response encoding="UTF-8" name="Gallow 1" id="65c022c0-19d4-4845-b483-bfbddafe7b7c" httpResponseStatus="200">
         <con:settings/>
         <con:script>context.patientid = Math.random()
@@ -4881,7 +4881,11 @@ context.root = Math.random()</con:script>
           <con:match>7.7</con:match>
           <con:response>Soap Fault 2</con:response>
         </con:query>
-      </con:dispatchConfig>
+      <con:query><con:name>Gallow 1</con:name><con:query>declare namespace ns3='urn:hl7-org:v3';
+
+//ns3:PRPA_IN201305UV02[1]/ns3:receiver[1]/ns3:device[1]/ns3:asAgent[1]/ns3:representedOrganization[1]/ns3:id[1]/@root</con:query><con:match>1.1</con:match><con:response>Gallow 1</con:response></con:query><con:query><con:name>Gallow 2</con:name><con:query>declare namespace ns3='urn:hl7-org:v3';
+
+//ns3:PRPA_IN201305UV02[1]/ns3:receiver[1]/ns3:device[1]/ns3:asAgent[1]/ns3:representedOrganization[1]/ns3:id[1]/@root</con:query><con:match>8.8</con:match><con:response>Gallow 2</con:response></con:query></con:dispatchConfig>
     </con:mockOperation>
     <con:properties/>
   </con:mockService>
@@ -7455,7 +7459,7 @@ context.root = Math.random()</con:script>
     </con:property>
     <con:property>
       <con:name>GatewayPropDir</con:name>
-      <con:value>c:\glassfish3\glassfish\domains\domain1\config\nhin</con:value>
+      <con:value/>
     </con:property>
     <con:property>
       <con:name>Gender</con:name>
@@ -7673,5 +7677,5 @@ com.eviware.soapui.impl.wsdl.testcase.WsdlTestRunContext.metaClass.withSql = { d
 }</con:afterLoadScript>
   <con:wssContainer/>
   <con:oAuth2ProfileContainer/>
-  <con:sensitiveInformation/>
+  <con:oAuth1ProfileContainer/><con:sensitiveInformation/>
 </con:soapui-project>

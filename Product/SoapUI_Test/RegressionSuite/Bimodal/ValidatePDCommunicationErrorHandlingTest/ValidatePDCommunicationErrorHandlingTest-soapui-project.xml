@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project name="ValidatePDCommunicationErrorHandlingTest" resourceRoot="${projectDir}" soapui-version="4.5.1" activeEnvironment="Default" abortOnError="false" runType="SEQUENTIAL" id="c65dc231-b365-4bdd-ba4f-e54445b70bf4" xmlns:con="http://eviware.com/soapui/config">
+<con:soapui-project name="ValidatePDCommunicationErrorHandlingTest" resourceRoot="${projectDir}" soapui-version="5.3.0" activeEnvironment="Default" abortOnError="false" runType="SEQUENTIAL" id="c65dc231-b365-4bdd-ba4f-e54445b70bf4" xmlns:con="http://eviware.com/soapui/config">
   <con:settings/>
   <con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="EntityPatientDiscoveryBindingSoap" type="wsdl" bindingName="{urn:gov:hhs:fha:nhinc:entitypatientdiscovery}EntityPatientDiscoveryBindingSoap" soapVersion="1_2" anonymous="optional" definition="../../../target/wsdl/EntityPatientDiscovery.wsdl" id="d32c208c-ad83-4f73-ad22-cf6a05daca8b" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <con:settings/>
@@ -26,7 +26,7 @@ detectedIssueEvent\text.</con:description>
     <con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Patient Discovery bad URL" searchProperties="true" id="73e5ebdb-e1c9-40ce-9ade-670476d53f05">
       <con:description/>
       <con:settings/>
-      <con:testStep name="Modify uddiConnectionInfo" type="groovy" id="8056af45-0538-4d5f-91be-d8b78ae7006b">
+      <con:testStep name="Modify exchangeInfo" type="groovy" id="8056af45-0538-4d5f-91be-d8b78ae7006b">
         <con:settings/>
         <con:config>
           <script>def destConfigFileLocation = context.findProperty("GatewayPropDir");
@@ -34,7 +34,7 @@ def mockHost = context.findProperty("mockHost");
 
 def badURL = "https://" + mockHost + ":8181/badURL";
 
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "2.2", "PatientDiscovery", badURL, "2.0", log)</script>
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "2.2", "PatientDiscovery", badURL, "2.0", log)</script>
         </con:config>
       </con:testStep>
       <con:testStep type="request" name="Patient Discovery" id="784ae585-bd31-4943-a6a8-c70d0ee1585c">
@@ -253,12 +253,12 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -266,7 +266,7 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -335,7 +335,7 @@ declare namespace ns2='urn:hl7-org:v3';
               </con:configuration>
             </con:assertion>
             <con:credentials>
-              <con:authType>Global HTTP Settings</con:authType>
+              <con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:jmsPropertyConfig/>
@@ -383,7 +383,7 @@ detectedIssueEvent\text.</con:description>
     <con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Patient Discovery bad URL" searchProperties="true" id="47d23875-bf40-4059-bd25-aca056cd34d7">
       <con:description/>
       <con:settings/>
-      <con:testStep name="Modify uddiConnectionInfo" type="groovy" id="34eb04ba-1ad1-47c5-b0c6-67462909bd6d">
+      <con:testStep name="Modify exchangeInfo" type="groovy" id="34eb04ba-1ad1-47c5-b0c6-67462909bd6d">
         <con:settings/>
         <con:config>
           <script>def destConfigFileLocation = context.findProperty("GatewayPropDir");
@@ -391,7 +391,7 @@ def mockHost = context.findProperty("mockHost");
 
 def badURL = "https://" + mockHost + ":8181/badURL";
 
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, "2.2", "PatientDiscovery", badURL, "2.0", log)</script>
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, "2.2", "PatientDiscovery", badURL, "2.0", log)</script>
         </con:config>
       </con:testStep>
       <con:testStep type="request" name="Patient Discovery" id="8f4baf99-df33-4f68-b877-d0fc6bd481c8">
@@ -610,12 +610,12 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -623,7 +623,7 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -692,7 +692,7 @@ declare namespace ns2='urn:hl7-org:v3';
               </con:configuration>
             </con:assertion>
             <con:credentials>
-              <con:authType>Global HTTP Settings</con:authType>
+              <con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:jmsPropertyConfig/>
@@ -1252,5 +1252,5 @@ com.eviware.soapui.impl.wsdl.testcase.WsdlTestRunContext.metaClass.checkGatewayM
 }</con:afterLoadScript>
   <con:wssContainer/>
   <con:oAuth2ProfileContainer/>
-  <con:sensitiveInformation/>
+  <con:oAuth1ProfileContainer/><con:sensitiveInformation/>
 </con:soapui-project>

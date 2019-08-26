@@ -25,13 +25,13 @@
     <con:runType>SEQUENTIAL</con:runType>
     <con:testCase failOnError="true" failTestCaseOnErrors="true" id="4e679453-a1a1-4bdf-9e0b-beb70425b7a7" keepSession="false" maxResults="0" name="Target with no DQ Service but 3 Correlations" searchProperties="true">
       <con:settings/>
-      <con:testStep name="Copy uddiConnectionInfo" type="groovy" id="63c9cb7c-fc4b-4b2d-883e-0d886f3fc59e">
+      <con:testStep name="Copy exchangeInfo" type="groovy" id="63c9cb7c-fc4b-4b2d-883e-0d886f3fc59e">
         <con:settings/>
         <con:config>
           <script>def sourceDir = context.expand('${projectDir}')
-def sourceFile = "UDDIcopy-uddiConnectionInfo.xml";
+def sourceFile = "UDDIcopy-exchangeInfo.xml";
 def destDir = context.findProperty( "GatewayPropDir" );
-def destFile = "uddiConnectionInfo.xml";
+def destFile = "exchangeInfo.xml";
 
 nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script>
         </con:config>
@@ -103,8 +103,8 @@ def dQURL = "https://localhost:8181/Gateway/DocumentQuery/2_0/NhinService/Respon
 def remoteHCID2 = context.findProperty("UDDIhcid3");
 def remoteHCID3 = context.findProperty("UDDIhcid4");
 
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, remoteHCID2, "QueryForDocuments", dQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, remoteHCID3, "QueryForDocuments", dQURL, "2.0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, remoteHCID2, "QueryForDocuments", dQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, remoteHCID3, "QueryForDocuments", dQURL, "2.0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="Document Query" type="request" id="86de0fe1-dc52-46a3-8614-937e002eb81b">
@@ -317,12 +317,12 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -330,7 +330,7 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -419,13 +419,13 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
     </con:testCase>
     <con:testCase failOnError="true" failTestCaseOnErrors="true" id="9324f41a-5d01-4528-9520-206957d72ffc" keepSession="false" maxResults="0" name="DQ a0 interface with 2010 Guidance and target available with 2.0 endpoint" searchProperties="true">
       <con:settings/>
-      <con:testStep name="Copy uddiConnectionInfo" type="groovy" id="b7291d46-0271-4f2b-a31e-c1ab22a199b4">
+      <con:testStep name="Copy exchangeInfo" type="groovy" id="b7291d46-0271-4f2b-a31e-c1ab22a199b4">
         <con:settings/>
         <con:config>
           <script>def sourceDir = context.expand('${projectDir}')
-def sourceFile = "UDDIcopy-uddiConnectionInfo.xml";
+def sourceFile = "UDDIcopy-exchangeInfo.xml";
 def destDir = context.findProperty( "GatewayPropDir" );
-def destFile = "uddiConnectionInfo.xml";
+def destFile = "exchangeInfo.xml";
 
 nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script>
         </con:config>
@@ -496,8 +496,8 @@ def dQURL = "https://localhost:8181/Gateway/DocumentQuery/2_0/NhinService/Respon
 def remoteHCID2 = context.findProperty("UDDIhcid3");
 def remoteHCID3 = context.findProperty("UDDIhcid4");
 
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, remoteHCID2, "QueryForDocuments", dQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, remoteHCID3, "QueryForDocuments", dQURL, "2.0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, remoteHCID2, "QueryForDocuments", dQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, remoteHCID3, "QueryForDocuments", dQURL, "2.0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="Document Query" type="request" id="f37d8767-1e44-4625-852d-c2d10022e9f8">
@@ -710,12 +710,12 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -723,7 +723,7 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -807,13 +807,13 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
     </con:testCase>
     <con:testCase failOnError="true" failTestCaseOnErrors="true" id="9324f41a-5d01-4528-9520-206957d72ffc" keepSession="false" maxResults="0" name="2 Targets (1 with no DQ Service) but 3 Correlations" searchProperties="true">
       <con:settings/>
-      <con:testStep name="Copy uddiConnectionInfo" type="groovy" id="c9f2af13-7f1f-47ad-964d-bf43b02f38e1">
+      <con:testStep name="Copy exchangeInfo" type="groovy" id="c9f2af13-7f1f-47ad-964d-bf43b02f38e1">
         <con:settings/>
         <con:config>
           <script>def sourceDir = context.expand('${projectDir}')
-def sourceFile = "UDDIcopy-uddiConnectionInfo.xml";
+def sourceFile = "UDDIcopy-exchangeInfo.xml";
 def destDir = context.findProperty( "GatewayPropDir" );
-def destFile = "uddiConnectionInfo.xml";
+def destFile = "exchangeInfo.xml";
 
 nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script>
         </con:config>
@@ -884,8 +884,8 @@ def dQURL = "https://localhost:8181/Gateway/DocumentQuery/2_0/NhinService/Respon
 def remoteHCID2 = context.findProperty("UDDIhcid3");
 def remoteHCID3 = context.findProperty("UDDIhcid4");
 
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, remoteHCID2, "QueryForDocuments", dQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, remoteHCID3, "QueryForDocuments", dQURL, "2.0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, remoteHCID2, "QueryForDocuments", dQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, remoteHCID3, "QueryForDocuments", dQURL, "2.0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="Document Query" type="request" id="49ea933f-f398-4af7-ba2a-e8d29a5177fc">
@@ -1098,12 +1098,12 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -1111,7 +1111,7 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -1219,13 +1219,13 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
     </con:testCase>
     <con:testCase failOnError="true" failTestCaseOnErrors="true" id="70151a65-365f-46fa-a1f8-f2d08e3fd5e3" keepSession="false" maxResults="0" name="Target with no DQ Service and No Correlations" searchProperties="true">
       <con:settings/>
-      <con:testStep name="Copy uddiConnectionInfo" type="groovy" id="8049571d-7a8b-46f5-8102-fe02b713c7a9">
+      <con:testStep name="Copy exchangeInfo" type="groovy" id="8049571d-7a8b-46f5-8102-fe02b713c7a9">
         <con:settings/>
         <con:config>
           <script>def sourceDir = context.expand('${projectDir}')
-def sourceFile = "UDDIcopy-uddiConnectionInfo.xml";
+def sourceFile = "UDDIcopy-exchangeInfo.xml";
 def destDir = context.findProperty( "GatewayPropDir" );
-def destFile = "uddiConnectionInfo.xml";
+def destFile = "exchangeInfo.xml";
 nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script>
         </con:config>
       </con:testStep>
@@ -1481,12 +1481,12 @@ nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -1494,7 +1494,7 @@ nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -1585,13 +1585,13 @@ nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script
     </con:testCase>
     <con:testCase failOnError="true" failTestCaseOnErrors="true" id="048c641d-b668-4521-b0a1-e518d4ed86e6" keepSession="false" maxResults="0" name="Target with no DQ Service with 1 Matching Correlation" searchProperties="true">
       <con:settings/>
-      <con:testStep name="Copy uddiConnectionInfo" type="groovy" id="4c7f8aaa-8548-41e5-aa4a-ae661765b1ee">
+      <con:testStep name="Copy exchangeInfo" type="groovy" id="4c7f8aaa-8548-41e5-aa4a-ae661765b1ee">
         <con:settings/>
         <con:config>
           <script>def sourceDir = context.expand('${projectDir}')
-def sourceFile = "UDDIcopy-uddiConnectionInfo.xml";
+def sourceFile = "UDDIcopy-exchangeInfo.xml";
 def destDir = context.findProperty( "GatewayPropDir" );
-def destFile = "uddiConnectionInfo.xml";
+def destFile = "exchangeInfo.xml";
 
 nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script>
         </con:config>
@@ -1659,8 +1659,8 @@ def dQURL = "https://localhost:8181/Gateway/DocumentQuery/2_0/NhinService/Respon
 def remoteHCID2 = context.findProperty("UDDIhcid3");
 def remoteHCID3 = context.findProperty("UDDIhcid4");
 
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, remoteHCID2, "QueryForDocuments", dQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, remoteHCID3, "QueryForDocuments", dQURL, "2.0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, remoteHCID2, "QueryForDocuments", dQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, remoteHCID3, "QueryForDocuments", dQURL, "2.0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="Document Query" type="request" id="347068ac-86e8-4c7c-b93b-4087b8ef0c81">
@@ -1873,12 +1873,12 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -1886,7 +1886,7 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -1976,13 +1976,13 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
     </con:testCase>
     <con:testCase failOnError="true" failTestCaseOnErrors="true" id="9324f41a-5d01-4528-9520-206957d72ffc" keepSession="false" maxResults="0" name="DQ a0 interface with 2010 guidance and target available with 3.0 endpoint" searchProperties="true">
       <con:settings/>
-      <con:testStep name="Copy uddiConnectionInfo" type="groovy" id="0d404d49-b723-40ea-bcdd-4eed23f6b181">
+      <con:testStep name="Copy exchangeInfo" type="groovy" id="0d404d49-b723-40ea-bcdd-4eed23f6b181">
         <con:settings/>
         <con:config>
           <script>def sourceDir = context.expand('${projectDir}')
-def sourceFile = "UDDIcopy-uddiConnectionInfo.xml";
+def sourceFile = "UDDIcopy-exchangeInfo.xml";
 def destDir = context.findProperty( "GatewayPropDir" );
-def destFile = "uddiConnectionInfo.xml";
+def destFile = "exchangeInfo.xml";
 
 nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script>
         </con:config>
@@ -2053,8 +2053,8 @@ def dQURL = "https://localhost:8181/Gateway/DocumentQuery/3_0/NhinService/Respon
 def remoteHCID2 = context.findProperty("UDDIhcid3");
 def remoteHCID3 = context.findProperty("UDDIhcid4");
 
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, remoteHCID2, "QueryForDocuments", dQURL, "3.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, remoteHCID3, "QueryForDocuments", dQURL, "3.0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, remoteHCID2, "QueryForDocuments", dQURL, "3.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, remoteHCID3, "QueryForDocuments", dQURL, "3.0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="Document Query" type="request" id="5ea97fa7-522c-42aa-82c7-37ee2e9f1a8e">
@@ -2267,12 +2267,12 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -2280,7 +2280,7 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -2368,13 +2368,13 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
     </con:testCase>
     <con:testCase failOnError="true" failTestCaseOnErrors="true" id="9324f41a-5d01-4528-9520-206957d72ffc" keepSession="false" maxResults="0" name="DQ a1 interface with 2011 Guidance and target available with 2.0 endpoint" searchProperties="true">
       <con:settings/>
-      <con:testStep name="Copy uddiConnectionInfo" type="groovy" id="1f14103b-3c78-4e61-8374-3da89e1bdc47">
+      <con:testStep name="Copy exchangeInfo" type="groovy" id="1f14103b-3c78-4e61-8374-3da89e1bdc47">
         <con:settings/>
         <con:config>
           <script>def sourceDir = context.expand('${projectDir}')
-def sourceFile = "UDDIcopy-uddiConnectionInfo.xml";
+def sourceFile = "UDDIcopy-exchangeInfo.xml";
 def destDir = context.findProperty( "GatewayPropDir" );
-def destFile = "uddiConnectionInfo.xml";
+def destFile = "exchangeInfo.xml";
 
 nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script>
         </con:config>
@@ -2445,8 +2445,8 @@ def dQURL = "https://localhost:8181/Gateway/DocumentQuery/2_0/NhinService/Respon
 def remoteHCID2 = context.findProperty("UDDIhcid3");
 def remoteHCID3 = context.findProperty("UDDIhcid4");
 
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, remoteHCID2, "QueryForDocuments", dQURL, "2.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, remoteHCID3, "QueryForDocuments", dQURL, "2.0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, remoteHCID2, "QueryForDocuments", dQURL, "2.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, remoteHCID3, "QueryForDocuments", dQURL, "2.0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="Document Query" type="request" id="a83fcb75-19ed-4640-bf0c-cfa13d335f00">
@@ -2659,12 +2659,12 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -2672,7 +2672,7 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -2756,13 +2756,13 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
     </con:testCase>
     <con:testCase failOnError="true" failTestCaseOnErrors="true" id="9324f41a-5d01-4528-9520-206957d72ffc" keepSession="false" maxResults="0" name="DQ a1 interface with 2011 Guidance and target available with 3.0 endpoint" searchProperties="true">
       <con:settings/>
-      <con:testStep name="Copy uddiConnectionInfo" type="groovy" id="badc620e-3fa8-4e32-9463-771560eb7971">
+      <con:testStep name="Copy exchangeInfo" type="groovy" id="badc620e-3fa8-4e32-9463-771560eb7971">
         <con:settings/>
         <con:config>
           <script>def sourceDir = context.expand('${projectDir}')
-def sourceFile = "UDDIcopy-uddiConnectionInfo.xml";
+def sourceFile = "UDDIcopy-exchangeInfo.xml";
 def destDir = context.findProperty( "GatewayPropDir" );
-def destFile = "uddiConnectionInfo.xml";
+def destFile = "exchangeInfo.xml";
 
 nhinc.FileUtils.copyFile(sourceDir, sourceFile, destDir, destFile, log);</script>
         </con:config>
@@ -2833,8 +2833,8 @@ def dQURL = "https://localhost:8181/Gateway/DocumentQuery/3_0/NhinService/Respon
 def remoteHCID2 = context.findProperty("UDDIhcid3");
 def remoteHCID3 = context.findProperty("UDDIhcid4");
 
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, remoteHCID2, "QueryForDocuments", dQURL, "3.0", log);
-nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFileLocation, remoteHCID3, "QueryForDocuments", dQURL, "3.0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, remoteHCID2, "QueryForDocuments", dQURL, "3.0", log);
+nhinc.FileUtils.createOrUpdateConnection("exchangeInfo.xml", destConfigFileLocation, remoteHCID3, "QueryForDocuments", dQURL, "3.0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="Document Query" type="request" id="20271e80-1ec6-44ad-8c38-276f55d96238">
@@ -3047,12 +3047,12 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
             <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -3060,7 +3060,7 @@ nhinc.FileUtils.createOrUpdateConnection("uddiConnectionInfo.xml", destConfigFil
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>

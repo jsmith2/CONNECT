@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,12 +23,14 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.admindistribution.outbound;
+
+import static gov.hhs.fha.nhinc.util.CoreHelpUtils.logInfoServiceProcess;
 
 import gov.hhs.fha.nhinc.admindistribution.AdminDistributionAuditLogger;
 import gov.hhs.fha.nhinc.admindistribution.AdminDistributionPolicyChecker;
-import gov.hhs.fha.nhinc.admindistribution.MessageGeneratorUtils;
+import gov.hhs.fha.nhinc.admindistribution.ADMessageGeneratorUtils;
 import gov.hhs.fha.nhinc.admindistribution.aspect.ADRequestTransformingBuilder;
 import gov.hhs.fha.nhinc.admindistribution.entity.OutboundAdminDistributionDelegate;
 import gov.hhs.fha.nhinc.admindistribution.entity.OutboundAdminDistributionOrchestratable;
@@ -40,9 +42,9 @@ import gov.hhs.fha.nhinc.common.nhinccommon.NhinTargetCommunitiesType;
 import gov.hhs.fha.nhinc.common.nhinccommon.NhinTargetSystemType;
 import gov.hhs.fha.nhinc.common.nhinccommonentity.RespondingGatewaySendAlertMessageSecuredType;
 import gov.hhs.fha.nhinc.common.nhinccommonentity.RespondingGatewaySendAlertMessageType;
-import gov.hhs.fha.nhinc.connectmgr.ConnectionManagerCache;
-import gov.hhs.fha.nhinc.connectmgr.ConnectionManagerException;
 import gov.hhs.fha.nhinc.connectmgr.UrlInfo;
+import gov.hhs.fha.nhinc.exchangemgr.ExchangeManager;
+import gov.hhs.fha.nhinc.exchangemgr.ExchangeManagerException;
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
 import java.util.List;
 import org.slf4j.Logger;
@@ -55,8 +57,8 @@ import org.slf4j.LoggerFactory;
 public class StandardOutboundAdminDistribution implements OutboundAdminDistribution {
 
     private static final Logger LOG = LoggerFactory.getLogger(StandardOutboundAdminDistribution.class);
-    private final AdminDistributionAuditLogger auditLogger = null;
-    private final MessageGeneratorUtils msgUtils = MessageGeneratorUtils.getInstance();
+    private AdminDistributionAuditLogger auditLogger = null;
+    private final ADMessageGeneratorUtils msgUtils = ADMessageGeneratorUtils.getInstance();
 
     /**
      * This method sends AlertMessage to the target.
@@ -66,11 +68,12 @@ public class StandardOutboundAdminDistribution implements OutboundAdminDistribut
      * @param target NhinTargetCommunity received.
      */
     @Override
-    @OutboundProcessingEvent(beforeBuilder = ADRequestTransformingBuilder.class, afterReturningBuilder = ADRequestTransformingBuilder.class, serviceType = "Admin Distribution", version = "")
+    @OutboundProcessingEvent(beforeBuilder = ADRequestTransformingBuilder.class, afterReturningBuilder
+    = ADRequestTransformingBuilder.class, serviceType = "Admin Distribution", version = "")
     public void sendAlertMessage(RespondingGatewaySendAlertMessageSecuredType message, AssertionType assertion,
-            NhinTargetCommunitiesType target) {
+        NhinTargetCommunitiesType target) {
         RespondingGatewaySendAlertMessageType unsecured = msgUtils.convertToUnsecured(message,
-                MessageGeneratorUtils.getInstance().generateMessageId(assertion), target);
+            ADMessageGeneratorUtils.getInstance().generateMessageId(assertion), target);
 
         this.sendAlertMessage(unsecured, assertion, target);
 
@@ -82,11 +85,13 @@ public class StandardOutboundAdminDistribution implements OutboundAdminDistribut
      * @param target NhinTargetCommunity received.
      */
     @Override
-    @OutboundProcessingEvent(beforeBuilder = ADRequestTransformingBuilder.class, afterReturningBuilder = ADRequestTransformingBuilder.class, serviceType = "Admin Distribution", version = "")
+    @OutboundProcessingEvent(beforeBuilder = ADRequestTransformingBuilder.class, afterReturningBuilder
+    = ADRequestTransformingBuilder.class, serviceType = "Admin Distribution", version = "")
     public void sendAlertMessage(RespondingGatewaySendAlertMessageType message, AssertionType assertion,
-            NhinTargetCommunitiesType target) {
-        auditMessage(message, MessageGeneratorUtils.getInstance().generateMessageId(assertion),
-                NhincConstants.AUDIT_LOG_INBOUND_DIRECTION);
+        NhinTargetCommunitiesType target) {
+        logInfoServiceProcess(this.getClass());
+        auditMessage(message, ADMessageGeneratorUtils.getInstance().generateMessageId(assertion),
+            NhincConstants.AUDIT_LOG_INBOUND_DIRECTION);
 
         List<UrlInfo> urlInfoList = getEndpoints(target);
 
@@ -95,7 +100,7 @@ public class StandardOutboundAdminDistribution implements OutboundAdminDistribut
         } else {
             for (UrlInfo urlInfo : urlInfoList) {
                 // create a new request to send out to each target community
-                LOG.debug("Target: " + urlInfo.getHcid());
+                LOG.debug("Target: {}", urlInfo.getHcid());
                 // check the policy for the outgoing request to the target community
                 boolean bIsPolicyOk = checkPolicy(message, assertion, urlInfo.getHcid());
 
@@ -117,10 +122,10 @@ public class StandardOutboundAdminDistribution implements OutboundAdminDistribut
      * @param direction The direction can be either outbound or inbound.
      */
     protected void auditMessage(RespondingGatewaySendAlertMessageType message, AssertionType assertion,
-            String direction) {
+        String direction) {
         AcknowledgementType ack = getAuditLogger().auditEntityAdminDist(message, assertion, direction);
         if (ack != null) {
-            LOG.debug("ack: " + ack.getMessage());
+            LOG.debug("ack: {}", ack.getMessage());
         }
     }
 
@@ -128,10 +133,13 @@ public class StandardOutboundAdminDistribution implements OutboundAdminDistribut
      * @return auditLogger to audit.
      */
     protected AdminDistributionAuditLogger getAuditLogger() {
-        return auditLogger != null ? auditLogger : new AdminDistributionAuditLogger();
+        if (null == auditLogger) {
+            auditLogger = new AdminDistributionAuditLogger();
+        }
+        return auditLogger;
     }
 
-    private NhinTargetSystemType buildTargetSystem(UrlInfo urlInfo) {
+    private static NhinTargetSystemType buildTargetSystem(UrlInfo urlInfo) {
         LOG.debug("Begin buildTargetSystem");
         NhinTargetSystemType result = new NhinTargetSystemType();
         HomeCommunityType hc = new HomeCommunityType();
@@ -153,9 +161,9 @@ public class StandardOutboundAdminDistribution implements OutboundAdminDistribut
         List<UrlInfo> urlInfoList = null;
 
         try {
-            urlInfoList = ConnectionManagerCache.getInstance().getEndpointURLFromNhinTargetCommunities(
-                    targetCommunities, NhincConstants.NHIN_ADMIN_DIST_SERVICE_NAME);
-        } catch (ConnectionManagerException ex) {
+            urlInfoList = ExchangeManager.getInstance().getEndpointURLFromNhinTargetCommunities(
+                targetCommunities, NhincConstants.NHIN_ADMIN_DIST_SERVICE_NAME);
+        } catch (ExchangeManagerException ex) {
             LOG.error("Failed to obtain target URLs", ex);
         }
 
@@ -185,11 +193,11 @@ public class StandardOutboundAdminDistribution implements OutboundAdminDistribut
      * @param target NhinTargetSystem received.
      */
     protected void sendToNhinProxy(RespondingGatewaySendAlertMessageType newRequest, AssertionType assertion,
-            NhinTargetSystemType target) {
+        NhinTargetSystemType target) {
         LOG.debug("begin sendToNhinProxy");
         OutboundAdminDistributionDelegate adDelegate = getNewOutboundAdminDistributionDelegate();
         OutboundAdminDistributionOrchestratable orchestratable = new OutboundAdminDistributionOrchestratable(
-                adDelegate);
+            adDelegate);
         orchestratable.setRequest(newRequest);
         orchestratable.setAssertion(assertion);
         orchestratable.setTarget(target);

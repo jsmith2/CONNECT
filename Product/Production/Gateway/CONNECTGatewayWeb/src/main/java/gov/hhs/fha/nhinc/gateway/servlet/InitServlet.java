@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,79 +23,45 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.gateway.servlet;
 
-import gov.hhs.fha.nhinc.auditrepository.hibernate.util.HibernateUtil;
+import gov.hhs.fha.nhinc.configuration.jmx.Configuration;
 import gov.hhs.fha.nhinc.event.EventLoggerFactory;
-import gov.hhs.fha.nhinc.gateway.executorservice.ExecutorServiceHelper;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import gov.hhs.fha.nhinc.gateway.AbstractJMXEnabledServlet;
+import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import org.springframework.stereotype.Component;
 
 /**
- * Started on webapplication init, creates the main ExecutorService and CamelContext instances Note the following: 1.
- * Main ExecutorService creates a new thread pool of size specified on construction, independent/in addition to
- * glassfish thread pool(s) set in domain.xml. 2. ExecutorService automatically handles any thread death condition and
- * creates a new thread in this case
- *
- * 3. Also creates a second largeJobExecutor with a fixed size thread pool (largeJobExecutor is used for TaskExecutors
- * that get a callable list of size comparable to the size of the main ExecutorService)
- *
  * @author paul.eftis
  */
-public class InitServlet extends HttpServlet {
-
-    private static final Logger LOG = LoggerFactory.getLogger(InitServlet.class);
-
-    private static ExecutorService executor = null;
-    private static ExecutorService largeJobExecutor = null;
+@Component
+public class InitServlet extends AbstractJMXEnabledServlet {
 
     @Override
-    @SuppressWarnings("static-access")
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-        executor = Executors.newFixedThreadPool(ExecutorServiceHelper.getInstance().getExecutorPoolSize());
-        largeJobExecutor = Executors
-                .newFixedThreadPool(ExecutorServiceHelper.getInstance().getLargeJobExecutorPoolSize());
-        // Initialize HibernateUtil when CONNECTGatewayWeb is initialized required for AuditRepo JavaImpl EJB calls.
-        // Do not Remove this ...
-
-        HibernateUtil hibernateUtil = new HibernateUtil();
-        hibernateUtil.buildSessionFactory();
-        // register event loggers as observers...
+    @PostConstruct
+    public void init() {
         EventLoggerFactory.getInstance().registerLoggers();
-    }
-
-    public static ExecutorService getExecutorService() {
-        return executor;
-    }
-
-    public static ExecutorService getLargeJobExecutorService() {
-        return largeJobExecutor;
+        super.init();
     }
 
     @Override
+    @PreDestroy
     public void destroy() {
-        LOG.debug("InitServlet shutdown stopping executor(s)....");
-        if (executor != null) {
-            try {
-                executor.shutdown();
-            } catch (Exception e) {
-                LOG.error("Error while shutdown of ExecutorService: {}", e.getLocalizedMessage(), e);
-            }
-        }
-        if (largeJobExecutor != null) {
-            try {
-                largeJobExecutor.shutdown();
-            } catch (Exception e) {
-                LOG.error("Error while shutdown of ExecutorService: {}", e.getLocalizedMessage(), e);
-            }
-        }
+        super.destroy();
+    }
+
+
+    @Override
+    public String getMBeanName() {
+        return NhincConstants.JMX_CONFIGURATION_BEAN_NAME;
+    }
+
+    @Override
+    public Object getMBeanInstance() {
+        return new Configuration();
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,28 +23,32 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.admingui.hibernate;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import gov.hhs.fha.nhinc.admingui.hibernate.dao.UserLoginDAO;
 import gov.hhs.fha.nhinc.admingui.model.Login;
-import gov.hhs.fha.nhinc.admingui.services.exception.PasswordServiceException;
+import gov.hhs.fha.nhinc.admingui.services.PasswordService;
 import gov.hhs.fha.nhinc.admingui.services.exception.UserLoginException;
 import gov.hhs.fha.nhinc.admingui.services.persistence.jpa.entity.UserLogin;
-import java.io.IOException;
+import gov.hhs.fha.nhinc.util.SHA2PasswordUtil;
+import gov.hhs.fha.nhinc.util.UtilException;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 
 /**
  *
  * @author sadusumilli, msw
  */
+@RunWith(MockitoJUnitRunner.class)
 public class LoginServiceImplTest {
 
     /**
@@ -53,33 +57,100 @@ public class LoginServiceImplTest {
     @InjectMocks
     private LoginServiceImpl loginService;
 
-    /**
-     * The mock dao.
-     */
-    @Mock
-    private UserLoginDAO mockDao;
 
-    /**
-     * Sets the up.
-     */
+    @Mock
+    private UserLoginDAO userDAO;
+
+    @Mock
+    private PasswordService passwordService;
+
+    private String salt = "SALT";
+
     @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
+    public void setup() {
+
+        Mockito.when(passwordService.generateRandomSalt()).thenReturn("SALT".getBytes());
     }
 
-    /**
-     * Test adduser_ pass.
-     *
-     * @throws IOException Signals that an I/O exception has occurred.
-     * @throws PasswordServiceException the password service exception
-     * @throws UserLoginException the user login exception
-     */
     @Test
-    public void testAdduser_Pass() throws IOException, PasswordServiceException, UserLoginException {
+    public void testAdduser_Pass() throws UserLoginException, UtilException {
         Login login = new Login();
         login.setUserName("ABCD");
         login.setPassword("ABCDEFGH");
-        Mockito.when(mockDao.createUser(Mockito.any(UserLogin.class))).thenReturn(true);
-        assertNotNull(loginService.addUser(login, 1));
+        Mockito.when(userDAO.createUser(Mockito.any(UserLogin.class))).thenReturn(true);
+        UserLogin addedUser = loginService.addUser(login, 1, "firstName", "middleName", "lastName", "role description");
+        assertNotNull(addedUser);
+
+        Mockito.verify(passwordService).generateRandomSalt();
+
+        String expectedHash = new String(SHA2PasswordUtil.calculateHash(salt.getBytes(), login.getPassword().getBytes()));
+        assertEquals(expectedHash, addedUser.getSha2());
+
+        assertEquals("firstName", addedUser.getFirstName());
+        assertEquals("middleName", addedUser.getMiddleName());
+        assertEquals("lastName", addedUser.getLastName());
+        assertEquals(salt, addedUser.getSalt());
+
+    }
+
+
+    @Test
+    public void testLogin(){
+        Login login = new Login();
+        login.setUserName("ABCD");
+        login.setPassword("ABCDEFGH");
+
+        UserLogin returnedUser = new UserLogin();
+        returnedUser.setSalt(salt);
+        returnedUser.setSha2("osoSSNvkHcYvZs0+Y54qW9oGVOVz6WB9UVn15NRAq0x4doJ3pjvlT9hlu9bFFxy71YELxql5O+w6+0UctMRP6Q==");
+
+        Mockito.when(userDAO.login(Mockito.isA(Login.class))).thenReturn(returnedUser);
+        UserLogin loggedInUser = loginService.login(login);
+        assertEquals(returnedUser, loggedInUser);
+    }
+
+    @Test
+    public void testLogin_badPassword(){
+        Login login = new Login();
+        login.setUserName("ABCD");
+        login.setPassword("ABCDEFGH");
+
+        UserLogin returnedUser = new UserLogin();
+        returnedUser.setSalt(salt);
+        returnedUser.setSha2("ThIsIsThEwRoNgHaSh");
+
+        Mockito.when(userDAO.login(Mockito.isA(Login.class))).thenReturn(returnedUser);
+        UserLogin loggedInUser = loginService.login(login);
+        assertEquals(null, loggedInUser);
+    }
+
+    @Test
+    public void testLogin_noPassword(){
+        Login login = new Login();
+        login.setUserName("ABCD");
+        login.setPassword("");
+
+        UserLogin returnedUser = new UserLogin();
+        returnedUser.setSalt(salt);
+        returnedUser.setSha2("");
+
+        Mockito.when(userDAO.login(Mockito.isA(Login.class))).thenReturn(returnedUser);
+        UserLogin loggedInUser = loginService.login(login);
+        assertEquals(null, loggedInUser);
+    }
+
+    @Test
+    public void testLogin_noDBPassword(){
+        Login login = new Login();
+        login.setUserName("ABCD");
+        login.setPassword("1234");
+
+        UserLogin returnedUser = new UserLogin();
+        returnedUser.setSalt(salt);
+        returnedUser.setSha2("");
+
+        Mockito.when(userDAO.login(Mockito.isA(Login.class))).thenReturn(returnedUser);
+        UserLogin loggedInUser = loginService.login(login);
+        assertEquals(null, loggedInUser);
     }
 }

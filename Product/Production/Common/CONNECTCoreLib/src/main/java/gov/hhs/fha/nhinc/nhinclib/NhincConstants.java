@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,7 +28,9 @@ package gov.hhs.fha.nhinc.nhinclib;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -55,7 +57,7 @@ public class NhincConstants {
         SPEC_1_0("1.0"), SPEC_1_1("1.1"), SPEC_2_0("2.0"), SPEC_3_0("3.0");
         private String value = null;
 
-        UDDI_SPEC_VERSION(String value) {
+        UDDI_SPEC_VERSION(final String value) {
             this.value = value;
         }
 
@@ -64,9 +66,9 @@ public class NhincConstants {
             return value;
         }
 
-        public static UDDI_SPEC_VERSION fromString(String valueString) {
+        public static UDDI_SPEC_VERSION fromString(final String valueString) {
             if (valueString != null) {
-                for (UDDI_SPEC_VERSION enumValue : UDDI_SPEC_VERSION.values()) {
+                for (final UDDI_SPEC_VERSION enumValue : UDDI_SPEC_VERSION.values()) {
                     if (valueString.equals(enumValue.toString())) {
                         return enumValue;
                     }
@@ -76,23 +78,25 @@ public class NhincConstants {
         }
     }
 
-    public static enum NHIN_SERVICE_NAMES {
+    public enum NHIN_SERVICE_NAMES {
 
-        PATIENT_DISCOVERY(PATIENT_DISCOVERY_SERVICE_NAME), PATIENT_DISCOVERY_DEFERRED_REQUEST(
-                PATIENT_DISCOVERY_DEFERRED_REQ_SERVICE_NAME), PATIENT_DISCOVERY_DEFERRED_RESPONSE(
-                        PATIENT_DISCOVERY_DEFERRED_RESP_SERVICE_NAME), DOCUMENT_QUERY(
-                                DOC_QUERY_SERVICE_NAME), DOCUMENT_RETRIEVE(
-                                        DOC_RETRIEVE_SERVICE_NAME), DOCUMENT_SUBMISSION(
-                                                NHINC_XDR_SERVICE_NAME), DOCUMENT_SUBMISSION_DEFERRED_REQUEST(
-                                                        NHINC_XDR_REQUEST_SERVICE_NAME), DOCUMENT_SUBMISSION_DEFERRED_RESPONSE(
-                                                                NHINC_XDR_RESPONSE_SERVICE_NAME), ADMINISTRATIVE_DISTRIBUTION(
-                                                                        NHIN_ADMIN_DIST_SERVICE_NAME), CORE_X12DS_REALTIME(
-                                                                                CORE_X12DS_REALTIME_SERVICE_NAME), CORE_X12DS_GENERICBATCH_REQUEST(
-                                                                                        CORE_X12DS_GENERICBATCH_REQUEST_SERVICE_NAME), CORE_X12DS_GENERICBATCH_RESPONSE(
-                                                                                                CORE_X12DS_GENERICBATCH_RESPONSE_SERVICE_NAME);
+        PATIENT_DISCOVERY(PATIENT_DISCOVERY_SERVICE_NAME),
+        PATIENT_DISCOVERY_DEFERRED_REQUEST(PATIENT_DISCOVERY_DEFERRED_REQ_SERVICE_NAME),
+        PATIENT_DISCOVERY_DEFERRED_RESPONSE(PATIENT_DISCOVERY_DEFERRED_RESP_SERVICE_NAME),
+        DOCUMENT_QUERY(DOC_QUERY_SERVICE_NAME), DOCUMENT_RETRIEVE(DOC_RETRIEVE_SERVICE_NAME),
+        DOCUMENT_SUBMISSION(NHINC_XDR_SERVICE_NAME),
+        DOCUMENT_SUBMISSION_DEFERRED_REQUEST(NHINC_XDR_REQUEST_SERVICE_NAME),
+        DOCUMENT_SUBMISSION_DEFERRED_RESPONSE(NHINC_XDR_RESPONSE_SERVICE_NAME),
+        ADMINISTRATIVE_DISTRIBUTION(NHIN_ADMIN_DIST_SERVICE_NAME),
+        CORE_X12DS_REALTIME(CORE_X12DS_REALTIME_SERVICE_NAME),
+        CORE_X12DS_GENERICBATCH_REQUEST(CORE_X12DS_GENERICBATCH_REQUEST_SERVICE_NAME),
+        CORE_X12DS_GENERICBATCH_RESPONSE(CORE_X12DS_GENERICBATCH_RESPONSE_SERVICE_NAME),
+        DOCUMENT_DATA_SUBMISSION(NHINC_XDS_SERVICE_NAME),
+        PATIENT_LOCATION_QUERY(PLQ_NHIN_SERVICE_NAME);
+
         private String UDDIServiceName = null;
 
-        NHIN_SERVICE_NAMES(String value) {
+        NHIN_SERVICE_NAMES(final String value) {
             UDDIServiceName = value;
         }
 
@@ -100,32 +104,111 @@ public class NhincConstants {
             return UDDIServiceName;
         }
 
-        public static NHIN_SERVICE_NAMES fromValueString(String valueString) {
+        public static NHIN_SERVICE_NAMES fromValueString(final String valueString) {
             if (valueString != null) {
-                for (NHIN_SERVICE_NAMES enumValue : NHIN_SERVICE_NAMES.values()) {
-                    if (valueString.equals(enumValue.UDDIServiceName)) {
+                for (final NHIN_SERVICE_NAMES enumValue : NHIN_SERVICE_NAMES.values()) {
+                    if (enumValue.UDDIServiceName.equals(valueString)) {
                         return enumValue;
                     }
                 }
             }
-            throw new IllegalArgumentException("No enum constant " + valueString);
+            return null;
         }
 
         public static List<String> getEnumServiceNamesList() {
-            List<String> enumServiceNames = new ArrayList<>();
-            for (NHIN_SERVICE_NAMES m : values()) {
+            final List<String> enumServiceNames = new ArrayList<>();
+            for (final NHIN_SERVICE_NAMES m : values()) {
                 enumServiceNames.add(m.toString());
             }
             return enumServiceNames;
         }
     }
 
-    // Authorization Framework
-    public static final String AUTH_FRWK_NAME_ID_FORMAT_EMAIL_ADDRESS = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress";
-    public static final String AUTH_FRWK_NAME_ID_FORMAT_X509 = "urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName";
-    public static final String AUTH_FRWK_NAME_ID_FORMAT_WINDOWS_NAME = "urn:oasis:names:tc:SAML:1.1:nameid-format:WindowsDomainQualifiedName";
-    // SAML constants
-    public static final String SAML_DEFAULT_ISSUER_NAME = "CN=SAML User,OU=SU,O=SAML User,L=Los Angeles,ST=CA,C=US";
+    public enum EXCHANGE_TYPE {
+        UDDI("uddi"),
+        FHIR("fhir"),
+        LOCAL("local"),
+        OVERRIDES("overrides");
+        private final String value;
+
+        EXCHANGE_TYPE(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public static EXCHANGE_TYPE getExchangeType(String value) {
+            if (value != null) {
+                for (final EXCHANGE_TYPE enumValue : EXCHANGE_TYPE.values()) {
+                    if (value.equals(enumValue.toString())) {
+                        return enumValue;
+                    }
+                }
+            }
+            throw new IllegalArgumentException("No enum constant " + value);
+        }
+    }
+
+    public enum EVENT_LOGGING_SERVICE_NAME {
+
+        PATIENT_DISCOVERY("Patient Discovery"), PATIENT_DISCOVERY_DEFERRED_REQUEST("Patient Discovery Deferred Request"),
+        PATIENT_DISCOVERY_DEFERRED_RESPONSE("Patient Discovery Deferred Response"), DOCUMENT_QUERY("Document Query"),
+        DOCUMENT_RETRIEVE("Retrieve Document"), DOCUMENT_SUBMISSION("Document Submission"),
+        DOCUMENT_SUBMISSION_DEFERRED_REQUEST("Document Submission Deferred Request"),
+        DOCUMENT_SUBMISSION_DEFERRED_RESPONSE("Document Submission Deferred Response"),
+        ADMINISTRATIVE_DISTRIBUTION("Admin Distribution"), DOCUMENT_DATA_SUBMISSION("Document Data Submission"),
+        PATIENT_LOCATION_QUERY("Patient Location Query");
+
+        String abbServiceName = null;
+
+        EVENT_LOGGING_SERVICE_NAME(String value) {
+            abbServiceName = value;
+        }
+
+        public String getAbbServiceName() {
+            return abbServiceName;
+        }
+
+        public static EVENT_LOGGING_SERVICE_NAME fromValueString(String valueString) {
+            if (valueString != null) {
+                for (EVENT_LOGGING_SERVICE_NAME enumValue : EVENT_LOGGING_SERVICE_NAME.values()) {
+                    if (valueString.equals(enumValue.abbServiceName)) {
+                        return enumValue;
+                    }
+                }
+            }
+            throw new IllegalArgumentException("Event Logging not implemented for " + valueString);
+        }
+
+        public static List<String> getEventLoggingServiceForDisplay() {
+            final List<String> enumServiceNames = new ArrayList<>();
+            for (final EVENT_LOGGING_SERVICE_NAME m : values()) {
+                if (!m.equals(EVENT_LOGGING_SERVICE_NAME.DOCUMENT_SUBMISSION_DEFERRED_REQUEST) && !m.equals(
+                    EVENT_LOGGING_SERVICE_NAME.DOCUMENT_SUBMISSION_DEFERRED_RESPONSE) && !m.equals(
+                        EVENT_LOGGING_SERVICE_NAME.PATIENT_DISCOVERY_DEFERRED_REQUEST)
+                    && !m.equals(EVENT_LOGGING_SERVICE_NAME.PATIENT_DISCOVERY_DEFERRED_RESPONSE)) {
+                    enumServiceNames.add(m.getAbbServiceName());
+                }
+            }
+            return enumServiceNames;
+        }
+
+        public static Map<String, String> getDropdownEventLoggingService() {
+            Map<String, String> map = new HashMap<>();
+            for (EVENT_LOGGING_SERVICE_NAME m : values()) {
+                map.put(m.toString(), m.getAbbServiceName());
+            }
+            return map;
+        }
+    }
+
     // Initiating multispec errors
     public static final String INIT_MULTISPEC_ERROR_UNSUPPORTED_GUIDANCE = "Unsupported guidance for API level.";
     public static final String INIT_MULTISPEC_ERROR_NO_MATCHING_ENDPOINT = "No matching target endpoint for guidance: ";
@@ -135,15 +218,22 @@ public class NhincConstants {
     public static final String SERVICE_NAME = "serviceName";
     // Property File Constants
     public static final String GATEWAY_PROPERTY_FILE = "gateway";
+    public static final String SAML_PROPERTY_FILE = "saml";
     public static final String HOME_COMMUNITY_ID_PROPERTY = "localHomeCommunityId";
     public static final String INTERNAL_CONNECTION_INFO = "InternalConnectionInfo2.xml";
     public static final String DIRECTTESTING_FLAG = "DirectTesting";
     public static final String MESSAGEMONITORING_DELAYINMINUTES = "MessageMonitoringDelayTime";
     public static final String UDDI_CONNECTION_INFO = "";
     public static final String ADAPTER_PROPERTY_FILE_NAME = "adapter";
+    public static final String INTERNAL_EXCHANGE_INFO_FILE = "internalExchangeInfo.xml";
     public static final String XDS_HOME_COMMUNITY_ID_PROPERTY = "XDSbHomeCommunityId";
+    public static final String XDS_REPOSITORY_ID = "XDSRepositoryId";
     public static final String MAX_UDDI_RESULTS_PROPERTY = "UDDIMaxResults";
-    // Concurrent Executor Service Constants (used to retrieve values from gateway.properties)
+    public static final String FHIR_DIRECTORY_FILE = "FHIRDirectoryMapping";
+    public static final String MESSAGES_PROPERTY_FILE = "messages";
+    public static final String ASSIGNING_AUTH_PROPERTY = "assigningAuthorityId";
+    // Concurrent Executor Service Constants (used to retrieve values from
+    // gateway.properties)
     public static final String CONCURRENT_POOL_SIZE = "ConcurrentPoolSize";
     public static final String LARGEJOB_POOL_SIZE = "LargeJobPoolSize";
     public static final String LARGEJOB_SIZE_PERCENT = "LargeJobSizePercent";
@@ -163,9 +253,6 @@ public class NhincConstants {
     public static final String RESPONSE_MESSAGE_ID_KEY = "RESPONSE_MESSAGE_ID";
     public static final String RESPONSE_MESSAGE_ID_LIST_KEY = "RESPONSE_MESSAGE_ID_LIST";
 
-    // Flag to enable SAML AuthzDecisionStatement->Evidence->Assertion->Conditions element default value
-    public static final String ENABLE_AUTH_DEC_EVIDENCE_CONDITIONS_DEFAULT_VALUE = "enableAuthDecEvidenceConditionsDefaultValue";
-
     // these 6 not used anymore
     public static final String PATIENT_DISCOVERY_CONNECT_TIMEOUT = "PDConnectTimeout";
     public static final String PATIENT_DISCOVERY_REQUEST_TIMEOUT = "PDRequestTimeout";
@@ -173,73 +260,6 @@ public class NhincConstants {
     public static final String DOC_QUERY_REQUEST_TIMEOUT = "DQRequestTimeout";
     public static final String CONNECT_TIMEOUT_NAME = "com.sun.xml.ws.connect.timeout";
     public static final String REQUEST_TIMEOUT_NAME = "com.sun.xml.ws.request.timeout";
-    // SAML Constants
-    public static final String TARGET_API_LEVEL = "targetAPILevel";
-    public static final String ACTION_PROP = "action";
-    public static final String RESOURCE_PROP = "resource";
-    public static final String PURPOSE_CODE_PROP = "purposeOfUseRoleCode";
-    public static final String PURPOSE_SYST_PROP = "purposeOfUseCodeSystem";
-    public static final String PURPOSE_SYST_NAME_PROP = "purposeOfUseCodeSystemName";
-    public static final String PURPOSE_DISPLAY_PROP = "purposeOfUseDisplayName";
-    public static final String USER_FIRST_PROP = "userFirstName";
-    public static final String USER_MIDDLE_PROP = "userMiddleName";
-    public static final String USER_LAST_PROP = "userLastName";
-    public static final String USER_NAME_PROP = "userName";
-    public static final String USER_ORG_PROP = "userOrganization";
-    public static final String USER_ORG_ID_PROP = "userOrganizationID";
-    public static final String HOME_COM_PROP = "homeCommunity";
-    public static final String PATIENT_ID_PROP = "patientID";
-    public static final String USER_CODE_PROP = "userRoleCode";
-    public static final String USER_SYST_PROP = "userRoleCodeSystem";
-    public static final String USER_SYST_NAME_PROP = "userRoleCodeSystemName";
-    public static final String USER_DISPLAY_PROP = "userRoleCodeDisplayName";
-    public static final String AUTHN_INSTANT_PROP = "authnInstant";
-    public static final String AUTHN_SESSION_INDEX_PROP = "authnSessionIndex";
-    public static final String AUTHN_CONTEXT_CLASS_PROP = "authnContextClass";
-    public static final String SUBJECT_LOCALITY_ADDR_PROP = "subjectLocalityAddress";
-    public static final String SUBJECT_LOCALITY_DNS_PROP = "subjectLocalityDNS";
-    public static final String AUTHZ_DECISION_PROP = "authzDecision";
-    public static final String AUTHZ_STATEMENT_EXISTS_PROP = "authzStatementExists";
-    public static final String ASSERTION_ISSUER_PROP = "assertionIssuer";
-    public static final String ASSERTION_ISSUER_FORMAT_PROP = "assertionIssuerFormat";
-    public static final String EVIDENCE_ID_PROP = "evidenceAssertionId";
-    public static final String EVIDENCE_INSTANT_PROP = "evidenceAssertionInstant";
-    public static final String EVIDENCE_VERSION_PROP = "evidenceAssertionVersion";
-    public static final String EVIDENCE_ISSUER_PROP = "evidenceAssertionIssuer";
-    public static final String EVIDENCE_ISSUER_FORMAT_PROP = "evidenceAssertionIssuerFormat";
-    public static final String EVIDENCE_SUBJECT_PROP = "evidenceSubject";
-    public static final String EVIDENCE_CONDITION_NOT_BEFORE_PROP = "evidenceConditionNotBefore";
-    public static final String EVIDENCE_CONDITION_NOT_AFTER_PROP = "evidenceConditionNotAfter";
-    public static final String EVIDENCE_ACCESS_CONSENT_PROP = "evidenceAccessConsent";
-    public static final String EVIDENCE_INST_ACCESS_CONSENT_PROP = "evidenceInstanceAccessConsent";
-    public static final String DOC_QUERY_ACTION = "queryDocuments";
-    public static final String PATIENT_DISCOVERY_ACTION = "patientDiscovery";
-    public static final String PAT_CORR_ACTION = "patientcorrelation";
-    public static final String XDR_REQUEST_ACTION = "xdrrequest";
-    public static final String XDR_RESPONSE_ACTION = "xdrresponse";
-    public static final String USERNAME_ATTR = "urn:oasis:names:tc:xspa:1.0:subject:subject-id";
-    public static final String USER_ORG_ATTR = "urn:oasis:names:tc:xspa:1.0:subject:organization";
-    public static final String USER_ORG_ID_ATTR = "urn:oasis:names:tc:xspa:1.0:subject:organization-id";
-    public static final String HOME_COM_ID_ATTR = "urn:nhin:names:saml:homeCommunityId";
-    public static final String USER_ROLE_ATTR = "urn:oasis:names:tc:xacml:2.0:subject:role";
-    public static final String PURPOSE_ROLE_ATTR = "urn:oasis:names:tc:xspa:1.0:subject:purposeofuse";
-    public static final String PATIENT_ID_ATTR = "urn:oasis:names:tc:xacml:2.0:resource:resource-id";
-    public static final String ACCESS_CONSENT_ATTR = "AccessConsentPolicy";
-    public static final String INST_ACCESS_CONSENT_ATTR = "InstanceAccessConsentPolicy";
-    // Attribute NameID Constants
-    public static final String ATTRIBUTE_NAME_SUBJECT_ID = "urn:oasis:names:tc:xacml:1.0:subject:subject-id";
-    public static final String ATTRIBUTE_NAME_SUBJECT_ID_XSPA = "urn:oasis:names:tc:xspa:1.0:subject:subject-id";
-    public static final String ATTRIBUTE_NAME_ORG = "urn:oasis:names:tc:xspa:1.0:subject:organization";
-    public static final String ATTRIBUTE_NAME_ORG_ID = "urn:oasis:names:tc:xspa:1.0:subject:organization-id";
-    public static final String ATTRIBUTE_NAME_HCID = "urn:nhin:names:saml:homeCommunityId";
-    public static final String ATTRIBUTE_NAME_SUBJECT_ROLE = "urn:oasis:names:tc:xacml:2.0:subject:role";
-    public static final String ATTRIBUTE_NAME_PURPOSE_OF_USE = "urn:oasis:names:tc:xspa:1.0:subject:purposeofuse";
-    public static final String ATTRIBUTE_NAME_RESOURCE_ID = "urn:oasis:names:tc:xacml:2.0:resource:resource-id";
-    public static final String ATTRIBUTE_NAME_NPI = "urn:oasis:names:tc:xspa:2.0:subject:npi";
-    public static final String CE_CODE_ID = "code";
-    public static final String CE_CODESYS_ID = "codeSystem";
-    public static final String CE_CODESYSNAME_ID = "codeSystemName";
-    public static final String CE_DISPLAYNAME_ID = "displayName";
     // Async Property Constants
     public static final String ASYNC_MESSAGE_ID_PROP = "messageId";
     public static final String ASYNC_RELATES_TO_PROP = "relatesToId";
@@ -324,7 +344,8 @@ public class NhincConstants {
     public static final String WS_ADDRESSING_URL_ANONYMOUS = "http://www.w3.org/2005/08/addressing/anonymous";
     public static final String WS_SOAP_HEADER_ACTION = "Action";
     public static final String WS_RETRIEVE_DOCUMENT_ACTION = "urn:ihe:iti:2007:RetrieveDocumentSet";
-    public static final String WS_PROVIDE_AND_REGISTER_DOCUMENT_ACTION = "urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b";
+    public static final String WS_PROVIDE_AND_REGISTER_DOCUMENT_ACTION
+    = "urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b";
     public static final String WS_SOAP_ATTR_MUSTUNDERSTAND = "mustUnderstand";
     public static final String WS_SOAP_HEADER_TO = "To";
     public static final String WS_SOAP_HEADER_REPLYTO = "ReplyTo";
@@ -340,7 +361,8 @@ public class NhincConstants {
     public static final String DOC_QUERY_SERVICE_NAME = "QueryForDocuments";
     public static final String ENTITY_DOC_QUERY_PROXY_SERVICE_NAME = "entitydocqueryproxy";
     public static final String ENTITY_DOC_QUERY_SECURED_SERVICE_NAME = "entitydocquerysecured";
-    public static final String NHINC_ADHOC_QUERY_SUCCESS_RESPONSE = "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Success";
+    public static final String NHINC_ADHOC_QUERY_SUCCESS_RESPONSE
+    = "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Success";
     public static final BigInteger NHINC_ADHOC_QUERY_NO_RESULT_COUNT = BigInteger.valueOf(0L);
     // Document Retrieve Constants
     public static final String ADAPTER_DOC_RETRIEVE_SERVICE_NAME = "adapterdocretrieve";
@@ -363,20 +385,30 @@ public class NhincConstants {
     public static final String PATIENT_DISCOVERY_ADAPTER_SERVICE_NAME = "adapterpatientdiscovery";
     public static final String ADAPTER_PATIENT_DISCOVERY_SECURED_SERVICE_NAME = "adapterpatientdiscoverysecured";
     public static final String PATIENT_DISCOVERY_ADAPTER_ASYNC_REQ_SERVICE_NAME = "adapterpatientdiscoveryasyncreq";
-    public static final String PATIENT_DISCOVERY_ADAPTER_SECURED_ASYNC_REQ_SERVICE_NAME = "adapterpatientdiscoverysecuredasyncreq";
-    public static final String PATIENT_DISCOVERY_ADAPTER_ASYNC_REQ_ERROR_SERVICE_NAME = "adapterpatientdiscoveryasyncreqerror";
-    public static final String PATIENT_DISCOVERY_ADAPTER_SECURED_ASYNC_REQ_ERROR_SERVICE_NAME = "adapterpatientdiscoverysecuredasyncreqerror";
+    public static final String PATIENT_DISCOVERY_ADAPTER_SECURED_ASYNC_REQ_SERVICE_NAME
+    = "adapterpatientdiscoverysecuredasyncreq";
+    public static final String PATIENT_DISCOVERY_ADAPTER_ASYNC_REQ_ERROR_SERVICE_NAME
+    = "adapterpatientdiscoveryasyncreqerror";
+    public static final String PATIENT_DISCOVERY_ADAPTER_SECURED_ASYNC_REQ_ERROR_SERVICE_NAME
+    = "adapterpatientdiscoverysecuredasyncreqerror";
     public static final String PATIENT_DISCOVERY_ADAPTER_ASYNC_RESP_SERVICE_NAME = "adapterpatientdiscoveryasyncresp";
-    public static final String PATIENT_DISCOVERY_ADAPTER_SECURED_ASYNC_RESP_SERVICE_NAME = "adapterpatientdiscoverysecuredasyncresp";
+    public static final String PATIENT_DISCOVERY_ADAPTER_SECURED_ASYNC_RESP_SERVICE_NAME
+    = "adapterpatientdiscoverysecuredasyncresp";
     public static final String ENTITY_PATIENT_DISCOVERY_SECURED_SERVICE_NAME = "entitypatientdiscoverysecured";
     public static final String ENTITY_PATIENT_DISCOVERY_SERVICE_NAME = "entitypatientdiscovery";
     public static final String PATIENT_DISCOVERY_ENTITY_ASYNC_REQ_SERVICE_NAME = "entitypatientdiscoveryasyncreq";
-    public static final String PATIENT_DISCOVERY_ENTITY_SECURED_ASYNC_REQ_SERVICE_NAME = "entitypatientdiscoverysecuredasyncreq";
+    public static final String PATIENT_DISCOVERY_ENTITY_SECURED_ASYNC_REQ_SERVICE_NAME
+    = "entitypatientdiscoverysecuredasyncreq";
     public static final String PATIENT_DISCOVERY_ENTITY_ASYNC_RESP_SERVICE_NAME = "entitypatientdiscoveryasyncresp";
-    public static final String PATIENT_DISCOVERY_ENTITY_SECURED_ASYNC_RESP_SERVICE_NAME = "entitypatientdiscoverysecuredasyncresp";
-    public static final String PATIENT_DISCOVERY_ADAPTER_ASYNC_REQ_QUEUE_SERVICE_NAME = "adapterpatientdiscoveryasyncreqqueue";
-    public static final String PATIENT_DISCOVERY_ADAPTER_SECURED_ASYNC_REQ_QUEUE_SERVICE_NAME = "adapterpatientdiscoverysecuredasyncreqqueue";
-    public static final String PATIENT_DISCOVERY_ADAPTER_ASYNC_REQ_QUEUE_PROCESS_SERVICE_NAME = "adapterpatientdiscoverydeferredreqqueueprocess";
+    public static final String PATIENT_DISCOVERY_ENTITY_SECURED_ASYNC_RESP_SERVICE_NAME
+    = "entitypatientdiscoverysecuredasyncresp";
+    public static final String PATIENT_DISCOVERY_ADAPTER_ASYNC_REQ_QUEUE_SERVICE_NAME
+    = "adapterpatientdiscoveryasyncreqqueue";
+    public static final String PATIENT_DISCOVERY_ADAPTER_SECURED_ASYNC_REQ_QUEUE_SERVICE_NAME
+    = "adapterpatientdiscoverysecuredasyncreqqueue";
+    public static final String PATIENT_DISCOVERY_ADAPTER_ASYNC_REQ_QUEUE_PROCESS_SERVICE_NAME
+    = "adapterpatientdiscoverydeferredreqqueueprocess";
+
     // Patient Discovery Error Constants
     public static final String PATIENT_DISCOVERY_ANSWER_NOT_AVAIL_ERR_CODE = "AnswerNotAvailable";
     public static final String PATIENT_DISCOVERY_RESPONDER_BUSY_ERR_CODE = "ResponderBusy";
@@ -384,12 +416,15 @@ public class NhincConstants {
     public static final String PATIENT_DISCOVERY_ADDRESS_MORE_CODE = "PatientAdressRequested";
     public static final String PATIENT_DISCOVERY_TELCOM_MORE_CODE = "PatientTelecomRequested";
     public static final String PATIENT_DISCOVERY_BIRTH_PLACE_NAME_MORE_CODE = "LivingSubjectBirthPlaceNameRequested";
-    public static final String PATIENT_DISCOVERY_BIRTH_PLACE_ADDRESS_MORE_CODE = "LivingSubjectBirthPlaceAddressRequested";
+    public static final String PATIENT_DISCOVERY_BIRTH_PLACE_ADDRESS_MORE_CODE
+    = "LivingSubjectBirthPlaceAddressRequested";
     public static final String PATIENT_DISCOVERY_MOTHERS_MAIDEN_NAME_MORE_CODE = "MothersMaidenNameRequested";
     public static final String PATIENT_DISCOVERY_SSN_MORE_CODE = "SSNRequested";
     // XDR Constants
     public static final String ENTITY_XDR_SECURED_SERVICE_NAME = "entityxdrsecured";
     public static final String ENTITY_XDR_SERVICE_NAME = "entityxdr";
+    public static final String ENTITY_XDS_SECURED_SERVICE_NAME = "entityxdssecured";
+    public static final String ENTITY_XDS_SERVICE_NAME = "entityxds";
     public static final String ADAPTER_XDR_SERVICE_NAME = "adapterxdr";
     public static final String ADAPTER_XDR_SECURED_SERVICE_NAME = "adapterxdrsecured";
     public static final String ADAPTER_COMPONENT_XDR_SERVICE_NAME = "adaptercomponentxdr";
@@ -412,8 +447,10 @@ public class NhincConstants {
     public static final String ADAPTER_XDR_SECURED_ASYNC_REQ_ERROR_SERVICE_NAME = "adapterxdrsecuredasyncreqerror";
     public static final String ADAPTER_COMPONENT_XDR_RESPONSE_SERVICE_NAME = "adaptercomponentxdrresponse";
     public static final String XDR_ACK_STATUS_MSG = "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:RequestAccepted";
-    public static final String XDR_RESP_ACK_STATUS_MSG = "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:ResponseAccepted";
+    public static final String XDR_RESP_ACK_STATUS_MSG
+    = "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:ResponseAccepted";
     public static final String XDR_ACK_FAILURE_STATUS_MSG = "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Failure";
+
     // Administrative Distribution Constants
     public static final String ADMIN_DIST_SERVICE_NAME = "admindist";
     public static final String NHIN_ADMIN_DIST_SERVICE_NAME = "AdminDistribution";
@@ -435,25 +472,40 @@ public class NhincConstants {
     public static final String CORE_X12DS_GENERICBATCH_RESPONSE_SERVICE_NAME = "CORE_X12DSGenericBatchResponse";
 
     public static final String NHIN_CORE_X12DS_GENERICBATCH_REQUEST_SERVICE_NAME = "nhincore_x12dsgenericbatchrequest";
-    public static final String NHIN_CORE_X12DS_GENERICBATCH_REQUEST_SECURED_SERVICE_NAME = "nhincore_x12dsgenericbatchrequestwssecured";
-    public static final String ENTITY_CORE_X12DS_GENERICBATCH_REQUEST_SERVICE_NAME = "entitycore_x12dsgenericbatchrequest";
-    public static final String ENTITY_CORE_X12DS_GENERICBATCH_REQUEST_SECURED_SERVICE_NAME = "entitycore_x12dsgenericbatchrequestsecured";
-    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_REQUEST_SERVICE_NAME = "adaptercore_x12dsgenericbatchrequest";
-    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_REQUEST_SECURED_SERVICE_NAME = "adaptercore_x12dsgenericbatchrequestsecured";
-    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_REQUEST_NOOP_SERVICE_NAME = "adaptercore_x12dsgenericbatchrequestnoop";
-    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_REQUEST_JAVA_SERVICE_NAME = "adaptercore_x12dsgenericbatchrequestjava";
-    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_REQUEST_PROXY_SERVICE_NAME = "adaptercore_x12dsgenericbatchrequestproxybean";
+    public static final String NHIN_CORE_X12DS_GENERICBATCH_REQUEST_SECURED_SERVICE_NAME
+    = "nhincore_x12dsgenericbatchrequestwssecured";
+    public static final String ENTITY_CORE_X12DS_GENERICBATCH_REQUEST_SERVICE_NAME
+    = "entitycore_x12dsgenericbatchrequest";
+    public static final String ENTITY_CORE_X12DS_GENERICBATCH_REQUEST_SECURED_SERVICE_NAME
+    = "entitycore_x12dsgenericbatchrequestsecured";
+    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_REQUEST_SERVICE_NAME
+    = "adaptercore_x12dsgenericbatchrequest";
+    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_REQUEST_SECURED_SERVICE_NAME
+    = "adaptercore_x12dsgenericbatchrequestsecured";
+    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_REQUEST_NOOP_SERVICE_NAME
+    = "adaptercore_x12dsgenericbatchrequestnoop";
+    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_REQUEST_JAVA_SERVICE_NAME
+    = "adaptercore_x12dsgenericbatchrequestjava";
+    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_REQUEST_PROXY_SERVICE_NAME
+    = "adaptercore_x12dsgenericbatchrequestproxybean";
 
     public static final String NHIN_CORE_X12DS_GENERICBATCH_RESPONSE_SERVICE_NAME = "nhincore_x12dsgenericbatchresponse";
-    public static final String NHIN_CORE_X12DS_GENERICBATCH_RESPONSE_SECURED_SERVICE_NAME = "nhincore_x12dsgenericbatchresponsewssecured";
-    public static final String ENTITY_CORE_X12DS_GENERICBATCH_RESPONSE_SERVICE_NAME = "entitycore_x12dsgenericbatchresponse";
-    public static final String ENTITY_CORE_X12DS_GENERICBATCH_RESPONSE_SECURED_SERVICE_NAME = "entitycore_x12dsgenericbatchresponsesecured";
-    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_RESPONSE_SERVICE_NAME = "adaptercore_x12dsgenericbatchresponse";
-    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_RESPONSE_SECURED_SERVICE_NAME = "adaptercore_x12dsgenericbatchresponsesecured";
-    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_RESPONSE_NOOP_SERVICE_NAME = "adaptercore_x12dsgenericbatchresponsenoop";
-    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_RESPONSE_JAVA_SERVICE_NAME = "adaptercore_x12dsgenericbatchresponsejava";
-    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_RESPONSE_PROXY_SERVICE_NAME = "adaptercore_x12dsgenericbatchresponseproxybean";
-
+    public static final String NHIN_CORE_X12DS_GENERICBATCH_RESPONSE_SECURED_SERVICE_NAME
+    = "nhincore_x12dsgenericbatchresponsewssecured";
+    public static final String ENTITY_CORE_X12DS_GENERICBATCH_RESPONSE_SERVICE_NAME
+    = "entitycore_x12dsgenericbatchresponse";
+    public static final String ENTITY_CORE_X12DS_GENERICBATCH_RESPONSE_SECURED_SERVICE_NAME
+    = "entitycore_x12dsgenericbatchresponsesecured";
+    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_RESPONSE_SERVICE_NAME
+    = "adaptercore_x12dsgenericbatchresponse";
+    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_RESPONSE_SECURED_SERVICE_NAME
+    = "adaptercore_x12dsgenericbatchresponsesecured";
+    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_RESPONSE_NOOP_SERVICE_NAME
+    = "adaptercore_x12dsgenericbatchresponsenoop";
+    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_RESPONSE_JAVA_SERVICE_NAME
+    = "adaptercore_x12dsgenericbatchresponsejava";
+    public static final String ADAPTER_CORE_X12DS_GENERICBATCH_RESPONSE_PROXY_SERVICE_NAME
+    = "adaptercore_x12dsgenericbatchresponseproxybean";
     public static final String CORE_X12DS_GENERICBATCH_PROXY_CONFIG_FILE_NAME = "CORE_X12DSGenericBatchProxyConfig.xml";
     public static final String CORE_X12DS_ACK_ERROR_MSG = null;
     public static final String CORE_X12DS_ACK_ERROR_CODE = null;
@@ -478,15 +530,22 @@ public class NhincConstants {
     public static final String HIBERNATE_DIRECTCONFIG_REPOSITORY = "configdb.hibernate.cfg.xml";
     public static final String HIBERNATE_MESSAGE_MONITORING_REPOSITORY = "messagemonitoringdb.hibernate.cfg.xml";
     public static final String HIBERNATE_ADMINGUI_REPOSITORY = "admingui.hibernate.cfg.xml";
-    public static final String XDS_REGISTRY_ERROR_SEVERITY_WARNING = "urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Warning";
-    public static final String XDS_REGISTRY_ERROR_SEVERITY_ERROR = "urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Error";
+
+    public static final String XDS_REGISTRY_ERROR_SEVERITY_WARNING
+    = "urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Warning";
+    public static final String XDS_REGISTRY_ERROR_SEVERITY_ERROR
+    = "urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Error";
     public static final String DIRECT_SOAP_EDGE_SERVICE_NAME = "directsoapedge";
     // JMX configurations
     public static final String JMX_ENABLED_SYSTEM_PROPERTY = "org.connectopensource.enablejmx";
     public static final String JMX_CONFIGURATION_BEAN_NAME = "org.connectopensource.mbeans:type=Configuration";
-    public static final String JMX_DOCUMENT_QUERY_30_BEAN_NAME = "org.connectopensource.mbeans:type=DocumentQuery30WebServices";
-    public static final String JMX_DOCUMENT_QUERY_20_BEAN_NAME = "org.connectopensource.mbeans:type=DocumentQuery20WebServices";
-    public static final String JMX_PATIENT_DISCOVERY_10_BEAN_NAME = "org.connectopensource.mbeans:type=PatientDiscovery10WebServices";
+
+    public static final String JMX_DOCUMENT_QUERY_30_BEAN_NAME
+    = "org.connectopensource.mbeans:type=DocumentQuery30WebServices";
+    public static final String JMX_DOCUMENT_QUERY_20_BEAN_NAME
+    = "org.connectopensource.mbeans:type=DocumentQuery20WebServices";
+    public static final String JMX_PATIENT_DISCOVERY_10_BEAN_NAME
+    = "org.connectopensource.mbeans:type=PatientDiscovery10WebServices";
     // Standard Format for parsing String into Date
     public static final String DATE_PARSE_FORMAT = "yyyyMMddHHmmss";
     // Document Type property for UClient
@@ -496,7 +555,9 @@ public class NhincConstants {
     public static final String EJB_CORE_MODULE_NAME = "AuditRepositoryCore";
     // AuditRepository EJB Bean name
     public static final String AUDIT_LOGGER_EJB_BEAN_NAME = "AuditEJBLoggerImpl";
-    /* -- End Document Retrieve deferred Service Name -- */
+    /*
+     * -- End Document Retrieve deferred Service Name --
+     */
 
     // ReplyTo Header value for Nwhin Outbound messages
     public static final String WSA_REPLY_TO = "http://www.w3.org/2005/08/addressing/anonymous";
@@ -519,6 +580,55 @@ public class NhincConstants {
     public static final String PATIENT_CORR_HIBERNATE_BEAN = "patientCorrHibernateUtil";
     public static final String MSG_MONITOR_HIBERNATE_BEAN = "msgMonitorHibernateUtil";
     public static final String DIRECT_CONFIG_HIBERNATE_BEAN = "directConfigHibernateUtil";
+    public static final String PATIENT_DISCOVERY_HIBERNATE_BEAN = "patientDbHibernateUtil";
+
+    public static final String CUSTOM_HTTP_HEADERS = "customHttpHeaders";
+    public static final String KEEP_ALIVE_PROP = "connectionKeepAlive";
+    public static final String READ_HTTP_HEADERS = "readHttpHeaders";
+
+    public static final String HOK_ASSERTION_TYPE = "HOK-Assertion";
+    public static final String SV_ASSERTION_TYPE = "SV-Assertion";
+
+    // XML Eternal Entity Injection Features
+    public static final String FEATURE_GENERAL_ENTITIES = "http://xml.org/sax/features/external-general-entities";
+    public static final String FEATURE_PARAMETER_ENTITIES = "http://xml.org/sax/features/external-parameter-entities";
+    public static final String FEATURE_DISALLOW_DOCTYPE = "http://apache.org/xml/features/disallow-doctype-decl";
+    /**
+     * System property which controls the alias used to retrieve the private key to sign the SAML assertion and
+     * endorsing supporting token.
+     */
+    public static final String CLIENT_KEY_ALIAS = "CLIENT_KEY_ALIAS";
+    /**
+     * Default alias used to retrieve the private key to sign the SAML assertion and endorsing supporting token.
+     */
+    public static final String DEFAULT_CLIENT_KEY_ALIAS = "gateway";
+    // UDDI TLS version
+    public static final String UDDI_TLS = "UDDI.TLS";
+    // FHIR TLS version
+    public static final String FHIR_TLS = "FHIR.TLS";
+
+    public static final String DISABLE_CN_CHECK = "disableCNCheck";
+    public static final String ENABLE_HOSTNAME_VERIFICATION = "enableHostnameVerification";
+
+    // jaxb-hl7-context-name
+    public static final String JAXB_HL7_CONTEXT_NAME_XSD_QUERY = "oasis.names.tc.ebxml_regrep.xsd.query._3";
+    public static final String JAXB_HL7_CONTEXT_NAME_HL7_V3 = "org.hl7.v3";
+
+    // Doc Data Submission
+    public static final String NHINC_XDS_SERVICE_NAME = "DocDataSubmission";
+    public static final String ADAPTER_XDS_SERVICE_NAME = "adapterxdsservice";
+    public static final String ADAPTER_XDS_SECURED_SERVICE_NAME = "adapterxdsservicesecured";
+
+    // Patient Location Query
+    public static final String PLQ_NHIN_SERVICE_NAME = "PatientLocationQuery";
+    public static final String PLQ_ENTITY_SERVICE_NAME = "patientlocationqueryservice";
+    public static final String PLQ_ENTITYSECURED_SERVICE_NAME = "patientlocationqueryservicesecured";
+    public static final String PLQ_ADAPTER_SERVICE_NAME = "adapterplqservice";
+    public static final String PLQ_ADAPTERSECURED_SERVICE_NAME = "adapterplqservicesecured";
+    public static final String ADAPTER_PLQ_SERVICE_NAME = "adapterpatientlocationqueryservice";
+    public static final String ADAPTER_PLQ_SECURED_SERVICE_NAME = "adapterpatientlocationqueryservicesecured";
+
+    public static final String CA_AUTHORITY_PROPERTY_FILE = "caauthority";
 
     private NhincConstants() {
     }

@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.auditrepository.nhinc;
 
 import com.services.nhinc.schema.auditmessage.AuditMessageType;
@@ -31,6 +31,7 @@ import com.services.nhinc.schema.auditmessage.FindAuditEventsResponseType;
 import com.services.nhinc.schema.auditmessage.FindAuditEventsType;
 import gov.hhs.fha.nhinc.auditrepository.hibernate.AuditRepositoryDAO;
 import gov.hhs.fha.nhinc.auditrepository.hibernate.AuditRepositoryRecord;
+import gov.hhs.fha.nhinc.auditrepository.util.AuditUtils;
 import gov.hhs.fha.nhinc.common.auditlog.LogEventSecureRequestType;
 import gov.hhs.fha.nhinc.common.nhinccommon.AcknowledgementType;
 import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
@@ -38,22 +39,14 @@ import gov.hhs.fha.nhinc.common.nhinccommonadapter.FindCommunitiesAndAuditEvents
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
 import gov.hhs.fha.nhinc.properties.PropertyAccessException;
 import gov.hhs.fha.nhinc.properties.PropertyAccessor;
-import gov.hhs.fha.nhinc.transform.marshallers.JAXBContextHandler;
-import gov.hhs.fha.nhinc.util.JAXBUnmarshallingUtil;
-import gov.hhs.fha.nhinc.util.StreamUtils;
-import java.io.InputStream;
+import static gov.hhs.fha.nhinc.util.CoreHelpUtils.getDate;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.stream.XMLStreamException;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,10 +97,9 @@ public class AuditRepositoryOrchImpl {
      * This is the actual implementation for AuditLogMgr Service for AuditQuery returns the AuditEventsReponse.
      *
      * @param query the query
-     * @param assertion the assertion
      * @return the found FindAuditEventsResponseType
      */
-    public FindCommunitiesAndAuditEventsResponseType findAudit(FindAuditEventsType query, AssertionType assertion) {
+    public FindCommunitiesAndAuditEventsResponseType findAudit(FindAuditEventsType query) {
 
         FindCommunitiesAndAuditEventsResponseType auditEvents;
         String patientId = query.getPatientId();
@@ -118,14 +110,14 @@ public class AuditRepositoryOrchImpl {
         XMLGregorianCalendar xmlEndDate = query.getEndDateTime();
 
         if (xmlBeginDate != null) {
-            beginDate = convertXMLGregorianCalendarToDate(xmlBeginDate);
+            beginDate = getDate(xmlBeginDate);
         }
         if (xmlEndDate != null) {
-            endDate = convertXMLGregorianCalendarToDate(xmlEndDate);
+            endDate = getDate(xmlEndDate);
         }
 
         List<AuditRepositoryRecord> responseList = auditLogDao.queryAuditRepositoryOnCriteria(userId, patientId,
-                beginDate, endDate);
+            beginDate, endDate);
         LOG.debug("after query call to logDAO.");
         LOG.debug("responseList is not NULL ");
         auditEvents = buildAuditReponseType(responseList);
@@ -139,7 +131,8 @@ public class AuditRepositoryOrchImpl {
      * @param eventsList
      * @return CommunitiesAndFindAdutiEventResponse
      */
-    private FindCommunitiesAndAuditEventsResponseType buildAuditReponseType(List<AuditRepositoryRecord> auditRecList) {
+    private static FindCommunitiesAndAuditEventsResponseType buildAuditReponseType(
+        List<AuditRepositoryRecord> auditRecList) {
 
         FindCommunitiesAndAuditEventsResponseType auditResType = new FindCommunitiesAndAuditEventsResponseType();
         FindAuditEventsResponseType response = new FindAuditEventsResponseType();
@@ -153,18 +146,20 @@ public class AuditRepositoryOrchImpl {
             blobMessage = eachRecord.getMessage();
             if (blobMessage != null) {
                 try {
-                    auditMessageType = unMarshallBlobToAuditMess(blobMessage);
-                    response.getFindAuditEventsReturn().add(auditMessageType);
+                    auditMessageType = AuditUtils.unMarshallBlobToAuditMessage(blobMessage);
+                    if (auditMessageType != null) {
+                        response.getFindAuditEventsReturn().add(auditMessageType);
 
-                    if (auditMessageType.getAuditSourceIdentification().size() > 0
-                            && auditMessageType.getAuditSourceIdentification().get(0) != null
-                            && auditMessageType.getAuditSourceIdentification().get(0).getAuditSourceID() != null
-                            && auditMessageType.getAuditSourceIdentification().get(0).getAuditSourceID().length() > 0) {
-                        String tempCommunity = auditMessageType.getAuditSourceIdentification().get(0)
+                        if (CollectionUtils.isNotEmpty(auditMessageType.getAuditSourceIdentification())
+                            && auditMessageType.getAuditSourceIdentification().get(0) != null && StringUtils.isNotEmpty(
+                            auditMessageType.getAuditSourceIdentification().get(0).getAuditSourceID())) {
+                            String tempCommunity = auditMessageType.getAuditSourceIdentification().get(0)
                                 .getAuditSourceID();
-                        if (!auditResType.getCommunities().contains(tempCommunity)) {
-                            auditResType.getCommunities().add(tempCommunity);
-                            LOG.debug("Adding community " + tempCommunity);
+                            if (!auditResType.getCommunities().contains(tempCommunity)) {
+
+                                auditResType.getCommunities().add(tempCommunity);
+                                LOG.debug("Adding community: {}", tempCommunity);
+                            }
                         }
                     }
                 } finally {
@@ -179,50 +174,6 @@ public class AuditRepositoryOrchImpl {
 
         auditResType.setFindAuditEventResponse(response);
         return auditResType;
-    }
-
-    /**
-     * This method unmarshalls XML Blob to AuditMessage
-     *
-     * @param auditBlob
-     * @return AuditMessageType
-     */
-    private AuditMessageType unMarshallBlobToAuditMess(Blob auditBlob) {
-
-        AuditMessageType auditMessageType = null;
-        InputStream in = null;
-        try {
-            if (auditBlob != null && (int) auditBlob.length() > 0) {
-                JAXBUnmarshallingUtil util = new JAXBUnmarshallingUtil();
-                in = auditBlob.getBinaryStream();
-                JAXBContextHandler oHandler = new JAXBContextHandler();
-                JAXBContext jc = oHandler.getJAXBContext("com.services.nhinc.schema.auditmessage");
-                Unmarshaller unmarshaller = jc.createUnmarshaller();
-                JAXBElement jaxEle = (JAXBElement) unmarshaller.unmarshal(util.getSafeStreamReaderFromInputStream(in));
-                auditMessageType = (AuditMessageType) jaxEle.getValue();
-            }
-        } catch (SQLException | JAXBException | XMLStreamException e) {
-            LOG.error("Blob to Audit Message Conversion Error: {}", e.getLocalizedMessage(), e);
-        } finally {
-            StreamUtils.closeStreamSilently(in);
-        }
-
-        return auditMessageType;
-    }
-
-    /**
-     * This method converts an XMLGregorianCalendar date to java.util.Date
-     *
-     * @param xmlCalDate
-     * @return java.util.Date
-     */
-    private Date convertXMLGregorianCalendarToDate(XMLGregorianCalendar xmlCalDate) {
-        Calendar cal = Calendar.getInstance(Locale.getDefault());
-        LOG.info("cal.getTime() -> " + cal.getTime());
-        cal.setTime(xmlCalDate.toGregorianCalendar().getTime());
-        Date eventDate = cal.getTime();
-        LOG.info("eventDate -> " + eventDate);
-        return eventDate;
     }
 
     private String logToDatabase(LogEventSecureRequestType request, AssertionType assertion) {
@@ -243,7 +194,7 @@ public class AuditRepositoryOrchImpl {
     protected boolean isLoggingToDatabaseOn() {
         try {
             return PropertyAccessor.getInstance().getPropertyBoolean(NhincConstants.AUDIT_LOGGING_PROPERTY_FILE,
-                    NhincConstants.LOG_TO_DATABASE);
+                NhincConstants.LOG_TO_DATABASE);
         } catch (PropertyAccessException ex) {
             LOG.error("Unable to read the Audit logging property: {}", ex.getLocalizedMessage(), ex);
         }
@@ -253,7 +204,7 @@ public class AuditRepositoryOrchImpl {
     protected boolean isLoggingToAuditFileOn() {
         try {
             return PropertyAccessor.getInstance().getPropertyBoolean(NhincConstants.AUDIT_LOGGING_PROPERTY_FILE,
-                    NhincConstants.LOG_TO_FILE);
+                NhincConstants.LOG_TO_FILE);
         } catch (PropertyAccessException ex) {
             LOG.error("Unable to read the Audit logging property: {}", ex.getLocalizedMessage(), ex);
         }

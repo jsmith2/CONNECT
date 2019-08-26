@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,11 +26,13 @@
  */
 package gov.hhs.fha.nhinc.messaging.client;
 
+import gov.hhs.fha.nhinc.cryptostore.StoreUtil;
 import gov.hhs.fha.nhinc.messaging.client.interceptor.SoapResponseInInterceptor;
 import gov.hhs.fha.nhinc.messaging.service.BaseServiceEndpoint;
 import gov.hhs.fha.nhinc.messaging.service.ServiceEndpoint;
 import gov.hhs.fha.nhinc.messaging.service.decorator.TimeoutServiceEndpointDecorator;
 import gov.hhs.fha.nhinc.messaging.service.decorator.URLServiceEndpointDecorator;
+import gov.hhs.fha.nhinc.messaging.service.decorator.cxf.TLSClientServiceEndpointDecorator;
 import gov.hhs.fha.nhinc.webserviceproxy.WebServiceProxyHelper;
 import org.apache.cxf.phase.PhaseInterceptorChain;
 
@@ -65,10 +67,12 @@ public abstract class CONNECTBaseClient<T> implements CONNECTClient<T> {
      * @param url
      * @return
      */
-    protected ServiceEndpoint<T> configureBasePort(T port, String url, Integer timeout) {
+    protected ServiceEndpoint<T> configureBasePort(T port, String url, String exchangeName, Integer timeout) {
         ServiceEndpoint<T> serviceEndpoint = new BaseServiceEndpoint<>(port);
         serviceEndpoint = new URLServiceEndpointDecorator<>(serviceEndpoint, url);
         serviceEndpoint = new TimeoutServiceEndpointDecorator<>(serviceEndpoint, timeout);
+        serviceEndpoint = new TLSClientServiceEndpointDecorator<>(serviceEndpoint,
+            StoreUtil.getGatewayCertificateAlias(exchangeName), exchangeName);
 
         return serviceEndpoint;
     }

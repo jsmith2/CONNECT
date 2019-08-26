@@ -1,0 +1,44 @@
+<ui:composition xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+        <p:dialog id="refreshExchangeStatusDlg" header="Exchange Refresh Status" widgetVar="wvDlgRefreshExchangeStatus" modal="true" dynamic="true" draggable="false" closeOnEscape="true" resizable="false" width="900" height="auto">
+            <div class="content">
+                <h:form id="refreshExchangeStatusForm" class="form-horizontal" role="form">
+                    <h:panelGrid columns="1" styleClass="gridStatus" style="width:900px;">
+                       <p:panel style="width: auto;">
+                            <div class="table-responsive table-orgs">
+                                <p:dataTable id="dataTableExchangeDownload" var="exStatus" value="#{exchangeManagerBean.exDownloadStatus}"
+                                 paginator="false" styleClass="table table-striped table-status">
+                                    <p:column style="padding:0px;">
+                                        <h:outputText rendered="#{exStatus.success}" value="#{exStatus.exchangeName}" style="color: green" />
+                                        <h:outputText rendered="#{!exStatus.success}" value="#{exStatus.exchangeName}" style="color: red" />
+                                        <div class="dataList">
+                                            <p:dataList id="refreshStatus" value="#{exStatus.stepStatus}" var="step" type="unordered" itemType="none" paginator="false" styleClass="dataList">
+                                                <p:outputPanel rendered="#{step.isStepSuccessful() eq 'false'}" >
+                                                <div class="progress-bar progress-bar-danger" role="progressbar" style="width:33.33%">
+                                                #{step.message}
+                                            </div>
+                                            </p:outputPanel>
+                                            <p:outputPanel rendered="#{step.isStepSuccessful() eq 'true'}">
+                                                <div class="progress-bar progress-bar-success" role="progressbar" style="width:33.33%">
+                                                #{step.message}
+                                                </div>
+                                            </p:outputPanel>
+                                            </p:dataList>
+                                        </div>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                       </p:panel>
+                    </h:panelGrid>
+                </h:form>
+                <div class="form-group">
+                   <div class="col-sm-12">
+                        <div class="form-button-row">
+                          <p:commandButton id="closeRefreshExchange" styleClass="btn btn-primary pull-right" value="Close" onclick="PF('wvDlgRefreshExchangeStatus').hide()"  update=":tabviewExchange"/>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </p:dialog>
+</ui:composition>

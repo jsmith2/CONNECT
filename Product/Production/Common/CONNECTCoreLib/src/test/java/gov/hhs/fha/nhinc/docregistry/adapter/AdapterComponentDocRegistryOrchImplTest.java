@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,13 +23,13 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.docregistry.adapter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
-import gov.hhs.fha.nhinc.docrepository.adapter.model.Document;
+import gov.hhs.fha.nhinc.docrepository.adapter.model.DocumentMetadata;
 import gov.hhs.fha.nhinc.docrepository.adapter.model.DocumentQueryParams;
 import gov.hhs.fha.nhinc.docrepository.adapter.service.DocumentService;
 import gov.hhs.fha.nhinc.document.DocumentConstants;
@@ -87,21 +87,21 @@ public class AdapterComponentDocRegistryOrchImplTest {
     private DocumentService createDocumentService() {
         return new DocumentService() {
             @Override
-            public List<Document> documentQuery(DocumentQueryParams params) {
+            public List<DocumentMetadata> documentQuery(DocumentQueryParams params) {
 
-                ArrayList<Document> docs = new ArrayList<>();
+                ArrayList<DocumentMetadata> docs = new ArrayList<>();
                 if (params.getOnDemand() == null || params.getOnDemand() != null && params.getOnDemand()) {
-                    Document onDemandDoc = new Document();
+                    DocumentMetadata onDemandDoc = new DocumentMetadata();
                     onDemandDoc.setDocumentUniqueId("12345.11111");
 
                     docs.add(onDemandDoc);
                 }
 
                 if (params.getOnDemand() == null || !params.getOnDemand()) {
-                    Document stableDoc = new Document();
+                    DocumentMetadata stableDoc = new DocumentMetadata();
                     stableDoc.setDocumentUniqueId("12345.22222");
 
-                    Document stableDoc2 = new Document();
+                    DocumentMetadata stableDoc2 = new DocumentMetadata();
                     stableDoc2.setDocumentUniqueId("12345.33333");
 
                     docs.add(stableDoc);

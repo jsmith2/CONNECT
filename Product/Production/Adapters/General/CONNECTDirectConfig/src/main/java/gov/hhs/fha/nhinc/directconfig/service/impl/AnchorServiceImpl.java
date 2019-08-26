@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 /*
  Copyright (c) 2010, NHIN Direct Project
  All rights reserved.
@@ -77,6 +77,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.jws.WebService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,7 +110,7 @@ public class AnchorServiceImpl extends SpringBeanAutowiringSupport implements An
      */
     @Override
     public AddAnchorsResponse addAnchors(AddAnchors addAnchors) throws ConfigurationServiceException {
-        if (addAnchors.getAnchor() != null && addAnchors.getAnchor().size() > 0) {
+        if (CollectionUtils.isNotEmpty(addAnchors.getAnchor())) {
             for (Anchor anchor : addAnchors.getAnchor()) {
                 dao.add(anchor);
             }
@@ -158,7 +159,7 @@ public class AnchorServiceImpl extends SpringBeanAutowiringSupport implements An
         GetAnchorsResponse getAnchorsResponse = new GetAnchorsResponse();
         List<Anchor> retList;
 
-        if (getAnchors.getAnchorId() != null && getAnchors.getAnchorId().size() > 0) {
+        if (CollectionUtils.isNotEmpty(getAnchors.getAnchorId())) {
             retList = dao.listByIds(new ArrayList<>(getAnchors.getAnchorId()));
         } else {
             log.debug("No anchor ids were provided.");
@@ -175,7 +176,7 @@ public class AnchorServiceImpl extends SpringBeanAutowiringSupport implements An
      */
     @Override
     public GetAnchorsForOwnerResponse getAnchorsForOwner(GetAnchorsForOwner getAnchorsForOwner)
-            throws ConfigurationServiceException {
+        throws ConfigurationServiceException {
 
         List<String> owners = new ArrayList<>();
         owners.add(getAnchorsForOwner.getOwner());
@@ -191,7 +192,7 @@ public class AnchorServiceImpl extends SpringBeanAutowiringSupport implements An
      */
     @Override
     public GetIncomingAnchorsResponse getIncomingAnchors(GetIncomingAnchors getIncomingAnchors)
-            throws ConfigurationServiceException {
+        throws ConfigurationServiceException {
 
         GetIncomingAnchorsResponse getIncomingAnchorsResponse = new GetIncomingAnchorsResponse();
 
@@ -202,7 +203,7 @@ public class AnchorServiceImpl extends SpringBeanAutowiringSupport implements An
         Collection<Anchor> anchors = getAnchorsForOwner(getAnchorsForOwner).getReturn();
         Collection<Anchor> retList = new ArrayList<>();
 
-        if (anchors != null && anchors.size() > 0) {
+        if (CollectionUtils.isNotEmpty(anchors)) {
             for (Anchor anchor : anchors) {
                 if (anchor.isIncoming()) {
                     retList.add(anchor);
@@ -225,7 +226,7 @@ public class AnchorServiceImpl extends SpringBeanAutowiringSupport implements An
      */
     @Override
     public GetOutgoingAnchorsResponse getOutgoingAnchors(GetOutgoingAnchors getOutgoingAnchors)
-            throws ConfigurationServiceException {
+        throws ConfigurationServiceException {
 
         GetAnchorsForOwner getAnchorsForOwner = new GetAnchorsForOwner();
         getAnchorsForOwner.setOwner(getOutgoingAnchors.getOwner());
@@ -258,7 +259,7 @@ public class AnchorServiceImpl extends SpringBeanAutowiringSupport implements An
      */
     @Override
     public SetAnchorStatusForOwnerResponse setAnchorStatusForOwner(SetAnchorStatusForOwner setAnchorStatusForOwner)
-            throws ConfigurationServiceException {
+        throws ConfigurationServiceException {
 
         dao.setStatus(setAnchorStatusForOwner.getOwner(), setAnchorStatusForOwner.getStatus());
 
@@ -285,7 +286,7 @@ public class AnchorServiceImpl extends SpringBeanAutowiringSupport implements An
     public RemoveAnchorsResponse removeAnchors(RemoveAnchors removeAnchors) throws ConfigurationServiceException {
         Collection<Long> ids = removeAnchors.getAnchorId();
 
-        if (ids != null && ids.size() > 0) {
+        if (CollectionUtils.isNotEmpty(ids)) {
             dao.delete(new ArrayList<>(ids));
         } else {
             log.debug("No Anchor IDs specified for deletion.");
@@ -299,7 +300,7 @@ public class AnchorServiceImpl extends SpringBeanAutowiringSupport implements An
      */
     @Override
     public RemoveAnchorsForOwnerResponse removeAnchorsForOwner(RemoveAnchorsForOwner removeAnchorsForOwner)
-            throws ConfigurationServiceException {
+        throws ConfigurationServiceException {
 
         dao.delete(removeAnchorsForOwner.getOwner());
 

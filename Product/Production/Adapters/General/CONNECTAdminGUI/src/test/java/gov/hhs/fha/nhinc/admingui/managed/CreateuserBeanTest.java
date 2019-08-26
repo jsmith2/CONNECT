@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.admingui.managed;
 
 import static org.junit.Assert.assertTrue;
@@ -33,13 +33,12 @@ import gov.hhs.fha.nhinc.admingui.model.Login;
 import gov.hhs.fha.nhinc.admingui.services.LoginService;
 import gov.hhs.fha.nhinc.admingui.services.exception.UserLoginException;
 import gov.hhs.fha.nhinc.admingui.services.persistence.jpa.entity.UserLogin;
+import gov.hhs.fha.nhinc.properties.PropertyAccessException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import javax.servlet.http.HttpSession;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -53,29 +52,19 @@ public class CreateuserBeanTest {
 
     private final HttpSession session = mock(HttpSession.class);
 
-    public CreateuserBeanTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
     @Before
-    public void setUp() throws UserLoginException {
+    public void setUp() {
 
         LoginService loginservice = new LoginService() {
 
             @Override
-            public UserLogin login(Login login) throws UserLoginException {
+            public UserLogin login(Login login) {
                 return new UserLogin();
             }
 
             @Override
-            public UserLogin addUser(Login user, long role) throws UserLoginException {
+            public UserLogin addUser(Login user, long role, String firstName, String middleName,
+            String lastName, String transRoleDesc) throws UserLoginException {
                 return new UserLogin();
             }
 
@@ -87,6 +76,11 @@ public class CreateuserBeanTest {
             @Override
             public void deleteUser(UserLogin user) throws UserLoginException {
                 // do nothing
+            }
+
+            @Override
+            public Properties getUserRoleList() throws PropertyAccessException {
+                return new Properties();
             }
         };
 
@@ -103,13 +97,8 @@ public class CreateuserBeanTest {
 
     }
 
-    @After
-    public void tearDown() {
-    }
-
     @Test
-    @SuppressWarnings("empty-statement")
-    public void testCreateUser_Pass1() throws UserLoginException {
+    public void testCreateUser_Pass1() {
         assertTrue(createuserBean.createUser());
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,9 +26,15 @@
  */
 package gov.hhs.fha.nhinc.messaging.client;
 
+import gov.hhs.fha.nhinc.exchangemgr.ExchangeManager;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
+import gov.hhs.fha.nhinc.common.nhinccommon.NhinTargetSystemType;
 import gov.hhs.fha.nhinc.messaging.service.port.ServicePortDescriptor;
-import org.apache.commons.lang.StringUtils;
+import javax.xml.ws.WebServiceException;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author akong
@@ -36,28 +42,20 @@ import org.apache.commons.lang.StringUtils;
  */
 public class CONNECTCXFClientFactory extends CONNECTClientFactory {
 
+    private static final String ERROR = "Could not resolve URL for CONNECT Webservice Client";
+    private static final Logger LOG = LoggerFactory.getLogger(CONNECTCXFClientFactory.class);
     /**
      * Returns a CONNECTClient configured for secured invocation.
      */
     @Override
-    public <T> CONNECTClient<T> getCONNECTClientSecured(ServicePortDescriptor<T> portDescriptor, String url,
-            AssertionType assertion) {
-        return getCONNECTClientSecured(portDescriptor, url, assertion, null, null);
-    }
+    public <T> CONNECTClient<T> getCONNECTClientSecured(ServicePortDescriptor<T> portDescriptor, String url, String exchangeName,
+        AssertionType assertion) {
 
-    /**
-     * Returns a CONNECTClient configured for secured invocation. This method allows Ws-Addressing parameters to be
-     * passed for HIEM use.
-     */
-    @Override
-    public <T> CONNECTClient<T> getCONNECTClientSecured(ServicePortDescriptor<T> portDescriptor, String url,
-            AssertionType assertion, String wsAddressingTo, String subscriptionId) {
-        String wsAddressingToValue = wsAddressingTo;
-        // use the url if the wsaddressing is null or blank
-        if (StringUtils.isBlank(wsAddressingToValue)) {
-            wsAddressingToValue = url;
+        if (StringUtils.isEmpty(url)) {
+            throw new WebServiceException(ERROR);
         }
-        return new CONNECTCXFClientSecured<>(portDescriptor, url, assertion, wsAddressingToValue, subscriptionId);
+
+        return new CONNECTCXFClientSecured<>(portDescriptor, url, exchangeName, assertion);
     }
 
     /**
@@ -66,16 +64,30 @@ public class CONNECTCXFClientFactory extends CONNECTClientFactory {
      */
     @Override
     public <T> CONNECTClient<T> getCONNECTClientSecured(ServicePortDescriptor<T> portDescriptor,
-            AssertionType assertion, String url, String targetHomeCommunityId, String serviceName) {
-        return new CONNECTCXFClientSecured<>(portDescriptor, assertion, url, targetHomeCommunityId, serviceName);
+        AssertionType assertion, String url, NhinTargetSystemType target, String serviceName) {
+
+        if (StringUtils.isEmpty(url)) {
+            throw new WebServiceException(ERROR);
+        }
+        if (StringUtils.isBlank(target.getExchangeName())) {
+            LOG.debug("Set default NHIN default exchange ");
+            target.setExchangeName(ExchangeManager.getInstance().getDefaultExchange());
+        }
+        return new CONNECTCXFClientSecured<>(portDescriptor, assertion, url, target, serviceName);
     }
 
     /**
      * Returns a CONNECTClient configured for unsecured invocation.
      */
     @Override
-    public <T> CONNECTClient<T> getCONNECTClientUnsecured(ServicePortDescriptor<T> portDescriptor, String url,
-            AssertionType assertion) {
-        return new CONNECTCXFClientUnsecured<>(portDescriptor, url, assertion);
+    public <T> CONNECTClient<T> getCONNECTClientUnsecured(ServicePortDescriptor<T> portDescriptor, String url, String exchangeName,
+        AssertionType assertion) {
+
+        if (StringUtils.isEmpty(url)) {
+            throw new WebServiceException(ERROR);
+        }
+
+        return new CONNECTCXFClientUnsecured<>(portDescriptor, url, exchangeName, assertion);
     }
+
 }

@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,12 +23,15 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.patientcorrelation.nhinc.dao;
+
+import static gov.hhs.fha.nhinc.util.GenericDBUtils.closeSession;
 
 import gov.hhs.fha.nhinc.patientcorrelation.nhinc.model.CorrelatedIdentifiers;
 import gov.hhs.fha.nhinc.patientcorrelation.nhinc.persistence.HibernateUtil;
 import gov.hhs.fha.nhinc.persistence.HibernateUtilFactory;
+import gov.hhs.fha.nhinc.util.GenericDBUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -59,92 +62,33 @@ public class Storer {
 
     private static void localUpdatePatientCorrelation(CorrelatedIdentifiers correlatedIdentifers) {
         LOG.debug("-- Begin CorrelatedIdentifiersDao.localUpdatePatientCorrelation() ---");
-        SessionFactory fact = null;
-        Session sess = null;
-        Transaction trans = null;
 
         CorrelatedIdentifiers singleRecord = Retriever.retrieveSinglePatientCorrelation(correlatedIdentifers);
-
         singleRecord.setCorrelationExpirationDate(correlatedIdentifers.getCorrelationExpirationDate());
+        GenericDBUtils.save(getSession(), singleRecord);
 
-        try {
-            fact = getHibernateUtil().getSessionFactory();
-            if (fact != null) {
-                sess = fact.openSession();
-                trans = sess.beginTransaction();
-                sess.saveOrUpdate(singleRecord);
-            } else {
-                LOG.error("Session factory was null");
-            }
-        } finally {
-            if (trans != null) {
-                try {
-                    trans.commit();
-                } catch (HibernateException he) {
-                    LOG.error("Failed to commit transaction: {}", he.getMessage(), he);
-                }
-            }
-            if (sess != null) {
-                try {
-                    sess.close();
-                } catch (HibernateException he) {
-                    LOG.error("Failed to close session: {}", he.getMessage(), he);
-                }
-            }
-
-        }
         LOG.debug("-- End CorrelatedIdentifiersDao.localUpdatePatientCorrelation() ---");
     }
 
     private static void localAddPatientCorrelation(CorrelatedIdentifiers correlatedIdentifers) {
         LOG.debug("-- Begin CorrelatedIdentifiersDao.addPatientCorrelation() ---");
-        SessionFactory fact = null;
-        Session sess = null;
-        Transaction trans = null;
-
-        try {
-            fact = getHibernateUtil().getSessionFactory();
-            if (fact != null) {
-                sess = fact.openSession();
-                trans = sess.beginTransaction();
-                sess.saveOrUpdate(correlatedIdentifers);
-            } else {
-                LOG.error("Session factory was null");
-            }
-        } finally {
-            if (trans != null) {
-                try {
-                    trans.commit();
-                } catch (HibernateException he) {
-                    LOG.error("Failed to commit transaction: {}", he.getMessage(), he);
-                }
-            }
-            if (sess != null) {
-                try {
-                    sess.close();
-                } catch (HibernateException he) {
-                    LOG.error("Failed to close session: {}", he.getMessage(), he);
-                }
-            }
-
-        }
+        GenericDBUtils.save(getSession(), correlatedIdentifers);
         LOG.debug("-- End CorrelatedIdentifiersDao.addPatientCorrelation() ---");
     }
 
     public static void removePatientCorrelation(CorrelatedIdentifiers correlatedIdentifers) {
         LOG.debug("-- Begin CorrelatedIdentifiersDao.removePatientCorrelation() ---");
-        SessionFactory fact = null;
         Session sess = null;
         Transaction trans = null;
 
         String deleteCorrelatedIdentifiersSQL = "delete from correlatedidentifiers "
-                + "where ((PatientAssigningAuthorityId = :patientAssigningAuthority " + "and PatientId= :patientId "
-                + "and CorrelatedPatientAssignAuthId= :correlatedPatientAssignAuthId "
-                + "and CorrelatedPatientId= :correlatedPatientId) "
-                + "or (PatientAssigningAuthorityId= :correlatedPatientAssignAuthId "
-                + "and PatientId= :correlatedPatientId "
-                + "and CorrelatedPatientAssignAuthId= :patientAssigningAuthority "
-                + "and CorrelatedPatientId= :patientId))";
+            + "where ((PatientAssigningAuthorityId = :patientAssigningAuthority " + "and PatientId= :patientId "
+            + "and CorrelatedPatientAssignAuthId= :correlatedPatientAssignAuthId "
+            + "and CorrelatedPatientId= :correlatedPatientId) "
+            + "or (PatientAssigningAuthorityId= :correlatedPatientAssignAuthId "
+            + "and PatientId= :correlatedPatientId "
+            + "and CorrelatedPatientAssignAuthId= :patientAssigningAuthority "
+            + "and CorrelatedPatientId= :patientId))";
 
         // get the SQL bind values
         String paramPatientAssigningAuthority = correlatedIdentifers.getPatientAssigningAuthorityId();
@@ -152,53 +96,46 @@ public class Storer {
         String paramCorrelatedPatientAssignAuthId = correlatedIdentifers.getCorrelatedPatientAssigningAuthorityId();
         String paramCorrelatedPatientId = correlatedIdentifers.getCorrelatedPatientId();
         try {
-            fact = getHibernateUtil().getSessionFactory();
-            if (fact != null) {
-                sess = fact.openSession();
-                if (sess != null) {
-                    trans = sess.beginTransaction();
-                    Query query = sess.createSQLQuery(deleteCorrelatedIdentifiersSQL);
-                    query.setString("patientAssigningAuthority", paramPatientAssigningAuthority);
-                    query.setString("patientId", paramPatientId);
-                    query.setString("correlatedPatientAssignAuthId", paramCorrelatedPatientAssignAuthId);
-                    query.setString("correlatedPatientId", paramCorrelatedPatientId);
-                    // delete the rows
-                    int rowsDeleted = query.executeUpdate();
-                    // commit the trasaction
-                    trans.commit();
-                    if (rowsDeleted != 0) {
-                        LOG.debug("Total Rows Deleted from table correlatedidentifiers -->" + rowsDeleted);
-                    }
-                } else {
-                    LOG.error("Unable to create session...");
+            sess = getSession();
+            if (null != sess) {
+                trans = sess.beginTransaction();
+                Query query = sess.createSQLQuery(deleteCorrelatedIdentifiersSQL);
+                query.setString("patientAssigningAuthority", paramPatientAssigningAuthority);
+                query.setString("patientId", paramPatientId);
+                query.setString("correlatedPatientAssignAuthId", paramCorrelatedPatientAssignAuthId);
+                query.setString("correlatedPatientId", paramCorrelatedPatientId);
+                // delete the rows
+                int rowsDeleted = query.executeUpdate();
+                // commit the trasaction
+                trans.commit();
+                if (rowsDeleted != 0) {
+                    LOG.debug("Total Rows Deleted from table correlatedidentifiers -->" + rowsDeleted);
                 }
-            } else {
-                LOG.error("Unable to create Factory...");
             }
-        } catch (HibernateException he) {
-            LOG.error(he.getLocalizedMessage(), he);
+        } catch (HibernateException | NullPointerException ex) {
+            GenericDBUtils.rollbackTransaction(trans);
+            LOG.error("error encounter during the removePatientCorrelation: {}", ex.getLocalizedMessage(), ex);
         } finally {
-            if (trans != null && trans.getStatus() == org.hibernate.resource.transaction.spi.TransactionStatus.ACTIVE) {
-                try {
-                    trans.rollback();
-                } catch (HibernateException he) {
-                    LOG.error("Failed to commit transaction: {}", he.getMessage(), he);
-                }
-            }
-            if (sess != null) {
-                try {
-                    sess.close();
-                } catch (HibernateException he) {
-                    LOG.error("Failed to close session: {}", he.getMessage(), he);
-                }
-            }
-
+            closeSession(sess);
         }
         LOG.debug("-- End CorrelatedIdentifiersDao.removePatientCorrelation() ---");
     }
 
-    protected static HibernateUtil getHibernateUtil() {
-        return HibernateUtilFactory.getPatientCorrHibernateUtil();
+    protected static Session getSession() {
+        HibernateUtil util = HibernateUtilFactory.getPatientCorrHibernateUtil();
+        if (null == util) {
+            LOG.error("Session factory was null");
+            return null;
+        }
+
+        SessionFactory fact = null;
+        fact = util.getSessionFactory();
+        if (null == fact) {
+            LOG.error("Failed to obtain a session from the sessionFactory");
+            return null;
+        }
+
+        return fact.openSession();
     }
 
 }

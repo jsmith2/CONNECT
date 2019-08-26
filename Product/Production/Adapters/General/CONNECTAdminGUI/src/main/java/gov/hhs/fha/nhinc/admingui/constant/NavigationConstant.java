@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,9 +43,16 @@ public class NavigationConstant {
     public static final String CM_PAGE = "connectionManager";
     public static final String PROPERTIES_PAGE = "properties";
     public static final String PATIENT_SEARCH_PAGE = "patientDiscovery";
-    public static final String AUDIT_SEARCH_PAGE = "auditLog";
     public static final String CUSTOM_ERROR_PAGE = "customerror";
     public static final String CUSTOM_ERROR_XHTML = "/customerror.xhtml";
+    public static final String CERTIFICATE_MGMT_PAGE = "certificateManager";
+    public static final String CERTIFICATE_MGMT_XHTML = "/certificateManager.xhtml";
+    public static final String LOAD_TEST_DATA_PAGE = "loadTestData";
+    public static final String LOAD_TEST_DATA_XHTML = "/loadTestData.xhtml";
+    public static final String LOGGING_PAGE = "auditLog";
+    public static final String LOGGING_XHTML = "/auditLog.xhtml";
+    public static final String EM_PAGE = "exchangeManager";
+
 
     public static final int DIRECT_DOMAIN_TAB = 0;
     public static final int DIRECT_SETTING_TAB = 1;
@@ -55,8 +62,16 @@ public class NavigationConstant {
     public static final int ACCOUNT_MGMT_USERACC_TAB = 0;
     public static final int ACCOUNT_MGMT_MANAGEROLE_TAB = 1;
 
-    public static final int GATEWAY_DASHBOARD_TAB = 0;
-    public static final int GATEWAY_REMOTELIST_TAB = 1;
+    public static final int KEYSTORE_MGMT_TAB = 0;
+    public static final int TRUSTSTORE_MGMT_TAB = 1;
+    public static final int IMPORT_CERT_MGMT_TAB = 2;
+
+    public static final int LOAD_TEST_DATA_PATIENT_TAB = 0;
+    public static final int LOAD_TEST_DATA_DOCUMENT_TAB = 1;
+
+    public static final int AUDIT_LOG_TAB = 0;
+    public static final int ERROR_LOG_TAB = 1;
+
     /**
      * Use this class to hold constant variables
      */

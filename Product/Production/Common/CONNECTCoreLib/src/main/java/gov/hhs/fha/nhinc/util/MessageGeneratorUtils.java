@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,18 +23,27 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.util;
 
 import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
 import gov.hhs.fha.nhinc.common.nhinccommon.NhinTargetCommunitiesType;
 import gov.hhs.fha.nhinc.common.nhinccommon.NhinTargetCommunityType;
 import gov.hhs.fha.nhinc.common.nhinccommon.NhinTargetSystemType;
+import gov.hhs.fha.nhinc.docrepository.adapter.DocRepoConstants;
+import gov.hhs.fha.nhinc.document.DocumentConstants;
+import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
 import gov.hhs.fha.nhinc.nhinclib.NullChecker;
 import gov.hhs.fha.nhinc.transform.marshallers.Marshaller;
 import gov.hhs.fha.nhinc.wsa.WSAHeaderHelper;
+import gov.hhs.healthit.nhin.XDRAcknowledgementType;
 import javax.xml.namespace.QName;
 import oasis.names.tc.ebxml_regrep.xsd.query._3.AdhocQueryRequest;
+import oasis.names.tc.ebxml_regrep.xsd.rs._3.ObjectFactory;
+import oasis.names.tc.ebxml_regrep.xsd.rs._3.RegistryError;
+import oasis.names.tc.ebxml_regrep.xsd.rs._3.RegistryErrorList;
+import oasis.names.tc.ebxml_regrep.xsd.rs._3.RegistryResponseType;
+import org.apache.commons.collections.CollectionUtils;
 import org.hl7.v3.PRPAIN201305UV02;
 import org.w3c.dom.Element;
 
@@ -76,10 +85,11 @@ public class MessageGeneratorUtils {
     public NhinTargetSystemType convertFirstToNhinTargetSystemType(NhinTargetCommunitiesType targets) {
         NhinTargetSystemType nhinTargetSystem = new NhinTargetSystemType();
 
-        if (targets != null && targets.getNhinTargetCommunity() != null
-                && targets.getNhinTargetCommunity().size() > 0) {
+        if (targets != null
+            && CollectionUtils.isNotEmpty(targets.getNhinTargetCommunity())) {
             nhinTargetSystem.setHomeCommunity(targets.getNhinTargetCommunity().get(0).getHomeCommunity());
             nhinTargetSystem.setUseSpecVersion(targets.getUseSpecVersion());
+            nhinTargetSystem.setExchangeName(targets.getExchangeName());
         }
 
         return nhinTargetSystem;
@@ -162,7 +172,7 @@ public class MessageGeneratorUtils {
     /**
      * This message generates a messageId if it is not present and set it in the assertion object. If present it will
      * format the messsageId and return it back.
-     *
+     * <p>
      * Note: AssertionType is a required element. It can never be null.
      *
      * @param assertion
@@ -179,4 +189,141 @@ public class MessageGeneratorUtils {
         }
         return assertion;
     }
+
+    public RegistryResponseType createRegistryErrorResponse(String errorMsg, String errorCode, String status) {
+        RegistryErrorList regErrList = new RegistryErrorList();
+        regErrList.setHighestSeverity(NhincConstants.XDS_REGISTRY_ERROR_SEVERITY_ERROR);
+
+        RegistryError regErr = new RegistryError();
+        regErrList.getRegistryError().add(regErr);
+        regErr.setCodeContext(errorMsg);
+        regErr.setErrorCode(errorCode);
+        regErr.setSeverity(NhincConstants.XDS_REGISTRY_ERROR_SEVERITY_ERROR);
+
+        RegistryResponseType response = new RegistryResponseType();
+        response.setRegistryErrorList(regErrList);
+        response.setStatus(status);
+
+        return response;
+    }
+
+    /**
+     * Create a RegistryErrorResponse with severity set to error. The errorCode is set to policy check error.
+     *
+     * @return the generated RegistryErrorResponse message
+     */
+    public RegistryResponseType createFailedPolicyCheckResponse() {
+        return createRegistryErrorResponse(DocumentConstants.XDR_POLICY_ERROR_CONTEXT,
+            DocumentConstants.XDR_POLICY_ERROR, DocumentConstants.XDS_SUBMISSION_RESPONSE_STATUS_FAILURE);
+    }
+
+    /**
+     * Create a RegistryErrorResponse with severity set to error. The errorCode is set to registry error and status set
+     * to failure.
+     *
+     * @return the generated RegistryErrorResponse message
+     */
+    public RegistryResponseType createRegistryErrorResponse() {
+        return createRegistryErrorResponse("Failed to retrieve document from request.",
+            DocumentConstants.XDS_REGISTRY_ERROR, DocumentConstants.XDS_SUBMISSION_RESPONSE_STATUS_FAILURE);
+    }
+
+    /**
+     * Create a XDRAcknowledgementType containing a RegistryErrorResponse with severity set to error. The errorCode is
+     * set to registry error and status set to failure.
+     *
+     * @return the generated XDRAcknowledgementType message
+     */
+    public XDRAcknowledgementType createXDRAckWithRegistryErrorResponse() {
+        XDRAcknowledgementType response = new XDRAcknowledgementType();
+        response.setMessage(createRegistryErrorResponse());
+
+        return response;
+    }
+
+    /**
+     * Create a RegistryErrorResponse with severity set to error. The error code is set to missing document and status
+     * set to failure.
+     *
+     * @return the generated RegistryResponseType message
+     */
+    public RegistryResponseType createMissingDocumentRegistryResponse() {
+        return createRegistryErrorResponse("Failed to retrieve document for sending.",
+            DocumentConstants.XDS_MISSING_DOCUMENT, DocumentConstants.XDS_SUBMISSION_RESPONSE_STATUS_FAILURE);
+    }
+
+    /**
+     * Create a RegistryErrorResponse with severity set to error. The error code is set to registry error and the status
+     * set to ack failure.
+     *
+     * @param errorMsg
+     * @return the generated RegistryResponseType message
+     */
+    public RegistryResponseType createRegistryErrorResponseWithAckFailure(String errorMsg) {
+        return createRegistryErrorResponse(errorMsg, DocumentConstants.XDS_REGISTRY_ERROR,
+            NhincConstants.XDR_ACK_FAILURE_STATUS_MSG);
+    }
+
+    /**
+     * Create a RegistryErrorResponse with severity set to error. The error code is set to registry busy and the status
+     * set to failure.
+     *
+     * @param errorMsg
+     * @return the generated RegistryResponseType message
+     */
+    public RegistryResponseType createRegistryBusyErrorResponse(String errorMsg) {
+        return createRegistryErrorResponse(errorMsg, DocumentConstants.XDS_REGISTRY_BUSY,
+            DocumentConstants.XDS_SUBMISSION_RESPONSE_STATUS_FAILURE);
+    }
+
+    /**
+     * Create a XDRAcknowledgementType with a message containing a RegistryErrorResponse with an ack failure status.
+     *
+     * @param errorMsg
+     * @return the generated XDRAcknowledgementType message
+     */
+    public XDRAcknowledgementType createRegistryErrorXDRAcknowledgementType(String errorMsg) {
+        XDRAcknowledgementType response = new XDRAcknowledgementType();
+
+        RegistryResponseType regResponse = createRegistryErrorResponseWithAckFailure(errorMsg);
+        response.setMessage(regResponse);
+
+        return response;
+    }
+
+    /**
+     * Create a XDRAcknowledgementType with a message containing a RegistryErrorResponse with a missing document error
+     * code.
+     *
+     * @return the generated XDRAcknowledgementType message
+     */
+    public XDRAcknowledgementType createMissingDocumentXDRAcknowledgementType() {
+        XDRAcknowledgementType response = new XDRAcknowledgementType();
+
+        RegistryResponseType regResponse = createMissingDocumentRegistryResponse();
+        response.setMessage(regResponse);
+
+        return response;
+    }
+
+    /**
+     * Create a XDRAcknowledgementType with a message containing a RegistryErrorResponse with a policy check error.
+     *
+     * @return the generated XDRAcknowledgementType message
+     */
+    public XDRAcknowledgementType createFailedPolicyCheckXDRAcknowledgementType() {
+        XDRAcknowledgementType response = new XDRAcknowledgementType();
+
+        RegistryResponseType regResponse = createFailedPolicyCheckResponse();
+        response.setMessage(regResponse);
+
+        return response;
+    }
+
+    public RegistryResponseType createRegistryResponseSuccess() {
+        RegistryResponseType registryResponse = new ObjectFactory().createRegistryResponseType();
+        registryResponse.setStatus(DocRepoConstants.XDS_RETRIEVE_RESPONSE_STATUS_SUCCESS);
+        return registryResponse;
+    }
+
 }

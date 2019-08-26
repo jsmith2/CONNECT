@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   /*
-   * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+   * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
    * All rights reserved.
    *
    * Redistribution and use in source and binary forms, with or without
@@ -41,11 +41,7 @@
                     <h:inputHidden id="csrfToken" value="#{csrfBean.token}"/>
                     <p:panelMenu style="width:100%">
                         <p:submenu label="Gateway Status" styleClass="sidebar-dkblue">
-                            <p:menuitem value="Dashboard" action="#{tabBean.navigateToGatewayDashboardTab()}" styleClass="glyphicon glyphicon-dashboard" />
-                            <ui:remove>
-                            <!-- Under development <p:menuitem value="Performance Statistics" action="#{tabBean.setDashboardTabIndexNavigate(1)}" styleClass="glyphicon glyphicon-stats" /> -->
-                            </ui:remove>
-                            <p:menuitem value="Remote Gateway List" action="#{tabBean.navigateToGatewayRemoteListTab()}" styleClass="glyphicon glyphicon-list" />
+                            <p:menuitem value="Dashboard" action="#{tabBean.navigateToStatusDashBoard()}" styleClass="glyphicon glyphicon-dashboard" />
                         </p:submenu>
                         <p:submenu rendered="#{applicationBean.isDirectEnabled()}" label="Direct Configuration" styleClass="sidebar-purple">
                             <p:menuitem value="Domains" action="#{tabBean.navigateToDirectDomainTab()}" styleClass="glyphicon glyphicon-globe" />
@@ -57,12 +53,19 @@
                             <p:menuitem value="User Accounts" action="#{tabBean.navigateToAccountMgmtUserAccountTab()}" styleClass="glyphicon glyphicon-user" />
                             <p:menuitem value="Manage Roles" action="#{tabBean.navigateToAccountMgmtManageRoleTab()}" styleClass="glyphicon glyphicon-lock" />
                         </p:submenu>
-                        <p:submenu label="Connection Management" styleClass="sidebar-red" >
-                            <p:menuitem value="View External Connections" action="#{tabBean.navigateToConnectionManagement()}" styleClass="glyphicon glyphicon-eye-open" />
+                        <p:submenu label="Exchange Management" styleClass="sidebar-dkgreen" >
+                            <p:menuitem value="View Exchange Services" action="#{tabBean.navigateToExchangeManagement()}" styleClass="glyphicon glyphicon-eye-open" />
                         </p:submenu>
-                        <p:submenu label="Properties" styleClass="sidebar-green" >
+                        <p:submenu label="Certificate Management" styleClass="sidebar-yellow" >
+                            <p:menuitem value="Manage KeyStore" action="#{tabBean.navigateToKeyStoreCertManagement()}" styleClass="glyphicon glyphicon-list" />
+                            <p:menuitem value="Manage TrustStore" action="#{tabBean.navigateToTrustStoreCertManagement()}" styleClass="glyphicon glyphicon-list" />
+                            <p:menuitem value="Import Wizard" action="#{tabBean.navigateToImportCertManagement()}" styleClass="glyphicon glyphicon-list" />
+                        </p:submenu>
+                      <p:submenu label="Properties" styleClass="sidebar-green" >
                             <p:menuitem value="Gateway" action="#{tabBean.navigateToGatewayPropTab()}" styleClass="glyphicon glyphicon-list" />
                             <p:menuitem value="Adapter" action="#{tabBean.navigateToAdapterPropTab()}" styleClass="glyphicon glyphicon-list-alt" />
+                            <p:menuitem value="Audit" action="#{tabBean.navigateToAuditPropTab()}" styleClass="glyphicon glyphicon-list-alt" />
+                            <p:menuitem value="Internal Endpoints" action="#{tabBean.navigateToInternalEndpointsPropTab()}" styleClass="glyphicon glyphicon-list-alt" />
                         </p:submenu>
                         <p:submenu rendered="#{applicationBean.fhirEnabled}" label="FHIR" styleClass="sidebar-orange">
                             <p:menuitem value="Resources" action="#{tabBean.navigateToFhir()}" styleClass="glyphicon glyphicon-fire" />
@@ -70,8 +73,13 @@
                         <p:submenu label="Cross-Gateway Query Client" styleClass="sidebar-teal" >
                             <p:menuitem value="Patient Search" action="#{tabBean.navigateToPatientDiscoveryTab()}" styleClass="glyphicon glyphicon-zoom-in" />
                         </p:submenu>
-                        <p:submenu label="AuditSearch" styleClass="sidebar-magenta" >
-                            <p:menuitem value="Audit Search" action="#{tabBean.navigateToAuditSearchTab()}" styleClass="glyphicon glyphicon-zoom-in" />
+                        <p:submenu label="Logging" styleClass="sidebar-magenta" >
+                            <p:menuitem value="Audit Search" action="#{tabBean.navigateToAuditLogTab()}" styleClass="glyphicon glyphicon-zoom-in" />
+                            <p:menuitem value="Failure Logging" action="#{tabBean.navigateToErrorLogTab()}" styleClass="glyphicon glyphicon-zoom-in" />
+                        </p:submenu>
+                        <p:submenu label="Test Data" styleClass="sidebar-amethyst" >
+                            <p:menuitem value="Test Patients" action="#{tabBean.navigateToLTDPatientTab()}" styleClass="glyphicon glyphicon-list" />
+                            <p:menuitem value="Test Documents" action="#{tabBean.navigateToLTDDocumentTab()}" styleClass="glyphicon glyphicon-list" />
                         </p:submenu>
                     </p:panelMenu>
                 </h:form>

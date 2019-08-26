@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.admingui.hibernate;
 
 import gov.hhs.fha.nhinc.admingui.hibernate.dao.UserLoginDAO;
@@ -31,20 +31,18 @@ import gov.hhs.fha.nhinc.admingui.jee.jsf.UserAuthorizationListener;
 import gov.hhs.fha.nhinc.admingui.model.Login;
 import gov.hhs.fha.nhinc.admingui.services.LoginService;
 import gov.hhs.fha.nhinc.admingui.services.PasswordService;
-import gov.hhs.fha.nhinc.admingui.services.exception.PasswordServiceException;
 import gov.hhs.fha.nhinc.admingui.services.exception.UserLoginException;
-import gov.hhs.fha.nhinc.admingui.services.impl.SHA2PasswordService;
 import gov.hhs.fha.nhinc.admingui.services.persistence.jpa.entity.UserLogin;
 import gov.hhs.fha.nhinc.admingui.services.persistence.jpa.entity.UserRole;
-
-import java.io.IOException;
+import gov.hhs.fha.nhinc.properties.PropertyAccessException;
+import gov.hhs.fha.nhinc.properties.PropertyAccessor;
+import gov.hhs.fha.nhinc.util.SHA2PasswordUtil;
+import gov.hhs.fha.nhinc.util.UtilException;
 import java.util.List;
-
+import java.util.Properties;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,50 +54,52 @@ import org.springframework.stereotype.Service;
 public class LoginServiceImpl implements LoginService {
 
     public static final String CONNECT_ADMIN_USER = "CONNECTAdmin";
-
-    private static final Logger LOG = LoggerFactory.getLogger(LoginServiceImpl.class);
+    private static final String ROLE_PROPERTIES_FILENAME = "roleCodes";
 
     @Autowired
     private UserLoginDAO userLoginDAO;
     /**
      * The credential service.
      */
-    private final PasswordService credentialService = new SHA2PasswordService();
-    /**
-     *
-     * @param userLoginDao
-     */
-    LoginServiceImpl(UserLoginDAO userLoginDao) {
-        userLoginDAO = userLoginDao;
-    }
-    
+    @Autowired
+    private PasswordService credentialService;
+
     /**
      * Default constructor
      */
     public LoginServiceImpl() {
-      //Spring can not instantiate without default constructor
+        //Spring can not instantiate without default constructor
     }
 
-    /*
-     * (non-Javadoc)
+
+    /**
+     * Gets the current JPA Entity from the database if the user was successfully authenticated.
      *
-     * @see gov.hhs.fha.nhinc.admingui.services.LoginService#login(gov.hhs.fha.nhinc .admingui.model.Login)
+     * Returns null if the credentials are invalid, or not provided.
      */
     @Override
-    public UserLogin login(Login login) throws UserLoginException {
-        UserLogin user = userLoginDAO.login(login);
-        if (user != null && user.getSha2() != null && user.getSalt() != null && login.getPassword() != null) {
-            try {
-                LOG.info("Prepare to check user credential");
-                boolean loggedIn = credentialService.checkPassword(user.getSha2().getBytes(),
-                    login.getPassword().getBytes(), user.getSalt().getBytes());
-                if (!loggedIn) {
-                    user = null;
-                }
-            } catch (PasswordServiceException e) {
-                throw new UserLoginException("Error while trying to login.", e);
-            }
+    public UserLogin login(Login login) {
+
+        // Credentials not provided
+        if (login == null || StringUtils.isBlank(login.getPassword()) || StringUtils.isBlank(login.getUserName())) {
+            return null;
         }
+
+        UserLogin user = userLoginDAO.login(login);
+
+        // User not found, or password was not set in the database
+        if (user == null || StringUtils.isBlank(user.getSha2()) || StringUtils.isBlank(user.getSalt())) {
+            return null;
+        }
+
+        // Passwords match
+        boolean loggedIn = SHA2PasswordUtil.checkPassword(user.getSha2().getBytes(),
+            login.getPassword().getBytes(), user.getSalt().getBytes());
+
+        if (!loggedIn) {
+            user = null;
+        }
+
         return user;
     }
 
@@ -109,15 +109,16 @@ public class LoginServiceImpl implements LoginService {
      * @see gov.hhs.fha.nhinc.admingui.services.LoginService#addUser(gov.hhs.fha.nhinc.admingui.model.User)
      */
     @Override
-    public UserLogin addUser(Login user, long role) throws UserLoginException {
+    public UserLogin addUser(Login user, long role, String firstName, String middleName,
+            String lastName, String transRoleDesc) throws UserLoginException {
         boolean isCreateUser;
         String passwordHash;
         byte[] saltValue;
         try {
             saltValue = credentialService.generateRandomSalt();
-            passwordHash = new String(credentialService.calculateHash(saltValue, user.getPassword().getBytes()));
+            passwordHash = new String(SHA2PasswordUtil.calculateHash(saltValue, user.getPassword().getBytes()));
 
-        } catch (PasswordServiceException | IOException e) {
+        } catch (UtilException e) {
             throw new UserLoginException("Error while calculating hash.", e);
         }
 
@@ -125,6 +126,11 @@ public class LoginServiceImpl implements LoginService {
         userLoginEntity.setUserName(user.getUserName());
         userLoginEntity.setSha2(passwordHash);
         userLoginEntity.setSalt(new String(saltValue));
+        userLoginEntity.setFirstName(firstName);
+        userLoginEntity.setMiddleName(middleName);
+        userLoginEntity.setLastName(lastName);
+        userLoginEntity.setTransactionRole(getUserRoleCode(transRoleDesc));
+        userLoginEntity.setTransactionRoleDesc(transRoleDesc);
 
         UserRole userRole = getUserRole(role);
 
@@ -163,9 +169,24 @@ public class LoginServiceImpl implements LoginService {
         return userLoginDAO.getRole(role);
     }
 
-    private UserLogin getCurrentUser() {
+    private static UserLogin getCurrentUser() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
         return (UserLogin) session.getAttribute(UserAuthorizationListener.USER_INFO_SESSION_ATTRIBUTE);
+    }
+
+    private String getUserRoleCode(String roleDesc) {
+        String roleDescNoSpaces = roleDesc.replaceAll(" ", "_");
+        return getPropAccessor().getProperty(ROLE_PROPERTIES_FILENAME, roleDescNoSpaces, null);
+    }
+
+    @Override
+    public Properties getUserRoleList() throws PropertyAccessException {
+        getPropAccessor().setPropertyFile(ROLE_PROPERTIES_FILENAME);
+        return getPropAccessor().getProperties(ROLE_PROPERTIES_FILENAME);
+    }
+
+    protected PropertyAccessor getPropAccessor() {
+        return PropertyAccessor.getInstance();
     }
 }

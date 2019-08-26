@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 /*
  Copyright (c) 2010, NHIN Direct Project
  All rights reserved.
@@ -55,6 +55,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.apache.commons.collections.CollectionUtils;
 
 /**
  * The JPA Domain class
@@ -207,7 +208,7 @@ public class Domain {
     public String getPostMasterEmail() {
         String result = null;
         // return the address that matched the ID
-        if ((getAddresses().size() > 0) && (getPostmasterAddressId() != null) && (getPostmasterAddressId() > 0)) {
+        if (CollectionUtils.isNotEmpty(getAddresses()) && getPostmasterAddressId() != null && getPostmasterAddressId() > 0) {
             for (Address address : getAddresses()) {
                 if (address.getId().equals(getPostmasterAddressId())) {
                     result = address.getEmailAddress();
@@ -317,10 +318,10 @@ public class Domain {
      */
     public boolean isValid() {
         boolean result = false;
-        if ((getDomainName() != null)
-                && (getDomainName().length() > 0)
-                && ((getStatus().equals(EntityStatus.ENABLED)) || (getStatus().equals(EntityStatus.DISABLED)) || ((getStatus()
-                        .equals(EntityStatus.NEW)) && (getId() == 0L)))) {
+        if (getDomainName() != null
+            && getDomainName().length() > 0
+            && (getStatus().equals(EntityStatus.ENABLED) || getStatus().equals(EntityStatus.DISABLED) || getStatus()
+                .equals(EntityStatus.NEW) && getId() == 0L)) {
 
             result = true;
         }
@@ -336,6 +337,6 @@ public class Domain {
     @Override
     public String toString() {
         return "[ID: " + getId() + " | Domain: " + getDomainName() + " | Status: " + getStatus().toString()
-                + " | Addresses: " + getAddresses().size() + "]";
+            + " | Addresses: " + getAddresses().size() + "]";
     }
 }

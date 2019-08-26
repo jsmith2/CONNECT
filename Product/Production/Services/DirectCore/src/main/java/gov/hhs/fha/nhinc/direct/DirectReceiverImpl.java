@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.direct;
 
 import gov.hhs.fha.nhinc.direct.edge.proxy.DirectEdgeProxy;
@@ -89,8 +89,10 @@ public class DirectReceiverImpl extends DirectAdapter implements DirectReceiver 
      */
     public static final String SUPPRESS_MDN_EDGE_NOTIFICATION = "org.connectopensource.suppressmdnedgenotification";
     //Default CONNECT failed notifcation header, error message, footer text.
-    private static final String HEADER = "We were permanently unable to deliver your message to the following recipients.  Please contact your system administrator with further questions.";
-    private static final String ERROR_MESSAGE = "The Direct address that you tried to reach is not responding. Try double-checking the recipient's address for typos or unnecessary spaces.";
+    private static final String HEADER
+        = "We were permanently unable to deliver your message to the following recipients.  Please contact your system administrator with further questions.";
+    private static final String ERROR_MESSAGE
+        = "The Direct address that you tried to reach is not responding. Try double-checking the recipient's address for typos or unnecessary spaces.";
     private static final String FOOTER = "";
     //specifies which Postmaster account to be user for DSN. Default value Sender's postmaster account.
     private static final boolean USE_SENDER_POSTMASTER_ACCOUNT = false;
@@ -168,7 +170,7 @@ public class DirectReceiverImpl extends DirectAdapter implements DirectReceiver 
         //Only send the message to edge client
         //1. if its a not a mdn (or)
         //2. if its a mdn and SuppressMDNEdgeNotification flag is false
-        if ((isEdgeMDNNotificationEnabled() && isMdn) || (!isMdn)) {
+        if (isEdgeMDNNotificationEnabled() && isMdn || !isMdn) {
             DirectEdgeProxy proxy = getDirectEdgeProxy();
             try {
                 proxy.provideAndRegisterDocumentSetB(processedMessage);
@@ -195,13 +197,13 @@ public class DirectReceiverImpl extends DirectAdapter implements DirectReceiver 
             }
         } else {
             try {
-                if ((MessageMonitoringUtil.isNotificationRequestedByEdge(processedMessage)) && notificationToEdgeFailed) {
+                if (MessageMonitoringUtil.isNotificationRequestedByEdge(processedMessage) && notificationToEdgeFailed) {
                     getDirectEventLogger().log(DirectEventType.BEGIN_OUTBOUND_MDN_FAILED, processedMessage);
                     sendMdnFailed(processedMessage, notificationFailureMessage);
                     //log the MDN Failed notification sent event
                     getDirectEventLogger().log(DirectEventType.END_OUTBOUND_MDN_FAILED, processedMessage);
                 } else if (!MessageMonitoringUtil.isNotificationRequestedByEdge(processedMessage)) {
-                    LOG.debug(("No need to dispatch MDN's since not requested by sender"));
+                    LOG.debug("No need to dispatch MDN's since not requested by sender");
                 } else {
                     sendMdnDispatched(result);
                 }
@@ -260,14 +262,16 @@ public class DirectReceiverImpl extends DirectAdapter implements DirectReceiver 
     private void sendMdns(Collection<NotificationMessage> mdnMessages, boolean processed) {
         if (mdnMessages != null) {
             for (NotificationMessage mdnMessage : mdnMessages) {
-                getDirectEventLogger().log((processed ? DirectEventType.BEGIN_OUTBOUND_MDN_PROCESSED : DirectEventType.BEGIN_OUTBOUND_MDN_DISPATCHED), mdnMessage);
+                getDirectEventLogger().log(processed ? DirectEventType.BEGIN_OUTBOUND_MDN_PROCESSED
+                    : DirectEventType.BEGIN_OUTBOUND_MDN_DISPATCHED, mdnMessage);
                 try {
                     MimeMessage message = process(mdnMessage).getProcessedMessage().getMessage();
                     getExternalMailSender().send(mdnMessage.getAllRecipients(), message);
                 } catch (Exception e) {
                     throw new DirectException("Exception sending outbound direct mdn.", e, mdnMessage);
                 }
-                getDirectEventLogger().log((processed ? DirectEventType.END_OUTBOUND_MDN_PROCESSED : DirectEventType.END_OUTBOUND_MDN_DISPATCHED), mdnMessage);
+                getDirectEventLogger().log(processed ? DirectEventType.END_OUTBOUND_MDN_PROCESSED
+                    : DirectEventType.END_OUTBOUND_MDN_DISPATCHED, mdnMessage);
                 LOG.info("MDN notification sent.");
             }
         }
@@ -298,18 +302,21 @@ public class DirectReceiverImpl extends DirectAdapter implements DirectReceiver 
      * @return returns a collection of DSN messages using message information provided.
      * @throws javax.mail.MessagingException
      */
-    public Collection<MimeMessage> createFailedDeliveryDSNFailureMessage(MimeMessage message, Tx tx, String notificationFailureMessage) throws MessagingException {
+    public Collection<MimeMessage> createFailedDeliveryDSNFailureMessage(MimeMessage message, Tx tx,
+        String notificationFailureMessage) throws MessagingException {
         //Default properties can be set in a property file agentSettings.properties
         //always use null
         Mailet mailet = null;
         //use the default prefix
         DSNGenerator generator = new DSNGenerator(RejectedRecipientDSNCreatorOptions.DEFAULT_PREFIX);
         //use the default postmasterbox
-        String postmasterMailbox = GatewayConfiguration.getConfigurationParam(RejectedRecipientDSNCreatorOptions.DSN_POSTMASTER,
+        String postmasterMailbox = GatewayConfiguration.getConfigurationParam(
+            RejectedRecipientDSNCreatorOptions.DSN_POSTMASTER,
             mailet, RejectedRecipientDSNCreatorOptions.DEFAULT_POSTMASTER);
         //use the default reporting MTA
-        String reportingMta = GatewayConfiguration.getConfigurationParam(RejectedRecipientDSNCreatorOptions.DSN_MTA_NAME,
-            mailet, RejectedRecipientDSNCreatorOptions.DEFAULT_MTA_NAME);
+        String reportingMta = GatewayConfiguration.
+            getConfigurationParam(RejectedRecipientDSNCreatorOptions.DSN_MTA_NAME,
+                mailet, RejectedRecipientDSNCreatorOptions.DEFAULT_MTA_NAME);
         DSNFailureTextBodyPartGenerator textGenerator = new DefaultDSNFailureTextBodyPartGenerator(
             GatewayConfiguration.getConfigurationParam(RejectedRecipientDSNCreatorOptions.DSN_FAILED_HEADER,
                 mailet, HEADER),
@@ -322,7 +329,8 @@ public class DirectReceiverImpl extends DirectAdapter implements DirectReceiver 
                 mailet, ERROR_MESSAGE),
             HumanReadableTextAssemblerFactory.getInstance());
 
-        FailedDeliveryDSNCreator rejectedDNSCreator = new FailedDeliveryDSNCreator(generator, postmasterMailbox, reportingMta, textGenerator);
+        FailedDeliveryDSNCreator rejectedDNSCreator = new FailedDeliveryDSNCreator(generator, postmasterMailbox,
+            reportingMta, textGenerator);
         final NHINDAddressCollection xdRecipients = new NHINDAddressCollection();
         Address[] recipients = message.getAllRecipients();
         xdRecipients.add(new NHINDAddress((InternetAddress) recipients[0]));
@@ -354,7 +362,8 @@ public class DirectReceiverImpl extends DirectAdapter implements DirectReceiver 
      *
      */
     private void sendMdnFailed(MimeMessage message, String notificationFailureMessage) throws MessagingException {
-        Collection<MimeMessage> mimeMessage = createFailedDeliveryDSNFailureMessage(message, convertMessagetoTx(message), notificationFailureMessage);
+        Collection<MimeMessage> mimeMessage
+            = createFailedDeliveryDSNFailureMessage(message, convertMessagetoTx(message), notificationFailureMessage);
         sendDSN(mimeMessage);
     }
 
@@ -385,9 +394,9 @@ public class DirectReceiverImpl extends DirectAdapter implements DirectReceiver 
      *
      * @return returns the from email address
      */
-    private String getFromAddress(MimeMessage message) throws MessagingException {
+    private static String getFromAddress(MimeMessage message) throws MessagingException {
         Address[] fromAddress = message.getFrom();
-        if ((fromAddress != null) && (fromAddress.length > 0)) {
+        if (fromAddress != null && fromAddress.length > 0) {
             LOG.info("Message fromAddress found.");
             return ((InternetAddress) fromAddress[0]).getAddress();
         }

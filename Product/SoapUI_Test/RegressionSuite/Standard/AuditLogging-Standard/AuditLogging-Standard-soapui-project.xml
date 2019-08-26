@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project activeEnvironment="Default" name="AuditLogging-Standard" resourceRoot="${projectDir}" soapui-version="4.5.1" abortOnError="false" runType="SEQUENTIAL" id="5db14dc5-8331-41c4-a9aa-da6343567d30" xmlns:con="http://eviware.com/soapui/config">
+<con:soapui-project activeEnvironment="Default" name="AuditLogging-Standard" resourceRoot="${projectDir}" soapui-version="5.3.0" abortOnError="false" runType="SEQUENTIAL" id="5db14dc5-8331-41c4-a9aa-da6343567d30" xmlns:con="http://eviware.com/soapui/config">
   <con:settings/>
   <con:interface anonymous="optional" bindingName="{urn:gov:hhs:fha:nhinc:entityadmindistribution}AdministrativeDistribution_Binding_Soap12" definition="../../../target/wsdl/EntityAdminDist_g1.wsdl" name="AdministrativeDistribution_Binding_Soap12_g1" soapVersion="1_2" type="wsdl" wsaVersion="NONE" xsi:type="con:WsdlInterface" id="c126afab-fa89-4571-a3dd-26a231fd90a8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <con:settings/>
@@ -117,7 +117,7 @@
 			}</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait to Clear Audit logs">
+      <con:testStep type="delay" name="Wait to Clear Audit logs" id="276cf17b-8729-4019-9d7a-5851f563eca5">
         <con:settings/>
         <con:config>
           <delay>3000</delay>
@@ -324,12 +324,12 @@
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -337,7 +337,7 @@
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -592,7 +592,7 @@
               </con:configuration>
             </con:assertion>
             <con:credentials>
-              <con:authType>Global HTTP Settings</con:authType>
+              <con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:jmsPropertyConfig/>
@@ -601,7 +601,7 @@
           </con:request>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait for Audit table to populate">
+      <con:testStep type="delay" name="Wait for Audit table to populate" id="4a9416ab-9562-442e-8347-4eca9c7fd58f">
         <con:settings/>
         <con:config>
           <delay>2000</delay>
@@ -632,7 +632,7 @@ else
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)" id="04127354-8070-4975-a7c8-47de075225ec">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -804,7 +804,7 @@ if (!parsedXmlMessage.ParticipantObjectIdentification[1].@ParticipantObjectTypeC
 }]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2) - ACK">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2) - ACK" id="cf0d9080-c48d-404b-afac-fd45bda0c349">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -963,7 +963,7 @@ nhinc.FileUtils.updateProperty(context.findProperty('GatewayPropDir'),context.fi
 testRunner.gotoStepByName( "Clear Audit Logs")]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="Success">
+      <con:testStep type="groovy" name="Success" id="b9b6a873-f986-4df7-b2c4-755f258b7642">
         <con:settings/>
         <con:config>
           <script/>
@@ -1255,7 +1255,7 @@ if (propertiesFile.exists()) {
 			}</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait to Clear Audit logs">
+      <con:testStep type="delay" name="Wait to Clear Audit logs" id="614135bb-df8b-47e1-ae60-f24c76257251">
         <con:settings/>
         <con:config>
           <delay>3000</delay>
@@ -1495,12 +1495,12 @@ if (propertiesFile.exists()) {
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -1509,7 +1509,7 @@ if (propertiesFile.exists()) {
                      <!--Optional:-->
                      <urn1:version>2.0</urn1:version>
                      <!--Optional:-->
-                     <urn1:issuer>CN=SAML User,OU=Harris,0=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <!--Optional:-->
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
                      <!--Optional:-->
@@ -1603,7 +1603,7 @@ if (propertiesFile.exists()) {
           </con:request>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait for Audit table to populate">
+      <con:testStep type="delay" name="Wait for Audit table to populate" id="6c0edf62-8e5d-4155-907d-449730706d6a">
         <con:settings/>
         <con:config>
           <delay>2000</delay>
@@ -1634,7 +1634,7 @@ else
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)" id="a9b3c082-3028-493a-be79-0e679efaab27">
         <con:settings/>
         <con:config>
           <script>context.withSql('AuditRepoDB') {sql ->
@@ -1731,7 +1731,7 @@ parsedXmlMessage.AuditSourceIdentification.find{
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2) - ACK">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2) - ACK" id="5cd38cca-5d86-4350-94d1-1984bb1e520d">
         <con:settings/>
         <con:config>
           <script>context.withSql('AuditRepoDB') {sql ->
@@ -1830,7 +1830,7 @@ nhinc.FileUtils.updateProperty(context.findProperty('GatewayPropDir'),context.fi
 testRunner.gotoStepByName( "Clear Audit Logs")</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="Success">
+      <con:testStep type="groovy" name="Success" id="337e8f00-96f8-44b1-a224-dc2a472536d5">
         <con:settings/>
         <con:config>
           <script/>
@@ -2033,7 +2033,7 @@ if (propertiesFile.exists()) {
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait to Clear Audit logs">
+      <con:testStep type="delay" name="Wait to Clear Audit logs" id="6861dd27-a539-4c68-8406-ced43cd89d0c">
         <con:settings/>
         <con:config>
           <delay>3000</delay>
@@ -2240,12 +2240,12 @@ if (propertiesFile.exists()) {
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -2253,7 +2253,7 @@ if (propertiesFile.exists()) {
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -2508,7 +2508,7 @@ if (propertiesFile.exists()) {
               </con:configuration>
             </con:assertion>
             <con:credentials>
-              <con:authType>Global HTTP Settings</con:authType>
+              <con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:jmsPropertyConfig/>
@@ -2517,7 +2517,7 @@ if (propertiesFile.exists()) {
           </con:request>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait for Audit table to populate">
+      <con:testStep type="delay" name="Wait for Audit table to populate" id="7108043f-941a-4652-930b-52a81f5106b1">
         <con:settings/>
         <con:config>
           <delay>2000</delay>
@@ -2548,7 +2548,7 @@ else
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)" id="47092b7a-61c3-4409-94fd-6bef9f5cb0a7">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -2673,7 +2673,7 @@ if (!parsedXmlMessage.ParticipantObjectIdentification[1].@ParticipantObjectTypeC
 }]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)" id="6a15642f-06f2-4d1f-a6e2-e48c777ba4d3">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -2788,7 +2788,7 @@ nhinc.FileUtils.updateProperty(context.findProperty('GatewayPropDir'),context.fi
 testRunner.gotoStepByName( "Clear Audit Logs")]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="Success">
+      <con:testStep type="groovy" name="Success" id="59037cae-7a39-4a00-803c-9dbe7cc67a74">
         <con:settings/>
         <con:config>
           <script/>
@@ -3069,7 +3069,8 @@ if (propertiesFile.exists()) {
       </con:properties>
       <con:reportParameters/>
     </con:testCase>
-    <con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Patient Discovery Deferred Req" searchProperties="true" id="722d7a11-28b2-47ff-93a2-1393fc42abb3">
+    
+   <con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Patient Discovery Deferred Req" searchProperties="true" id="722d7a11-28b2-47ff-93a2-1393fc42abb3">
       <con:settings/>
       <con:testStep type="groovy" name="Clear Audit Logs" id="9c898c67-4fd9-410c-a77d-103a33311ee2">
         <con:settings/>
@@ -3080,7 +3081,7 @@ if (propertiesFile.exists()) {
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait to Clear Audit logs">
+      <con:testStep type="delay" name="Wait to Clear Audit logs" id="7487e794-3bc6-44ec-8c40-9c009bec9c72">
         <con:settings/>
         <con:config>
           <delay>3000</delay>
@@ -3309,12 +3310,12 @@ if (propertiesFile.exists()) {
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -3322,7 +3323,7 @@ if (propertiesFile.exists()) {
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -3411,7 +3412,7 @@ if (propertiesFile.exists()) {
           </con:request>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait for Audit table to populate">
+      <con:testStep type="delay" name="Wait for Audit table to populate" id="89ad619c-1f40-492b-bf1b-fa3b685d9079">
         <con:settings/>
         <con:config>
           <delay>1500</delay>
@@ -3442,7 +3443,7 @@ else
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)" id="44f69cd0-58a0-4c6d-bda4-3dc48040f129">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -3604,7 +3605,7 @@ if (!parsedXmlMessage.ParticipantObjectIdentification[1].@ParticipantObjectTypeC
 }]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2) - ACK">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2) - ACK" id="7c4c9ea0-4692-4035-9d81-6abaedfc579d">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -3760,7 +3761,7 @@ nhinc.FileUtils.updateProperty(context.findProperty('GatewayPropDir'),context.fi
 testRunner.gotoStepByName( "Clear Audit Logs")]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="Success">
+      <con:testStep type="groovy" name="Success" id="fa39a666-aa97-4576-9c72-a89508de895b">
         <con:settings/>
         <con:config>
           <script/>
@@ -4384,7 +4385,7 @@ if (propertiesFile.exists()) {
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait to Clear Audit logs">
+      <con:testStep type="delay" name="Wait to Clear Audit logs" id="0358723f-37b8-4911-81a1-f6b9f2d6ee6d">
         <con:settings/>
         <con:config>
           <delay>3000</delay>
@@ -4659,12 +4660,12 @@ if (propertiesFile.exists()) {
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -4672,7 +4673,7 @@ if (propertiesFile.exists()) {
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -4741,7 +4742,7 @@ if (propertiesFile.exists()) {
           </con:request>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait for Audit table to populate">
+      <con:testStep type="delay" name="Wait for Audit table to populate" id="e193d987-8a60-4973-b75f-589a15ea8f41">
         <con:settings/>
         <con:config>
           <delay>1500</delay>
@@ -4772,7 +4773,7 @@ else
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)" id="405f8441-1c18-450f-b668-b5b3de1c7816">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -4932,7 +4933,7 @@ if (!parsedXmlMessage.ParticipantObjectIdentification[1].@ParticipantObjectTypeC
 }]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)-ACK">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)-ACK" id="8cdd6bc5-8555-4981-ac1e-ac9131e2fc20">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -5091,7 +5092,7 @@ nhinc.FileUtils.updateProperty(context.findProperty('GatewayPropDir'),context.fi
 testRunner.gotoStepByName( "Clear Audit Logs")]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="Success">
+      <con:testStep type="groovy" name="Success" id="e280e1a7-5aee-4449-bc02-e5f6d4b70cd4">
         <con:settings/>
         <con:config>
           <script/>
@@ -5719,7 +5720,7 @@ if (propertiesFile.exists()) {
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait to Clear Audit logs">
+      <con:testStep type="delay" name="Wait to Clear Audit logs" id="20afd961-b3be-45d8-b2f6-959f3999a6ca">
         <con:settings/>
         <con:config>
           <delay>3000</delay>
@@ -5951,12 +5952,12 @@ if (propertiesFile.exists()) {
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -5964,7 +5965,7 @@ if (propertiesFile.exists()) {
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -6039,7 +6040,7 @@ if (propertiesFile.exists()) {
 		}</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait for Audit table to populate">
+      <con:testStep type="delay" name="Wait for Audit table to populate" id="8475c20f-e8ba-41a2-b67f-05a9354e8941">
         <con:settings/>
         <con:config>
           <delay>1500</delay>
@@ -6070,7 +6071,7 @@ else
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)" id="f4f395c3-8469-4e9f-9652-122409318501">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -6229,7 +6230,7 @@ if (!parsedXmlMessage.ParticipantObjectIdentification[1].@ParticipantObjectTypeC
 }]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)" id="1d1168ba-8f98-45ab-a3d5-cf64ebb690fe">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -6382,7 +6383,7 @@ nhinc.FileUtils.updateProperty(context.findProperty('GatewayPropDir'),context.fi
 testRunner.gotoStepByName( "Clear Audit Logs")]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="Success">
+      <con:testStep type="groovy" name="Success" id="ec5a1d89-0eaa-4e38-bf76-5210f50d5dd5">
         <con:settings/>
         <con:config>
           <script/>
@@ -6834,7 +6835,7 @@ if (propertiesFile.exists()) {
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait to Clear Audit logs">
+      <con:testStep type="delay" name="Wait to Clear Audit logs" id="3df5357d-7e4e-4ddc-8a3b-f77a4820502a">
         <con:settings/>
         <con:config>
           <delay>3000</delay>
@@ -7106,12 +7107,12 @@ if (propertiesFile.exists()) {
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
          <urn3:samlAuthzDecisionStatement>
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -7119,7 +7120,7 @@ if (propertiesFile.exists()) {
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -7169,7 +7170,7 @@ if (propertiesFile.exists()) {
           </con:request>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait for Audit table to populate">
+      <con:testStep type="delay" name="Wait for Audit table to populate" id="f4ee5494-57ac-4194-a820-2c7901828a18">
         <con:settings/>
         <con:config>
           <delay>1500</delay>
@@ -7200,7 +7201,7 @@ else
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)" id="03a39c91-ed7e-441f-a1d3-7e8a8ff9db83">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -7347,7 +7348,7 @@ if (!parsedXmlMessage.ParticipantObjectIdentification[1].@ParticipantObjectTypeC
 }]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)" id="8b2816e6-ce46-4eea-90e6-c5b19e9cc477">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -7485,7 +7486,7 @@ nhinc.FileUtils.updateProperty(context.findProperty('GatewayPropDir'),context.fi
 testRunner.gotoStepByName( "Clear Audit Logs")]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="Success">
+      <con:testStep type="groovy" name="Success" id="dec194ea-437e-42eb-8824-c8d1bf1e581a">
         <con:settings/>
         <con:config>
           <script/>
@@ -7849,7 +7850,7 @@ if (propertiesFile.exists()) {
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait to Clear Audit logs">
+      <con:testStep type="delay" name="Wait to Clear Audit logs" id="a3366faa-78f2-4334-8fa9-b796f3dc9ed7">
         <con:settings/>
         <con:config>
           <delay>3000</delay>
@@ -8064,12 +8065,12 @@ if (propertiesFile.exists()) {
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement>
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -8077,7 +8078,7 @@ if (propertiesFile.exists()) {
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -8145,7 +8146,7 @@ if (propertiesFile.exists()) {
           </con:request>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait for Audit table to populate">
+      <con:testStep type="delay" name="Wait for Audit table to populate" id="cc3812c3-77b7-49ad-acd6-8d68091a7820">
         <con:settings/>
         <con:config>
           <delay>2000</delay>
@@ -8176,7 +8177,7 @@ else
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)" id="ac245657-defc-4c72-8050-904a8579cc1a">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -8320,7 +8321,7 @@ if (!parsedXmlMessage.ParticipantObjectIdentification[1].@ParticipantObjectTypeC
 }]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)" id="b66960ac-e391-41f2-8607-ed42ccdd568d">
         <con:settings/>
         <con:config>
           <script><![CDATA[import java.util.regex.*
@@ -8445,7 +8446,7 @@ nhinc.FileUtils.updateProperty(context.findProperty('GatewayPropDir'),context.fi
 testRunner.gotoStepByName( "Clear Audit Logs")]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="Success">
+      <con:testStep type="groovy" name="Success" id="7d2b855f-ecbb-48e3-832b-a1b9d2497f78">
         <con:settings/>
         <con:config>
           <script/>
@@ -9009,7 +9010,7 @@ if (propertiesFile.exists()) {
             <urn1:samlAuthnStatement>
                <urn1:authInstant>2009-09-01T13:00:00.000Z</urn1:authInstant>
                <urn1:sessionIndex>mySessionIndex</urn1:sessionIndex>
-               <urn1:authContextClassRef>myContextClassRef</urn1:authContextClassRef>
+               <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
                <urn1:subjectLocalityAddress>mySubjectLocalityAddress</urn1:subjectLocalityAddress>
                <urn1:subjectLocalityDNSName>mySubjectLocalityDns</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
@@ -9258,7 +9259,7 @@ nhinc.FileUtils.setG1ConnectionInfo(context.expand(context.testCase.testSuite.pr
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait to Clear Audit logs">
+      <con:testStep type="delay" name="Wait to Clear Audit logs" id="5ba344c0-9a81-460c-9989-dd72f2173120">
         <con:settings/>
         <con:config>
           <delay>3000</delay>
@@ -9465,12 +9466,12 @@ nhinc.FileUtils.setG1ConnectionInfo(context.expand(context.testCase.testSuite.pr
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -9478,7 +9479,7 @@ nhinc.FileUtils.setG1ConnectionInfo(context.expand(context.testCase.testSuite.pr
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -9745,7 +9746,7 @@ nhinc.FileUtils.setG1ConnectionInfo(context.expand(context.testCase.testSuite.pr
           </con:request>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait for Audit table to populate">
+      <con:testStep type="delay" name="Wait for Audit table to populate" id="83801d0e-0b15-4380-ab1f-09dc2a3648aa">
         <con:settings/>
         <con:config>
           <delay>2000</delay>
@@ -9776,7 +9777,7 @@ else
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)" id="5e60d3a7-c46d-47b2-9e22-58e240ebd788">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -9948,7 +9949,7 @@ if (!parsedXmlMessage.ParticipantObjectIdentification[1].@ParticipantObjectTypeC
 }]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2) - ACK">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2) - ACK" id="b016e4a1-5c25-4bec-9d67-f693aea04f4f">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -10108,7 +10109,7 @@ nhinc.FileUtils.updateProperty(context.findProperty('GatewayPropDir'),context.fi
 testRunner.gotoStepByName( "Clear Audit Logs")]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="Success">
+      <con:testStep type="groovy" name="Success" id="1439f06b-94f2-4172-a9d5-05967d7789bb">
         <con:settings/>
         <con:config>
           <script/>
@@ -10400,7 +10401,7 @@ if (propertiesFile.exists()) {
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait to Clear Audit logs">
+      <con:testStep type="delay" name="Wait to Clear Audit logs" id="9f183909-94eb-4526-9d42-ca41132a1ebb">
         <con:settings/>
         <con:config>
           <delay>3000</delay>
@@ -10640,12 +10641,12 @@ if (propertiesFile.exists()) {
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -10654,7 +10655,7 @@ if (propertiesFile.exists()) {
                      <!--Optional:-->
                      <urn1:version>2.0</urn1:version>
                      <!--Optional:-->
-                     <urn1:issuer>CN=SAML User,OU=Harris,0=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <!--Optional:-->
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
                      <!--Optional:-->
@@ -10748,7 +10749,7 @@ if (propertiesFile.exists()) {
           </con:request>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait for Audit table to populate">
+      <con:testStep type="delay" name="Wait for Audit table to populate" id="f585e599-f471-4560-8294-341b4f084dda">
         <con:settings/>
         <con:config>
           <delay>2000</delay>
@@ -10779,7 +10780,7 @@ else
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)" id="23846261-1d7e-4ecb-9e98-70448e072b83">
         <con:settings/>
         <con:config>
           <script>context.withSql('AuditRepoDB') {sql ->
@@ -10875,7 +10876,7 @@ parsedXmlMessage.AuditSourceIdentification.find{
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2) - ACK">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2) - ACK" id="5694160b-8f78-4cb8-9c25-70394a42c2b9">
         <con:settings/>
         <con:config>
           <script>context.withSql('AuditRepoDB') {sql ->
@@ -10976,7 +10977,7 @@ nhinc.FileUtils.updateProperty(context.findProperty('GatewayPropDir'),context.fi
 testRunner.gotoStepByName( "Clear Audit Logs")</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="Success">
+      <con:testStep type="groovy" name="Success" id="4ca5b153-decf-40b8-8599-f9e62947e97b">
         <con:settings/>
         <con:config>
           <script/>
@@ -11179,7 +11180,7 @@ if (propertiesFile.exists()) {
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait to Clear Audit logs">
+      <con:testStep type="delay" name="Wait to Clear Audit logs" id="6504b682-61da-4ddf-aabe-307659c097d3">
         <con:settings/>
         <con:config>
           <delay>3000</delay>
@@ -11386,12 +11387,12 @@ if (propertiesFile.exists()) {
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -11399,7 +11400,7 @@ if (propertiesFile.exists()) {
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -11663,7 +11664,7 @@ if (propertiesFile.exists()) {
           </con:request>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait for Audit table to populate">
+      <con:testStep type="delay" name="Wait for Audit table to populate" id="e0b66121-0e5a-4874-b1a3-bd93bb2bf01f">
         <con:settings/>
         <con:config>
           <delay>2000</delay>
@@ -11694,7 +11695,7 @@ else
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)" id="b137b49d-1e0d-45f2-8175-0eef0ace57bb">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -11819,7 +11820,7 @@ if (!parsedXmlMessage.ParticipantObjectIdentification[1].@ParticipantObjectTypeC
 }]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)" id="10dac1ef-639e-4ec9-83fc-c4ddb2675455">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -11933,7 +11934,7 @@ nhinc.FileUtils.updateProperty(context.findProperty('GatewayPropDir'),context.fi
 testRunner.gotoStepByName( "Clear Audit Logs")]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="Success">
+      <con:testStep type="groovy" name="Success" id="21700a1e-f627-4441-8495-e96cba53fd72">
         <con:settings/>
         <con:config>
           <script/>
@@ -12214,6 +12215,7 @@ if (propertiesFile.exists()) {
       </con:properties>
       <con:reportParameters/>
     </con:testCase>
+    
     <con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Patient Discovery Deferred Req" searchProperties="true" id="2d01ba9b-8e2f-4495-9afb-0df274e6ff49">
       <con:settings/>
       <con:testStep type="groovy" name="Clear Audit Logs" id="809a434a-ba0b-48e1-98db-e52ff6b22075">
@@ -12225,7 +12227,7 @@ if (propertiesFile.exists()) {
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait to Clear Audit logs">
+      <con:testStep type="delay" name="Wait to Clear Audit logs" id="ea9936bd-e33a-4c67-ba61-0c53799aaba4">
         <con:settings/>
         <con:config>
           <delay>3000</delay>
@@ -12454,12 +12456,12 @@ if (propertiesFile.exists()) {
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -12467,7 +12469,7 @@ if (propertiesFile.exists()) {
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -12556,7 +12558,7 @@ if (propertiesFile.exists()) {
           </con:request>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait for Audit table to populate">
+      <con:testStep type="delay" name="Wait for Audit table to populate" id="08bfe32b-d471-4632-8e32-ccc096d5eb35">
         <con:settings/>
         <con:config>
           <delay>1500</delay>
@@ -12587,7 +12589,7 @@ else
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)" id="78db50a3-68b0-4313-8744-ef3fc4d76df4">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -12749,7 +12751,7 @@ if (!parsedXmlMessage.ParticipantObjectIdentification[1].@ParticipantObjectTypeC
 }]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2) - ACK">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2) - ACK" id="eed36b62-ed58-45fd-93a0-cf1d7669b31c">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -12905,7 +12907,7 @@ nhinc.FileUtils.updateProperty(context.findProperty('GatewayPropDir'),context.fi
 testRunner.gotoStepByName( "Clear Audit Logs")]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="Success">
+      <con:testStep type="groovy" name="Success" id="e03f4cb1-1cd7-40ad-96eb-ef9aba1a53b2">
         <con:settings/>
         <con:config>
           <script/>
@@ -13529,7 +13531,7 @@ if (propertiesFile.exists()) {
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait to Clear Audit logs">
+      <con:testStep type="delay" name="Wait to Clear Audit logs" id="939c30ab-2f67-4b36-a926-95c306f26a2b">
         <con:settings/>
         <con:config>
           <delay>3000</delay>
@@ -13804,12 +13806,12 @@ if (propertiesFile.exists()) {
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -13817,7 +13819,7 @@ if (propertiesFile.exists()) {
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -13886,7 +13888,7 @@ if (propertiesFile.exists()) {
           </con:request>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait for Audit table to populate">
+      <con:testStep type="delay" name="Wait for Audit table to populate" id="6f005d6f-024c-4e56-9ab9-3b777dad061b">
         <con:settings/>
         <con:config>
           <delay>1500</delay>
@@ -13917,7 +13919,7 @@ else
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1) - ACK">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1) - ACK" id="a64fd02f-ac34-4384-9815-70d9fef3616d">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -14072,7 +14074,7 @@ if (!parsedXmlMessage.ParticipantObjectIdentification[1].@ParticipantObjectTypeC
 }]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)" id="ce303fca-52cb-4503-bdc0-af4bc5bc7df5">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -14236,7 +14238,7 @@ nhinc.FileUtils.updateProperty(context.findProperty('GatewayPropDir'),context.fi
 testRunner.gotoStepByName( "Clear Audit Logs")]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="Success">
+      <con:testStep type="groovy" name="Success" id="c7ab3e32-d116-488c-a1b8-c0fb1d788113">
         <con:settings/>
         <con:config>
           <script/>
@@ -14864,7 +14866,7 @@ if (propertiesFile.exists()) {
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait to Clear Audit logs">
+      <con:testStep type="delay" name="Wait to Clear Audit logs" id="2318a243-e44c-442e-b138-a5a8b716f983">
         <con:settings/>
         <con:config>
           <delay>3000</delay>
@@ -15096,12 +15098,12 @@ if (propertiesFile.exists()) {
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -15109,7 +15111,7 @@ if (propertiesFile.exists()) {
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -15184,7 +15186,7 @@ if (propertiesFile.exists()) {
 		}</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait for Audit table to populate">
+      <con:testStep type="delay" name="Wait for Audit table to populate" id="ca6df12d-066a-4557-a5c6-755af3f7c18e">
         <con:settings/>
         <con:config>
           <delay>1500</delay>
@@ -15215,7 +15217,7 @@ else
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)" id="8c223388-6880-43a4-a30b-32ae0b7de073">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -15375,7 +15377,7 @@ if (!parsedXmlMessage.ParticipantObjectIdentification[1].@ParticipantObjectTypeC
 }]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)" id="09234c99-45e4-44f3-ba6a-32b175c0f9b9">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -15528,7 +15530,7 @@ nhinc.FileUtils.updateProperty(context.findProperty('GatewayPropDir'),context.fi
 testRunner.gotoStepByName( "Clear Audit Logs")]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="Success">
+      <con:testStep type="groovy" name="Success" id="f34648bf-0072-446d-9bc9-26a4334e4201">
         <con:settings/>
         <con:config>
           <script/>
@@ -15976,7 +15978,7 @@ if (propertiesFile.exists()) {
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait to Clear Audit logs">
+      <con:testStep type="delay" name="Wait to Clear Audit logs" id="c92e32f6-6248-42bb-b95d-1ba03e96a99d">
         <con:settings/>
         <con:config>
           <delay>3000</delay>
@@ -16248,12 +16250,12 @@ if (propertiesFile.exists()) {
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
          <urn3:samlAuthzDecisionStatement>
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -16261,7 +16263,7 @@ if (propertiesFile.exists()) {
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -16311,7 +16313,7 @@ if (propertiesFile.exists()) {
           </con:request>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait for Audit table to populate">
+      <con:testStep type="delay" name="Wait for Audit table to populate" id="c0d6ca87-6ea1-47e7-b7bf-5e1da8ba06b2">
         <con:settings/>
         <con:config>
           <delay>1500</delay>
@@ -16342,7 +16344,7 @@ else
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)" id="a97b6b6a-cbae-48c3-ad2e-13bcd7bc2f05">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -16489,7 +16491,7 @@ if (!parsedXmlMessage.ParticipantObjectIdentification[1].@ParticipantObjectTypeC
 }]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)" id="60bc9f4d-1f6d-48f8-b30d-626c8951c3cc">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -16627,7 +16629,7 @@ nhinc.FileUtils.updateProperty(context.findProperty('GatewayPropDir'),context.fi
 testRunner.gotoStepByName( "Clear Audit Logs")]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="Success">
+      <con:testStep type="groovy" name="Success" id="082740b2-ac86-48bf-b550-38f7fbe5c244">
         <con:settings/>
         <con:config>
           <script/>
@@ -16979,7 +16981,7 @@ if (propertiesFile.exists()) {
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Wait to Clear Audit logs">
+      <con:testStep type="delay" name="Wait to Clear Audit logs" id="acb268c7-8b7a-4483-9165-41e2e523adca">
         <con:settings/>
         <con:config>
           <delay>3000</delay>
@@ -17194,12 +17196,12 @@ if (propertiesFile.exists()) {
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement>
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -17207,7 +17209,7 @@ if (propertiesFile.exists()) {
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -17275,7 +17277,7 @@ if (propertiesFile.exists()) {
           </con:request>
         </con:config>
       </con:testStep>
-      <con:testStep type="delay" name="Delay">
+      <con:testStep type="delay" name="Delay" id="68e2946f-56b6-4a5f-b1ce-8e67c15b6967">
         <con:settings/>
         <con:config>
           <delay>2000</delay>
@@ -17306,7 +17308,7 @@ else
 }</script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-InitiatingGateway(1.1)" id="372eef26-aef0-4f64-beff-53da0cca6b66">
         <con:settings/>
         <con:config>
           <script><![CDATA[context.withSql('AuditRepoDB') {sql ->
@@ -17450,7 +17452,7 @@ if (!parsedXmlMessage.ParticipantObjectIdentification[1].@ParticipantObjectTypeC
 }]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)">
+      <con:testStep type="groovy" name="VerifyMessage-NhinOutbound-RespondingGateway(2.2)" id="3edfbc1b-0808-4dfc-8fac-5a5f0eee87a9">
         <con:settings/>
         <con:config>
           <script><![CDATA[import java.util.regex.*
@@ -17572,7 +17574,7 @@ nhinc.FileUtils.updateProperty(context.findProperty('GatewayPropDir'),context.fi
 testRunner.gotoStepByName( "Clear Audit Logs")]]></script>
         </con:config>
       </con:testStep>
-      <con:testStep type="groovy" name="Success">
+      <con:testStep type="groovy" name="Success" id="fd2ab37f-aa54-45f8-b97f-cf51d7abc808">
         <con:settings/>
         <con:config>
           <script/>
@@ -18136,7 +18138,7 @@ if (propertiesFile.exists()) {
             <urn1:samlAuthnStatement>
                <urn1:authInstant>2009-09-01T13:00:00.000Z</urn1:authInstant>
                <urn1:sessionIndex>mySessionIndex</urn1:sessionIndex>
-               <urn1:authContextClassRef>myContextClassRef</urn1:authContextClassRef>
+               <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
                <urn1:subjectLocalityAddress>mySubjectLocalityAddress</urn1:subjectLocalityAddress>
                <urn1:subjectLocalityDNSName>mySubjectLocalityDns</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
@@ -18367,12 +18369,16 @@ nhinc.FileUtils.setG0ConnectionInfo(context.expand(context.testCase.testSuite.pr
         <con:name>Endpoint-XDREntity</con:name>
         <con:value>http://localhost:8080/Gateway/DocumentSubmission/1_1/EntityService/EntityDocSubmissionUnsecured</con:value>
       </con:property>
+      <con:property>
+        <con:name>Endpoint-XDSEntity</con:name>
+        <con:value>http://localhost:8080/Gateway/DocumentDataSubmission/1_0/EntityService/EntityDocDataSubmissionUnsecured</con:value>
+      </con:property>
     </con:properties>
     <con:setupScript/>
     <con:tearDownScript/>
     <con:reportParameters/>
   </con:testSuite>
-  <con:properties>
+  <con:endpointStrategy xsi:type="con:DefaultEndpointStrategy" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:endpoint mode="OVERRIDE">http://localhost:${HttpDefaultPort}/Gateway/DocumentDataSubmission/1_0/EntityService/EntityDocDataSubmissionUnsecured</con:endpoint></con:endpointStrategy><con:properties>
     <con:property>
       <con:name>AAMappingDB</con:name>
       <con:value>assigningauthoritydb</con:value>
@@ -18574,6 +18580,10 @@ nhinc.FileUtils.setG0ConnectionInfo(context.expand(context.testCase.testSuite.pr
       <con:value>DocSubmission</con:value>
     </con:property>
     <con:property>
+      <con:name>EventTypeDocDataSubmission</con:name>
+      <con:value>DocDataSubmission</con:value>
+    </con:property>
+    <con:property>
       <con:name>EventTypePDDefReq</con:name>
       <con:value>PatientDiscoveryDeferredReq</con:value>
     </con:property>
@@ -18750,5 +18760,5 @@ com.eviware.soapui.impl.wsdl.testcase.WsdlTestRunContext.metaClass.setGatewaySta
 }</con:afterLoadScript>
   <con:wssContainer/>
   <con:oAuth2ProfileContainer/>
-  <con:sensitiveInformation/>
+  <con:oAuth1ProfileContainer/><con:sensitiveInformation/>
 </con:soapui-project>

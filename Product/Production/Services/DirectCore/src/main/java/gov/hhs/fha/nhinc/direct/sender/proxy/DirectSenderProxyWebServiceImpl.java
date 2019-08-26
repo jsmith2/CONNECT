@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,15 +23,15 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.direct.sender.proxy;
 
-import gov.hhs.fha.nhinc.connectmgr.ConnectionManagerCache;
-import gov.hhs.fha.nhinc.connectmgr.ConnectionManagerException;
 import gov.hhs.fha.nhinc.direct.ConnectCustomSendMimeMessage;
 import gov.hhs.fha.nhinc.direct.DirectConstants;
 import gov.hhs.fha.nhinc.direct.DirectSenderPortType;
 import gov.hhs.fha.nhinc.direct.DirectSenderService;
+import gov.hhs.fha.nhinc.exchangemgr.ExchangeManagerException;
+import gov.hhs.fha.nhinc.webserviceproxy.WebServiceProxyHelper;
 import java.io.IOException;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -51,6 +51,7 @@ import org.slf4j.LoggerFactory;
 public class DirectSenderProxyWebServiceImpl {
 
     private static final Logger LOG = LoggerFactory.getLogger(DirectSenderProxyWebServiceImpl.class);
+    private static final WebServiceProxyHelper HELPER = new WebServiceProxyHelper();
 
     /**
      *
@@ -60,7 +61,7 @@ public class DirectSenderProxyWebServiceImpl {
         LOG.debug("Begin DirectSenderUnsecuredProxy.sendOutboundDirect(MimeMessage)");
 
         try { // Call Web Service Operation
-            String url = ConnectionManagerCache.getInstance().getInternalEndpointURLByServiceName(DirectConstants.DIRECT_SENDER_SERVICE_NAME);
+            String url = HELPER.getAdapterEndPointFromConnectionManager(DirectConstants.DIRECT_SENDER_SERVICE_NAME);
             DirectSenderPortType port = getPort(url);
             gov.hhs.fha.nhinc.direct.SendoutMessage parameters = new gov.hhs.fha.nhinc.direct.SendoutMessage();
             ConnectCustomSendMimeMessage senderMessage = new ConnectCustomSendMimeMessage();
@@ -70,13 +71,13 @@ public class DirectSenderProxyWebServiceImpl {
             senderMessage.setSubject(message.getSubject());
             parameters.setMessage(senderMessage);
             port.sendOutboundDirect(parameters);
-        } catch (IOException | MessagingException | ConnectionManagerException ex) {
-            LOG.error("DirectSender WebService Failed :{}", ex.getLocalizedMessage(), ex);
+        } catch (IOException | MessagingException | ExchangeManagerException ex) {
+            LOG.error("DirectSender WebService Failed : {}", ex.getLocalizedMessage(), ex);
         }
         LOG.debug("End DirectSenderUnsecuredProxy.sendOutboundDirect(MimeMessage)");
     }
 
-    private DirectSenderPortType getPort(String url) {
+    private static DirectSenderPortType getPort(String url) {
         DirectSenderService service = new DirectSenderService();
         DirectSenderPortType port = service.getDirectSenderPortType();
         ((javax.xml.ws.BindingProvider) port).getRequestContext().put(javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);

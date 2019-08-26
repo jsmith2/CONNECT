@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.docrepository.adapter.dao;
 
 import static org.junit.Assert.assertEquals;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import gov.hhs.fha.nhinc.docrepository.adapter.model.Document;
+import gov.hhs.fha.nhinc.docrepository.adapter.model.DocumentMetadata;
 import gov.hhs.fha.nhinc.docrepository.adapter.model.DocumentQueryParams;
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,7 +62,7 @@ public class DocumentDaoTest {
 
     @Test
     public void testSave() {
-        Document doc = new Document();
+        DocumentMetadata doc = new DocumentMetadata();
 
         documentDao.save(doc);
 
@@ -71,7 +71,7 @@ public class DocumentDaoTest {
 
     @Test
     public void testDelete() {
-        Document doc = new Document();
+        DocumentMetadata doc = new DocumentMetadata();
 
         documentDao.delete(doc);
 
@@ -79,42 +79,63 @@ public class DocumentDaoTest {
     }
 
     @Test
+    public void testDeleteAll() {
+        List<DocumentMetadata> documents = new ArrayList<>();
+        DocumentMetadata document1 = new DocumentMetadata();
+        documents.add(document1);
+        DocumentMetadata document2 = new DocumentMetadata();
+        documents.add(document2);
+        DocumentMetadata document3 = new DocumentMetadata();
+        documents.add(document3);
+
+        when(session.isOpen()).thenReturn(true);
+        documentDao.deleteAll(documents);
+
+        verify(session).beginTransaction();
+        verify(session).delete(document1);
+        verify(session).delete(document2);
+        verify(session).delete(document3);
+        verify(transaction).commit();
+        verify(session).close();
+    }
+
+    @Test
     public void testFindById() {
-        Document doc = new Document();
+        DocumentMetadata doc = new DocumentMetadata();
         final long ID = 12345;
         doc.setDocumentid(ID);
 
-        when(session.get(Document.class, ID)).thenReturn(doc);
+        when(session.get(DocumentMetadata.class, ID)).thenReturn(doc);
 
-        Document resultDoc = documentDao.findById(ID);
+        DocumentMetadata resultDoc = documentDao.findById(ID);
 
-        assertEquals(resultDoc.getDocumentid(), (Long) ID);
+        assertEquals((Long) ID, resultDoc.getDocumentid());
     }
 
     @Test
     public void testFindAll() {
-        Document doc1 = new Document();
+        DocumentMetadata doc1 = new DocumentMetadata();
         final long ID_1 = 12345;
         doc1.setDocumentid(ID_1);
 
-        Document doc2 = new Document();
+        DocumentMetadata doc2 = new DocumentMetadata();
         final long ID_2 = 12345;
         doc2.setDocumentid(ID_2);
 
-        List<Document> documents = new ArrayList<>();
+        List<DocumentMetadata> documents = new ArrayList<>();
         documents.add(doc1);
         documents.add(doc2);
 
         Criteria criteria = mock(Criteria.class);
 
-        when(session.createCriteria(Document.class)).thenReturn(criteria);
+        when(session.createCriteria(DocumentMetadata.class)).thenReturn(criteria);
         when(criteria.list()).thenReturn(documents);
 
-        List<Document> resultsDocuments = documentDao.findAll();
+        List<DocumentMetadata> resultsDocuments = documentDao.findAll();
 
-        assertEquals(resultsDocuments.size(), 2);
-        assertEquals(resultsDocuments.get(0).getDocumentid(), (Long) ID_1);
-        assertEquals(resultsDocuments.get(1).getDocumentid(), (Long) ID_2);
+        assertEquals(2, resultsDocuments.size());
+        assertEquals((Long) ID_1, resultsDocuments.get(0).getDocumentid());
+        assertEquals((Long) ID_2, resultsDocuments.get(1).getDocumentid());
     }
 
     @Test
@@ -152,31 +173,29 @@ public class DocumentDaoTest {
         params.setDocumentUniqueId(documentUniqueIds);
         params.setOnDemandParams(false);
 
-        Document doc1 = new Document();
+        DocumentMetadata doc1 = new DocumentMetadata();
         final long ID_1 = 12345;
         doc1.setDocumentid(ID_1);
 
-        Document doc2 = new Document();
+        DocumentMetadata doc2 = new DocumentMetadata();
         final long ID_2 = 12345;
         doc2.setDocumentid(ID_2);
 
-        List<Document> documents = new ArrayList<>();
+        List<DocumentMetadata> documents = new ArrayList<>();
         documents.add(doc1);
         documents.add(doc2);
 
         Criteria criteria = mock(Criteria.class);
 
-        when(session.createCriteria(Document.class)).thenReturn(criteria);
+
+        when(session.createCriteria(DocumentMetadata.class)).thenReturn(criteria);
         when(criteria.list()).thenReturn(documents);
 
-        when(session.createCriteria(Document.class)).thenReturn(criteria);
-        when(criteria.list()).thenReturn(documents);
+        List<DocumentMetadata> resultsDocuments = documentDao.findDocuments(params);
 
-        List<Document> resultsDocuments = documentDao.findDocuments(params);
-
-        assertEquals(resultsDocuments.size(), 2);
-        assertEquals(resultsDocuments.get(0).getDocumentid(), (Long) ID_1);
-        assertEquals(resultsDocuments.get(1).getDocumentid(), (Long) ID_2);
+        assertEquals(2, resultsDocuments.size());
+        assertEquals((Long) ID_1, resultsDocuments.get(0).getDocumentid());
+        assertEquals((Long) ID_2, resultsDocuments.get(1).getDocumentid());
 
     }
 }

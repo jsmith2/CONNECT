@@ -32,12 +32,17 @@ CREATE TABLE IF NOT EXISTS adminguidb.UserLogin (
     salt varchar(100) NOT NULL,
     sha2 varchar(100) NOT NULL,
     userName varchar(100) NOT NULL UNIQUE,
+	firstName varchar(100),
+	middleName varchar(100),
+	lastName varchar(100),
     userRole BIGINT unsigned NOT NULL,
+	transactionUserRole varchar(100),
+	transactionUserRoleDesc varchar(150),
     CONSTRAINT fk_role_user
-      FOREIGN KEY (userRole)
-      REFERENCES adminguidb.UserRole (roleId)
-      ON DELETE NO ACTION
-      ON UPDATE NO ACTION
+        FOREIGN KEY (userRole)
+        REFERENCES adminguidb.UserRole (roleId)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
 );
 
 INSERT INTO adminguidb.UserRole 
@@ -56,9 +61,9 @@ VALUES
 ("direct.xhtml", "Direct Config", 0, 1),
 ("direct.xhtml", "Direct Config", 0, 2),
 ("direct.xhtml", "Direct Config", 0, 3),
-("connectionManager.xhtml", "Connection Management", 0, 1),
-("connectionManager.xhtml", "Connection Management", 0, 2),
-("connectionManager.xhtml", "Connection Management", 0, 3),
+("exchangeManager.xhtml", "Exchange Management", 0, 1),
+("exchangeManager.xhtml", "Exchange Management", 0, 2),
+("exchangeManager.xhtml", "Exchange Management", 0, 3),
 ("properties.xhtml", "CONNECT Properties", 0, 1),
 ("properties.xhtml", "CONNECT Properties", 0, 2),
 ("properties.xhtml", "CONNECT Properties", 0, 3),
@@ -68,9 +73,15 @@ VALUES
 ("patientDiscovery.xhtml", "Cross-Query Gateway Client", 0, 1),
 ("patientDiscovery.xhtml", "Cross-Query Gateway Client", 0, 2),
 ("patientDiscovery.xhtml", "Cross-Query Gateway Client", 0, 3),
-("auditLog.xhtml", "AuditSearch", 0, 1),
-("auditLog.xhtml", "AuditSearch", 0, 2),
-("auditLog.xhtml", "AuditSearch", 0, 3);
+("loadTestData.xhtml", "Test Data", 0, 1),
+("loadTestData.xhtml", "Test Data", 0, 2),
+("loadTestData.xhtml", "Test Data", 0, 3),
+("auditLog.xhtml", "Logging", 0, 1),
+("auditLog.xhtml", "Logging", 0, 2),
+("auditLog.xhtml", "Logging", 0, 3),
+("certificateManager.xhtml", "Certificate Management", 0, 1),
+("certificateManager.xhtml", "Certificate Management", -1, 2),
+("certificateManager.xhtml", "Certificate Management", -1, 3);
 
 INSERT INTO adminguidb.UserLogin
 (id, salt, sha2, userName, userRole)

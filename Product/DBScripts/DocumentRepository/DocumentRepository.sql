@@ -39,7 +39,7 @@ CREATE TABLE docrepository.document (
   IntendedRecipientOrganization varchar(128) default NULL COMMENT 'Format of HL7 2.x XON',
   LanguageCode varchar(64) default NULL,
   LegalAuthenticator varchar(128) default NULL COMMENT 'Format of HL7 2.x XCN',
-  MimeType varchar(32) default NULL,
+  MimeType varchar(256) default NULL,
   ParentDocumentId varchar(64) default NULL,
   ParentDocumentRelationship varchar(64) default NULL,
   PracticeSetting varchar(64) default NULL,
@@ -61,6 +61,7 @@ CREATE TABLE docrepository.document (
   OnDemand tinyint(1) NOT NULL default 0 COMMENT 'Indicate whether document is dynamic (true or 1) or static (false or 0).',
   NewDocumentUniqueId varchar(128) default NULL,
   NewRepositoryUniqueId varchar(128) default NULL,
+  PatientRecordId int(11) NULL,
   PRIMARY KEY  (documentid)
 );
 

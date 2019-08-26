@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   /*
-   * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+   * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
    * All rights reserved.
    *
    * Redistribution and use in source and binary forms, with or without
@@ -29,89 +29,147 @@
 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
 
-    <h:body>
-        <ui:composition template="/resources/Templates/BaseTemplate.xhtml">
-            <ui:define name="metatag"></ui:define>
-            <ui:define name="content">
-                <h:form>
-                    <h1 class="section-header">Gateway Status</h1>
-                    <!-- BEGIN: MAIN CONTENT - TAB BAR NAVIGATION -->
-                    <p:tabView id="tabview" effect="fade" effectDuration="normal" dynamic="true" activeIndex="#{tabBean.dashboardTabIndex}" styleClass="tabs-override tabs-ovr-dkblue" >
-                        <p:tab title="Gateway Dashboard" closable="false">
-                            <ui:insert id="dashboard_status">
-                                <ui:include src="Dashboard.xhtml" />
-                            </ui:insert>
-                        </p:tab>
-                        <ui:remove>
-                            <!--  Under Development
-                                <p:tab title="Performance Statistics" closable="false">
-                                <div class="content-block">
-                                    <h2 class="subsection-header">CONNECT Performance Statistics</h2>
-                                    <div class="chart-block">
-                                        <p:lineChart value="#{chartBean.model}" legendPosition="ne"/>
-                                    </div>
-                                </div>
-                                <div class="content-block">
-                                    <h2 class="subsection-header">Direct Performance Statistics</h2>
-                                    <div class="chart-block">
-                                        [to be developed]
-                                    </div>
-                                </div>
-                            </p:tab> -->
-                        </ui:remove>
-                        <!-- END: TAB PANE - PERFORMANCE STATISTICS -->
-                        <!-- BEGIN: TAB PANE - REMOTE GATEWAYS -->
-                        <p:tab title="Remote Gateway" closable="false">
+<head>
+<title>Admin GUI Status</title>
+<link rel="icon" type="image/ico" href="/images/favicon-admingui.ico" />
+</head>
+<h:body>
+    <ui:composition template="/resources/Templates/BaseTemplate.xhtml">
+        <ui:define name="metatag"></ui:define>
+        <ui:define name="content">
+            <h1 class="section-header">Gateway Status</h1>
+            <p:tabView id="tabview" effect="fade" effectDuration="normal" dynamic="true" activeIndex="0"
+                styleClass="tabs-override tabs-ovr-dkblue">
+                <p:tab title="Dashboard" closable="false">
+                    <div class="content-block">
+
+                        <p:panel rendered="#{not empty statusBean.certificateList}" id="alertsPanel"
+                            widgetVar="alertsPanel" style="width: 100%; margin: 0 auto;">
+                            <h2 class="subsection-header">System Alerts and Notifications</h2>
+                            <div class="table-responsive table-orgs">
+                                <p:dataTable id="certificateTable" rows="3" widgetVar="certificateTable" var="cert"
+                                    value="#{statusBean.certificateList}" scrollable="TRUE" scrollHeight="100"
+                                    styleClass="table table-striped table-status" lazy="true">
+                                    <p:column>
+                                        <h:outputText rendered="#{cert.expiryColorCoding eq 'RED' and cert.expiresInDays le 0 }"
+                                            value="Certificate with alias #{cert.alias} expired. Use Certificate Manager to Update. "
+                                            style="color: red" />
+                                         <h:outputText rendered="#{cert.expiryColorCoding eq 'RED' and cert.expiresInDays ge 0 }"
+                                        value="Certificate with alias #{cert.alias} is about to expire in #{cert.expiresInDays} days. Use Certificate Manager to Update. "
+                                        style="color: red" />
+                                        <h:outputText rendered="#{cert.expiryColorCoding eq 'YELLOW'}"
+                                            styleClass="glyphicon glyphicon-warning-sign highlightYELLOW pull-left" />
+                                        <h:outputText  rendered="#{cert.expiryColorCoding eq 'YELLOW'}"
+                                            value=" Certificate with alias #{cert.alias} is about to expire in #{cert.expiresInDays} days. Use Certificate Manager to update. "
+                                            styleClass="orange-warning" style=" white-space: pre"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
                             <div class="content-block">
-                                <h2 class="subsection-header">Remote Gateway List</h2>
-                                <f:event type="postAddToView" listener="#{eventBean.load}" />
-                                <div class="table-responsive">
-                                    <p:dataTable id="dashboardId" value="#{eventBean.organizations}" var="organization" styleClass="table table-striped table-remotegateways">
-                                        <p:column headerText="Gateway">
-                                            <h:outputText value="#{organization.organizationName}" />
-                                        </p:column>
-
-                                        <p:column sortBy="pdCount" headerText="PD">
-                                            <h:outputText value="#{organization.pdCount}" />
-                                        </p:column>
-
-                                        <p:column sortBy="dqCount" headerText="DQ">
-                                            <h:outputText value="#{organization.dqCount}" />
-                                        </p:column>
-
-                                        <p:column sortBy="drCount" headerText="DR">
-                                            <h:outputText value="#{organization.drCount}" />
-                                        </p:column>
-
-                                        <p:column sortBy="dsCount" headerText="DS">
-                                            <h:outputText value="#{organization.dsCount}" />
-                                        </p:column>
-
-                                        <p:column sortBy="adCount" headerText="AD">
-                                            <h:outputText value="#{organization.adCount}" />
-                                        </p:column>
-
-                                        <p:column sortBy="directCount" headerText="Direct">
-                                            <h:outputText value="#{organization.directCount}" />
-                                        </p:column>
-
-                                        <p:column sortBy="totalCount" headerText="Total">
-                                            <h:outputText value="#{organization.totalCount}" />
-                                        </p:column>
-                                    </p:dataTable>
+                                <div class="content form-block ">
+                                    <p:commandButton id="viewAlerts" value="View All Alerts"
+                                        actionListener="#{statusBean.getCertificateInfo}" update=":viewAllAlertsDlg"
+                                        oncomplete="PF('viewAllAlertsDlg').show();" styleClass="edit-button pull-right">
+                                        <p:resetInput target=":tabview" />
+                                    </p:commandButton>
                                 </div>
                             </div>
-                        </p:tab>
-                    </p:tabView>
-                    <!-- END: TAB PANE - REMOTE GATEWAYS -->
-                </h:form>
-            </ui:define>
-        </ui:composition>
-    </h:body>
+                        </p:panel>
+                        <h2 class="subsection-header header-no-text"></h2>
+
+                        <div class="content">
+
+                            <div class="form-block center-block" style="padding: 0px;">
+                                <h:form class="form-horizontal" role="form" id="statusForm">
+                                    <p:panel id="orgPanel" widgetVar="orgPanel" style="width: 100%; margin: 0 auto;">
+                                        <p:panelGrid id="statusGrid" styleClass="ui-panelgrid-domain">
+                                            <p:row>
+                                                <p:column>
+                                                    <p:outputLabel for="osOutput" value="Operating System: " />
+                                                </p:column>
+                                                <p:column>
+                                                    <h:outputText id="osOutput" value="${statusBean.os}" />
+                                                </p:column>
+                                                <p:column>
+                                                    <p:outputLabel for="memoryOutput" value="Memory Used: " />
+                                                </p:column>
+                                                <p:column>
+                                                    <h:outputText id="memoryOutput" value="${statusBean.memory}" />
+                                                </p:column>
+                                            </p:row>
+                                            <p:row>
+                                                <p:column>
+                                                    <p:outputLabel for="javaOutput" value="Java Version: " />
+                                                </p:column>
+                                                <p:column>
+                                                    <h:outputText id="javaOutput" value=" ${statusBean.java}" />
+                                                </p:column>
+                                                <p:column>
+                                                    <p:outputLabel for="totalOutbound" value="Total Outbound Messages: " />
+                                                </p:column>
+                                                <p:column>
+                                                    <h:outputText id="totalOutbound"
+                                                        value="${statusBean.totalOutboundRequests}" />
+                                                </p:column>
+                                            </p:row>
+                                            <p:row>
+                                                <p:column>
+                                                    <p:outputLabel for="appOutput" value="Application Server: " />
+                                                </p:column>
+                                                <p:column>
+                                                    <h:outputText id="appOutput" value="${statusBean.appServer}" />
+                                                </p:column>
+                                                <p:column>
+                                                    <p:outputLabel for="totalInbound" value="Total Inbound Messages: " />
+                                                </p:column>
+                                                <p:column>
+                                                    <h:outputText id="totalInbound"
+                                                        value="${statusBean.totalInboundRequests}" />
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </p:panel>
+
+
+                                    <h2 class="subsection-header">SERVICES</h2>
+                                    <p:panelGrid columns="2" styleClass="gridStatus" layout="grid">
+                                        <p:panel style="padding: 10px;">
+                                            <p>Green Available / Red Unavailable</p>
+                                            <div class="table-responsive table-orgs">
+                                                <p:dataTable id="servicesTable" widgetVar="servicesTable" var="service"
+                                                    value="#{statusBean.services}" scrollable="TRUE" scrollHeight="500"
+                                                    styleClass="table table-striped table-status" lazy="true">
+                                                    <p:column>
+                                                        <h:outputText rendered="#{service.available}"
+                                                            value="#{service.serviceName}" style="color: green" />
+                                                        <h:outputText rendered="#{!service.available}"
+                                                            value="#{service.serviceName} (#{service.serviceMessage})"
+                                                            style="color: red" />
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </div>
+                                        </p:panel>
+                                        <p:panel style="padding: 10px;">
+                                            <p:chart type="bar" id="eventBarChart" model="#{statusBean.eventBarChart}" />
+                                            <br/><br/>
+                                            <p:chart type="pie" id="eventPieChart" model="#{statusBean.eventPieChart}" />
+                                         <p:poll listener="#{statusBean.initServices}" update="eventPieChart eventBarChart statusGrid" interval="30" />
+                                        </p:panel>
+                                     </p:panelGrid>
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END: STATUS PANEL -->
+                </p:tab>
+            </p:tabView>
+            <!-- include any dialog -->
+            <ui:include src="ViewAllAlertsDialog.xhtml" />
+        </ui:define>
+    </ui:composition>
+</h:body>
 </html>

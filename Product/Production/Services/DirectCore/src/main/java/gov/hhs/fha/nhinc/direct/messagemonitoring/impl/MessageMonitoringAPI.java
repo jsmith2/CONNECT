@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.direct.messagemonitoring.impl;
 
 import gov.hhs.fha.nhinc.direct.edge.proxy.DirectEdgeProxy;
@@ -73,6 +73,7 @@ public class MessageMonitoringAPI {
     private static final String STATUS_COMPLETED = "Completed";
     private static final String STATUS_PROCESSED = "Processed";
     private static final String STATUS_ARCHIVED = "Archived";
+    private static final String MSG_MONITORING_NOT_ENABLED = "Message Monitoring is not enabled.";
 
     public MessageMonitoringAPI() {
         // set the default value
@@ -84,6 +85,9 @@ public class MessageMonitoringAPI {
     private static class SingletonHolder {
 
         public static final MessageMonitoringAPI INSTANCE = new MessageMonitoringAPI();
+
+        private SingletonHolder() {
+        }
     }
 
     public static MessageMonitoringAPI getInstance() {
@@ -94,7 +98,7 @@ public class MessageMonitoringAPI {
         // Always
         // check if the message monitoring is enabled
         if (!MessageMonitoringUtil.isMessageMonitoringEnabled()) {
-            LOG.debug("Message Monitoring is not enabled.");
+            LOG.debug(MSG_MONITORING_NOT_ENABLED);
             return;
         }
         LOG.debug("Message Monitoring is enabled.");
@@ -115,7 +119,7 @@ public class MessageMonitoringAPI {
 
             // ignore any message that comes if the status not in Pending
             if (!(tm.getStatus().equalsIgnoreCase(STATUS_PENDING)
-                    || tm.getStatus().equalsIgnoreCase(STATUS_PROCESSED))) {
+                || tm.getStatus().equalsIgnoreCase(STATUS_PROCESSED))) {
                 return;
             }
             // get the mail sender
@@ -123,7 +127,7 @@ public class MessageMonitoringAPI {
             final String senderMailId = getSenderEmailId(message);
 
             MonitoredMessageNotification tmn = getTrackmessagenotification(tm, senderMailId);
-            if (tmn == null){
+            if (tmn == null) {
                 tmn = new MonitoredMessageNotification();
             }
             // check if its a MDN or DSN
@@ -148,7 +152,7 @@ public class MessageMonitoringAPI {
             final Date updatedTime = new Date();
             String incomingMsgReceivedStatus = getIncomingMessagesReceivedStatus(tm);
             if (incomingMsgReceivedStatus.equalsIgnoreCase(STATUS_PENDING)
-                    || incomingMsgReceivedStatus.equalsIgnoreCase(STATUS_PROCESSED)) {
+                || incomingMsgReceivedStatus.equalsIgnoreCase(STATUS_PROCESSED)) {
                 tmn.setUpdatetime(updatedTime);
                 getMessageMonitoringDAO().updateMessageNotification(tmn);
             } else {
@@ -162,10 +166,10 @@ public class MessageMonitoringAPI {
         }
     }
 
-    public void addOutgoingMessage(final MimeMessage message, final boolean failed, final String errorMessage) {
+    public void addOutgoingMessage(final MimeMessage message, final boolean failed) {
         // Always check if message monitoring enabled
         if (!MessageMonitoringUtil.isMessageMonitoringEnabled()) {
-            LOG.debug("Message Monitoring is not enabled.");
+            LOG.debug(MSG_MONITORING_NOT_ENABLED);
             return;
         }
         try {
@@ -218,27 +222,27 @@ public class MessageMonitoringAPI {
 
     /**
      * Build the Message Monitoring cache from the database tables. This will be called when the module is initiated.
-     *
+     * <p>
      */
     private void buildCache() {
         LOG.debug("Inside buildCache");
         // Always check if message monitoring enabled
         if (!MessageMonitoringUtil.isMessageMonitoringEnabled()) {
-            LOG.debug("Message Monitoring is not enabled.");
+            LOG.debug(MSG_MONITORING_NOT_ENABLED);
             return;
         }
         LOG.debug("Message Monitoring is enabled.");
         // get all the Pending rows and add it to the cache
         final List<MonitoredMessage> pendingMessages = getAllPendingMessagesFromDatabase();
-        LOG.debug("Total cache rows from database:" + pendingMessages.size());
+        LOG.debug("Total cache rows from database: {}", pendingMessages.size());
         // clear the cache before loading the data from database
         clearCache();
         // load the pending outgoing messages to the cache
         for (final MonitoredMessage trackMessage : pendingMessages) {
             if (!trackMessage.getStatus().equals(STATUS_ARCHIVED)) {
                 messageMonitoringCache.put(trackMessage.getMessageid(), trackMessage);
-                LOG.debug(
-                        "Total child rows for the messageId:" + trackMessage.getMonitoredmessagenotifications().size());
+                LOG.debug("Total child rows for the messageId: {}", trackMessage.getMonitoredmessagenotifications().
+                    size());
             } else {
                 deleteElapsedArchivedMessage(trackMessage);
             }
@@ -248,7 +252,6 @@ public class MessageMonitoringAPI {
 
     /**
      * Clear the cache.
-     *
      */
     public void clearCache() {
         messageMonitoringCache = new HashMap();
@@ -314,23 +317,17 @@ public class MessageMonitoringAPI {
         return failedMessages;
     }
 
-    public boolean updateMessageMonitoringRetryCount(final MimeMessage message) {
+    public boolean updateMessageMonitoringRetryCount() {
 
-        try {
-            // get the message id
-            final String messageId = message.getMessageID();
+        // its already there, just update the
+        final String emailId = null;
+        final Date updatedTime = new Date();
+        // create the track message notification objects
+        final MonitoredMessageNotification tmn = new MonitoredMessageNotification();
+        tmn.setUpdatetime(updatedTime);
+        tmn.setEmailid(emailId);
+        tmn.setStatus(STATUS_PENDING);
 
-            // its already there, just update the
-            final String emailId = null;
-            final Date updatedTime = new Date();
-            // create the track message notification objects
-            final MonitoredMessageNotification tmn = new MonitoredMessageNotification();
-            tmn.setUpdatetime(updatedTime);
-            tmn.setEmailid(emailId);
-            tmn.setStatus(STATUS_PENDING);
-        } catch (final MessagingException ex) {
-            LOG.error(ex.getLocalizedMessage(),ex);
-        }
         return false;
     }
 
@@ -349,8 +346,7 @@ public class MessageMonitoringAPI {
         return messageMonitoringCache.containsKey(messageId);
     }
 
-    public MonitoredMessageNotification getTrackmessagenotification(final MonitoredMessage trackMessage)
-            throws MessagingException {
+    public MonitoredMessageNotification getTrackmessagenotification(final MonitoredMessage trackMessage) {
         // assuming only one recipient
         final String emailId = trackMessage.getRecipients();
 
@@ -367,7 +363,7 @@ public class MessageMonitoringAPI {
     }
 
     public MonitoredMessageNotification getTrackmessagenotification(final MonitoredMessage trackMessage,
-            final String emailId) throws MessagingException {
+        final String emailId) {
         final Iterator iterator = trackMessage.getMonitoredmessagenotifications().iterator();
         // check values
         while (iterator.hasNext()) {
@@ -380,7 +376,7 @@ public class MessageMonitoringAPI {
         return null;
     }
 
-    private String getIncomingMessagesReceivedStatus(final MonitoredMessage trackMessage) {
+    private static String getIncomingMessagesReceivedStatus(final MonitoredMessage trackMessage) {
         boolean failed = false;
         boolean processed = false;
 
@@ -421,15 +417,13 @@ public class MessageMonitoringAPI {
         if (tm != null) {
             return tm.getStatus().equalsIgnoreCase(STATUS_COMPLETED) || tm.getStatus().equalsIgnoreCase(STATUS_ERROR);
         }
-        // if not able to find then return ture
-        // TODO: revist this
+        // if not able to find then return true
         return true;
     }
 
     /**
      * This method is called by the poller task to monitor & update the message status and also to notify the edge
      * client with respective status of the
-     *
      */
     public void process() {
 
@@ -437,7 +431,7 @@ public class MessageMonitoringAPI {
 
         // Always check if the message monitoring is enabled
         if (!MessageMonitoringUtil.isMessageMonitoringEnabled()) {
-            LOG.debug("Message Monitoring is not enabled.");
+            LOG.debug(MSG_MONITORING_NOT_ENABLED);
             return;
         }
         // check all the pending messages and update the status
@@ -458,7 +452,7 @@ public class MessageMonitoringAPI {
     }
 
     private void checkAndUpdateMessageStatus() {
-        LOG.debug("Exiting Message Monitoring API checkAndUpdateMessageStatus() method.");
+        LOG.debug("Entering Message Monitoring API checkAndUpdateMessageStatus() method.");
         // get the pending message list
         final List<MonitoredMessage> pendingMessages = getAllPendingMessages();
 
@@ -466,7 +460,7 @@ public class MessageMonitoringAPI {
             // check if the processed message is received, if not check the time limit
             // reached
             if (trackMessage.getStatus().equals(STATUS_PENDING)
-                    && getIncomingMessagesReceivedStatus(trackMessage).equals(STATUS_PENDING)) {
+                && getIncomingMessagesReceivedStatus(trackMessage).equals(STATUS_PENDING)) {
                 if (MessageMonitoringUtil.isProcessedMDNReceiveTimeLapsed(trackMessage.getCreatetime())) {
                     LOG.debug("Processed MDN not received on time for the message ID:" + trackMessage.getMessageid());
                     // update the status to Error
@@ -474,7 +468,7 @@ public class MessageMonitoringAPI {
                 } // process the next pending message
             } // if the message status is processed then check if the time limit reached for dispatched
             else if (trackMessage.getStatus().equals(STATUS_PENDING)
-                    && getIncomingMessagesReceivedStatus(trackMessage).equals(STATUS_PROCESSED)) {
+                && getIncomingMessagesReceivedStatus(trackMessage).equals(STATUS_PROCESSED)) {
                 if (MessageMonitoringUtil.isDispatchedMDNReceiveTimeLapsed(trackMessage.getCreatetime())) {
                     LOG.debug("Dispatched MDN not received on time for the message ID:" + trackMessage.getMessageid());
                     // update the status to Error
@@ -491,7 +485,7 @@ public class MessageMonitoringAPI {
      * MessageId in order to make event assertions for Automated testing
      */
     public void processAllMessages() throws MessageMonitoringDAOException {
-        LOG.debug("Inside Message Monitoring API checkAndUpdateMessageStatus() method.");
+        LOG.debug("Inside Message Monitoring API processAllMessages() method.");
         // ********FAILED MESSAGES***********
         // get all the failed messages
         final List<MonitoredMessage> failedMessages = getAllFailedMessages();
@@ -525,7 +519,7 @@ public class MessageMonitoringAPI {
             }
         }
 
-        LOG.debug("Exiting Message Monitoring API checkAndUpdateMessageStatus() method.");
+        LOG.debug("Exiting Message Monitoring API processAllMessages() method.");
     }
 
     /**
@@ -539,27 +533,20 @@ public class MessageMonitoringAPI {
         final String subject = MessageMonitoringUtil.getSuccessfulMessageSubjectPrefix() + trackMessage.getSubject();
         final String emailText = MessageMonitoringUtil.getSuccessfulMessageEmailText() + trackMessage.getRecipients();
         final String postmasterEmailId = MessageMonitoringUtil.getDomainPostmasterEmailId() + "@"
-                + MessageMonitoringUtil.getDomainFromEmail(trackMessage.getSenderemailid());
+            + MessageMonitoringUtil.getDomainFromEmail(trackMessage.getSenderemailid());
         // logic goes here
         final DirectEdgeProxy proxy = MessageMonitoringUtil.getDirectEdgeProxy();
         MimeMessage message = null;
         String errorMsg = null;
         try {
             message = MessageMonitoringUtil.createMimeMessage(postmasterEmailId, subject,
-                    trackMessage.getSenderemailid(), emailText, trackMessage.getMessageid());
+                trackMessage.getSenderemailid(), emailText, trackMessage.getMessageid());
             proxy.provideAndRegisterDocumentSetB(message);
             // Log the failed QOS event
             getDirectEventLogger().log(DirectEventType.DIRECT_EDGE_NOTIFICATION_SUCCESSFUL, message);
-        } catch (final AddressException ex) {
-            errorMsg = ex.getLocalizedMessage();
-            LOG.error("Unknown email address {}",errorMsg,ex);
-            // if error then log a error event
-            logErrorEvent(message, errorMsg);
         } catch (final MessagingException ex) {
             errorMsg = ex.getLocalizedMessage();
-            LOG.error(errorMsg,ex);
-            // if error then log a error event
-            logErrorEvent(message, errorMsg);
+            LOG.error(errorMsg, ex);
         }
         LOG.debug("Exiting Message Monitoring API sendSuccessEdgeNotification() method.");
     }
@@ -574,27 +561,23 @@ public class MessageMonitoringAPI {
         final String subject = MessageMonitoringUtil.getFailedMessageSubjectPrefix() + trackMessage.getSubject();
         final String emailText = MessageMonitoringUtil.getFailedMessageEmailText() + trackMessage.getRecipients();
         final String postmasterEmailId = MessageMonitoringUtil.getDomainPostmasterEmailId() + "@"
-                + MessageMonitoringUtil.getDomainFromEmail(trackMessage.getSenderemailid());
+            + MessageMonitoringUtil.getDomainFromEmail(trackMessage.getSenderemailid());
         // logic goes here
         final DirectEdgeProxy proxy = MessageMonitoringUtil.getDirectEdgeProxy();
         MimeMessage message = null;
         String errorMsg = null;
         try {
             message = MessageMonitoringUtil.createMimeMessage(postmasterEmailId, subject,
-                    trackMessage.getSenderemailid(), emailText, trackMessage.getMessageid());
+                trackMessage.getSenderemailid(), emailText, trackMessage.getMessageid());
             proxy.provideAndRegisterDocumentSetB(message);
             // Log the failed QOS event
             getDirectEventLogger().log(DirectEventType.DIRECT_EDGE_NOTIFICATION_FAILED, message);
         } catch (final AddressException ex) {
             errorMsg = ex.getLocalizedMessage();
             LOG.error("Unable to send FailEdgeNotification {}", errorMsg, ex);
-            // Log the error
-            logErrorEvent(message, errorMsg);
         } catch (final MessagingException ex) {
             errorMsg = ex.getLocalizedMessage();
             LOG.error(errorMsg, ex);
-            // Log the error
-            logErrorEvent(message, errorMsg);
         }
         LOG.debug("Exiting Message Monitoring API sendFailedEdgeNotification() method.");
     }
@@ -604,21 +587,11 @@ public class MessageMonitoringAPI {
      *
      * @return the directEventLogger
      */
-    private DirectEventLogger getDirectEventLogger() {
+    private static DirectEventLogger getDirectEventLogger() {
         return DirectEventLogger.getInstance();
     }
 
-    /*
-     * TODO: The MimeMessage is always null when an exception is thrown and logErrorEvent() is called. Can this method
-     * be removed?
-     */
-    public void logErrorEvent(final MimeMessage message, final String errorMessage) {
-        if (message != null) {
-            getDirectEventLogger().log(DirectEventType.DIRECT_ERROR, message, errorMessage);
-        }
-    }
-
-    private boolean getDirectTestFlag(final String fileName, final String property) {
+    private static boolean getDirectTestFlag(final String fileName, final String property) {
         boolean directTestFlag = false;
         final String directTestingFlag = getDirectTestingParam(fileName, property);
         if (directTestingFlag != null && !directTestingFlag.isEmpty() && directTestingFlag.equals("true")) {
@@ -627,7 +600,7 @@ public class MessageMonitoringAPI {
         return directTestFlag;
     }
 
-    private String getDirectTestingParam(final String fileName, final String property) {
+    private static String getDirectTestingParam(final String fileName, final String property) {
         String directTestingParam = null;
         try {
             directTestingParam = PropertyAccessor.getInstance().getProperty(fileName, property);
@@ -637,7 +610,7 @@ public class MessageMonitoringAPI {
         return directTestingParam;
     }
 
-    private boolean getDirectTestingDelay(final String fileName, final String property, final Date updateDate) {
+    private static boolean getDirectTestingDelay(final String fileName, final String property, final Date updateDate) {
         final String delayTime = getDirectTestingParam(fileName, property);
         final Date currentDateTime = new Date();
         final int delayInMinutes = Integer.parseInt(delayTime);
@@ -648,19 +621,18 @@ public class MessageMonitoringAPI {
         return false;
     }
 
-    private Date getupdateDate(final Date updateDate, final int delayUpdateTime) {
+    private static Date getupdateDate(final Date updateDate, final int delayUpdateTime) {
         final Calendar cal = Calendar.getInstance();
         cal.setTime(updateDate);
         cal.add(Calendar.MINUTE, delayUpdateTime);
         return cal.getTime();
     }
 
-    private void deleteFromMessageMonitoringDB(final MonitoredMessage trackMessage) {
+    private static void deleteFromMessageMonitoringDB(final MonitoredMessage trackMessage) {
         try {
             MessageMonitoringDAOImpl.getInstance().deleteCompletedMessages(trackMessage);
         } catch (final MessageMonitoringDAOException ex) {
-            LOG.debug("Error While deleting Message from MessageMonitoring Table: " + ex);
-            return;
+            LOG.debug("Error While deleting Message from MessageMonitoring Table: {}", ex);
         }
         LOG.debug("Completed message deleted.");
     }
@@ -674,14 +646,14 @@ public class MessageMonitoringAPI {
         }
     }
 
-    private void deleteElapsedArchivedMessage(final MonitoredMessage trackMessage) {
+    private static void deleteElapsedArchivedMessage(final MonitoredMessage trackMessage) {
         if (getDirectTestingDelay(NhincConstants.GATEWAY_PROPERTY_FILE, NhincConstants.MESSAGEMONITORING_DELAYINMINUTES,
-                trackMessage.getUpdatetime())) {
+            trackMessage.getUpdatetime())) {
             deleteFromMessageMonitoringDB(trackMessage);
         }
     }
 
-    private String getSenderEmailId(final MimeMessage message) throws MessagingException {
+    private static String getSenderEmailId(final MimeMessage message) throws MessagingException {
         InternetAddress sender;
         sender = (InternetAddress) message.getSender();
         if (sender == null) {

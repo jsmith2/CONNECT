@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.adapter.deferred.queue;
 
 import gov.hhs.fha.nhinc.common.deferredqueuemanager.DeferredQueueManagerForceProcessRequestType;
@@ -37,30 +37,12 @@ import gov.hhs.fha.nhinc.common.deferredqueuemanager.RetrieveDeferredQueueRespon
 import javax.annotation.Resource;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.soap.Addressing;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Addressing(enabled = true, required = true)
 public class DeferredQueueManager implements gov.hhs.fha.nhinc.deferredqueuemanager.DeferredQueueManagerPortType {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DeferredQueueManager.class);
-
     @Resource
     private WebServiceContext context;
-
-    /**
-     * Default constructor.
-     */
-    public DeferredQueueManager() {
-
-        try {
-            DeferredQueueTimer timer = DeferredQueueTimer.getInstance();
-            timer.startTimer();
-        } catch (Exception e) {
-            String sErrorMessage = "Failed to start DeferredQueueManager's timer.  Error: " + e.getMessage();
-            LOG.error(sErrorMessage, e);
-        }
-    }
 
     /**
      * Force the deferred queue process
@@ -70,9 +52,9 @@ public class DeferredQueueManager implements gov.hhs.fha.nhinc.deferredqueuemana
      */
     @Override
     public DeferredQueueManagerForceProcessResponseType forceProcessOnDeferredQueue(
-            DeferredQueueManagerForceProcessRequestType deferredQueueManagerForceProcessRequest) {
+        DeferredQueueManagerForceProcessRequestType deferredQueueManagerForceProcessRequest) {
         return new DeferredQueueManagerHelper().forceProcessOnDeferredQueue(deferredQueueManagerForceProcessRequest,
-                context);
+            context);
     }
 
     /**
@@ -83,9 +65,9 @@ public class DeferredQueueManager implements gov.hhs.fha.nhinc.deferredqueuemana
      */
     @Override
     public DeferredQueueManagerForceProcessResponseType forceProcessOnDeferredRequest(
-            DeferredQueueManagerForceProcessRequestType deferredQueueManagerForceProcessRequest) {
+        DeferredQueueManagerForceProcessRequestType deferredQueueManagerForceProcessRequest) {
         return new DeferredQueueManagerHelper().forceProcessOnDeferredQueue(deferredQueueManagerForceProcessRequest,
-                context);
+            context);
     }
 
     /**
@@ -96,7 +78,7 @@ public class DeferredQueueManager implements gov.hhs.fha.nhinc.deferredqueuemana
      */
     @Override
     public QueryDeferredQueueResponseType queryDeferredQueue(QueryDeferredQueueRequestType queryDeferredQueueRequest) {
-        return new DeferredQueueManagerHelper().queryDeferredQueue(queryDeferredQueueRequest, context);
+        return new DeferredQueueManagerHelper().queryDeferredQueue(queryDeferredQueueRequest);
     }
 
     /**
@@ -107,8 +89,8 @@ public class DeferredQueueManager implements gov.hhs.fha.nhinc.deferredqueuemana
      */
     @Override
     public RetrieveDeferredQueueResponseType retrieveDeferredQueue(
-            RetrieveDeferredQueueRequestType retrieveDeferredQueueRequest) {
-        return new DeferredQueueManagerHelper().retrieveDeferredQueue(retrieveDeferredQueueRequest, context);
+        RetrieveDeferredQueueRequestType retrieveDeferredQueueRequest) {
+        return new DeferredQueueManagerHelper().retrieveDeferredQueue(retrieveDeferredQueueRequest);
     }
 
     /**
@@ -119,8 +101,8 @@ public class DeferredQueueManager implements gov.hhs.fha.nhinc.deferredqueuemana
      */
     @Override
     public DeferredQueueStatisticsResponseType deferredQueueStatistics(
-            DeferredQueueStatisticsRequestType deferredQueueStatisticsRequest) {
-        return new DeferredQueueManagerHelper().deferredQueueStatistics(deferredQueueStatisticsRequest, context);
+        DeferredQueueStatisticsRequestType deferredQueueStatisticsRequest) {
+        return new DeferredQueueManagerHelper().deferredQueueStatistics(deferredQueueStatisticsRequest);
     }
 
 }

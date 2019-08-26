@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,17 +23,17 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.policyengine;
 
 import gov.hhs.fha.nhinc.common.eventcommon.AdhocQueryRequestEventType;
 import gov.hhs.fha.nhinc.common.eventcommon.AdhocQueryResultEventType;
 import gov.hhs.fha.nhinc.common.eventcommon.DocRetrieveEventType;
 import gov.hhs.fha.nhinc.common.eventcommon.FindAuditEventsEventType;
-import gov.hhs.fha.nhinc.common.eventcommon.NotifyEventType;
 import gov.hhs.fha.nhinc.common.eventcommon.PatDiscReqEventType;
 import gov.hhs.fha.nhinc.common.eventcommon.XDREventType;
 import gov.hhs.fha.nhinc.common.eventcommon.XDRResponseEventType;
+import gov.hhs.fha.nhinc.common.eventcommon.XDSEventType;
 import gov.hhs.fha.nhinc.common.nhinccommonadapter.CheckPolicyRequestType;
 import gov.hhs.fha.nhinc.transform.policy.PolicyEngineTransformer;
 
@@ -42,6 +42,7 @@ import gov.hhs.fha.nhinc.transform.policy.PolicyEngineTransformer;
  * @author Jon Hoppesch
  */
 public class PolicyEngineChecker implements DocumentRetrievePolicyEngineChecker {
+
     PolicyEngineTransformer policyTransformer = new PolicyEngineTransformer();
 
     /**
@@ -70,7 +71,7 @@ public class PolicyEngineChecker implements DocumentRetrievePolicyEngineChecker 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see gov.hhs.fha.nhinc.policyengine.DocumentRetrievePolicyEngineChecker#checkPolicyDocRetrieve(gov.hhs.fha.nhinc.
      * common.eventcommon.DocRetrieveEventType)
      */
@@ -89,22 +90,16 @@ public class PolicyEngineChecker implements DocumentRetrievePolicyEngineChecker 
         return policyTransformer.transformFindAuditEventsToCheckPolicy(request);
     }
 
-    /**
-     * This method will create the generic Policy Check Request Message from a notify request
-     *
-     * @param request Policy check request message for the notify request
-     * @return A generic policy check request message that can be passed to the Policy Engine
-     */
-    public CheckPolicyRequestType checkPolicyNotify(NotifyEventType request) {
-        return policyTransformer.transformNotifyToCheckPolicy(request);
-    }
-
     public CheckPolicyRequestType checkPolicyXDRRequest(XDREventType request) {
         return policyTransformer.transformXDRRequestToCheckPolicy(request);
     }
 
     public CheckPolicyRequestType checkPolicyXDRResponse(XDRResponseEventType request) {
         return policyTransformer.transformXDRResponseInputToCheckPolicy(request);
+    }
+
+    public CheckPolicyRequestType checkPolicyXDSRequest(XDSEventType request) {
+        return policyTransformer.transformXDSRequestToCheckPolicy(request);
     }
 
 }

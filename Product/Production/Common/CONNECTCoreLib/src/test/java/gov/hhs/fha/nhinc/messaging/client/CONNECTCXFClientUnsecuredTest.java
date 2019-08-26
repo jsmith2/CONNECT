@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,8 +23,10 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.messaging.client;
+
+import static org.junit.Assert.assertEquals;
 
 import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
 import gov.hhs.fha.nhinc.messaging.service.decorator.MTOMServiceEndpointDecoratorTest;
@@ -37,9 +39,11 @@ import gov.hhs.fha.nhinc.messaging.service.port.TestServicePortType;
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
 import gov.hhs.fha.nhinc.properties.PropertyAccessException;
 import gov.hhs.fha.nhinc.properties.PropertyAccessor;
+import org.apache.cxf.configuration.jsse.TLSClientParameters;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
-import static org.junit.Assert.assertEquals;
+import org.apache.cxf.transport.http.HTTPConduit;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -58,10 +62,12 @@ public class CONNECTCXFClientUnsecuredTest {
 
     @Before
     public void setUpTest(){
+        System.setProperty("nhinc.properties.dir", System.getProperty("user.dir") + "/src/test/resources/");
+        System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
         try {
             PropertyAccessor.getInstance().setProperty(NhincConstants.GATEWAY_PROPERTY_FILE, TimeoutServiceEndpointDecorator.CONFIG_KEY_TIMEOUT, Integer.toString(TIMEOUT));
         } catch (PropertyAccessException ex) {
-            System.out.println("Unable to set in memory property for timeout decorator.");
+            Assert.fail("Unable to set in memory property for timeout decorator: " + ex.getMessage());
         }
     }
 
@@ -124,7 +130,61 @@ public class CONNECTCXFClientUnsecuredTest {
 
     private CONNECTClient<TestServicePortType> createClient(String url, AssertionType assertion) {
         return CONNECTClientFactory.getInstance().getCONNECTClientUnsecured(new TestServicePortDescriptor(), url,
-                assertion);
+            assertion);
+    }
+
+    @Test
+    public void testHttpsClientDisableCNCheckTrue() {
+        String url = "https://url";
+        AssertionType assertion = new AssertionType();
+        assertion.setTransactionTimeout(-1);
+
+        CONNECTClient<TestServicePortType> endpoint = null;
+        try {
+            PropertyAccessor.getInstance().setProperty(NhincConstants.GATEWAY_PROPERTY_FILE,
+                NhincConstants.DISABLE_CN_CHECK, "true");
+
+            boolean disableCNCheck = PropertyAccessor.getInstance()
+                .getPropertyBoolean(NhincConstants.GATEWAY_PROPERTY_FILE, NhincConstants.DISABLE_CN_CHECK);
+
+            endpoint = createClient(url, assertion);
+
+            Client client = ClientProxy.getClient(endpoint.getPort());
+
+            HTTPConduit conduit = (HTTPConduit) client.getConduit();
+            TLSClientParameters tlsPara = conduit.getTlsClientParameters();
+
+            Assert.assertTrue("disableCNCheck==true", tlsPara.isDisableCNCheck());
+        } catch (PropertyAccessException ex) {
+            Assert.fail("Unable to set in memory property for disable-CN-Check.");
+        }
+    }
+
+    @Test
+    public void testHttpsClientDisableCNCheckFalse() {
+        String url = "https://url";
+        AssertionType assertion = new AssertionType();
+        assertion.setTransactionTimeout(-1);
+
+        CONNECTClient<TestServicePortType> endpoint = null;
+        try {
+            PropertyAccessor.getInstance().setProperty(NhincConstants.GATEWAY_PROPERTY_FILE,
+                NhincConstants.DISABLE_CN_CHECK, "false");
+
+            boolean disableCNCheck = PropertyAccessor.getInstance()
+                .getPropertyBoolean(NhincConstants.GATEWAY_PROPERTY_FILE, NhincConstants.DISABLE_CN_CHECK);
+
+            endpoint = createClient(url, assertion);
+
+            Client client = ClientProxy.getClient(endpoint.getPort());
+
+            HTTPConduit conduit = (HTTPConduit) client.getConduit();
+            TLSClientParameters tlsPara = conduit.getTlsClientParameters();
+
+            Assert.assertFalse("disableCNCheck==false", tlsPara.isDisableCNCheck());
+        } catch (PropertyAccessException ex) {
+            Assert.fail("Unable to set in memory property for disable-CN-Check.");
+        }
     }
 
 }

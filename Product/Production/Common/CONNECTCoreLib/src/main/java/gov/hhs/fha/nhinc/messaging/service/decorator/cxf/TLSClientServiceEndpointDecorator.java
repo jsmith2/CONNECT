@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,9 +26,10 @@
  */
 package gov.hhs.fha.nhinc.messaging.service.decorator.cxf;
 
+import gov.hhs.fha.nhinc.util.HomeCommunityMap;
+
 import gov.hhs.fha.nhinc.messaging.service.ServiceEndpoint;
 import gov.hhs.fha.nhinc.messaging.service.decorator.ServiceEndpointDecorator;
-import org.apache.cxf.configuration.jsse.TLSClientParameters;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.transport.http.HTTPConduit;
@@ -36,11 +37,12 @@ import org.apache.cxf.transport.http.HTTPConduit;
 /**
  * @author bhumphrey
  * @param <T>
- *
  */
 public class TLSClientServiceEndpointDecorator<T> extends ServiceEndpointDecorator<T> {
 
     private TLSClientParametersFactory tlsClientFactory;
+    protected String certificateAlias = null;
+    protected String exchangeName = null;
 
     /**
      * Constructor.
@@ -49,8 +51,9 @@ public class TLSClientServiceEndpointDecorator<T> extends ServiceEndpointDecorat
      * @param assertion
      * @param url
      */
-    public TLSClientServiceEndpointDecorator(ServiceEndpoint<T> decoratoredEndpoint) {
-        this(decoratoredEndpoint, TLSClientParametersFactory.getInstance());
+    public TLSClientServiceEndpointDecorator(ServiceEndpoint<T> decoratoredEndpoint, String certificateAlias,
+        String exchangeName) {
+        this(decoratoredEndpoint, TLSClientParametersFactory.getInstance(), certificateAlias, exchangeName);
     }
 
     /**
@@ -60,9 +63,11 @@ public class TLSClientServiceEndpointDecorator<T> extends ServiceEndpointDecorat
      * @param paramFactory
      */
     public TLSClientServiceEndpointDecorator(ServiceEndpoint<T> decoratoredEndpoint,
-            TLSClientParametersFactory tlsClientFactory) {
+        TLSClientParametersFactory tlsClientFactory, String certificateAlias, String exchangeName) {
         super(decoratoredEndpoint);
         this.tlsClientFactory = tlsClientFactory;
+        this.certificateAlias = certificateAlias;
+        this.exchangeName = exchangeName;
     }
 
     /**
@@ -71,11 +76,21 @@ public class TLSClientServiceEndpointDecorator<T> extends ServiceEndpointDecorat
     @Override
     public void configure() {
         super.configure();
-        Client client = ClientProxy.getClient(getPort());
-        HTTPConduit conduit = (HTTPConduit) client.getConduit();
-        TLSClientParameters tlsCP = tlsClientFactory.getTLSClientParameters();
+        // get sni name based on exchnage
+        getHttpConduit().setTlsClientParameters(
+            tlsClientFactory.getTLSClientParameters(certificateAlias, HomeCommunityMap.getSNIName(exchangeName)));
+    }
 
-        conduit.setTlsClientParameters(tlsCP);
+    protected HTTPConduit getHttpConduit() {
+        Client client = ClientProxy.getClient(getPort());
+        return (HTTPConduit) client.getConduit();
+    }
+
+    /**
+     * @return the tlsClientFactory
+     */
+    public TLSClientParametersFactory getTlsClientFactory() {
+        return tlsClientFactory;
     }
 
 }

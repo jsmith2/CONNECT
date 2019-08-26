@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.connectopensource</groupId>
         <artifactId>Gateway</artifactId>
-        <version>4.8.0-SNAPSHOT</version>
+        <version>5.4.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>CONNECTGatewayWeb</artifactId>
@@ -56,12 +56,10 @@
             <groupId>org.connectopensource</groupId>
             <artifactId>PolicyEngineWebservices</artifactId>
         </dependency>
-
-        <!-- Security -->
         <dependency>
-            <groupId>org.forgerock.openam</groupId>
-            <artifactId>clientsdk</artifactId>
-            <scope>runtime</scope>
+            <groupId>org.connectopensource</groupId>
+            <artifactId>ConnectionManagerCore</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <!-- Persistence -->

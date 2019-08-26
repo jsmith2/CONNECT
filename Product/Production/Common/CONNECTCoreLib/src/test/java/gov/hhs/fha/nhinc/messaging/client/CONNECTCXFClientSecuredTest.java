@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,8 +23,10 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.messaging.client;
+
+import static org.junit.Assert.assertEquals;
 
 import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
 import gov.hhs.fha.nhinc.messaging.service.decorator.MTOMServiceEndpointDecoratorTest;
@@ -44,7 +46,6 @@ import gov.hhs.fha.nhinc.properties.PropertyAccessException;
 import gov.hhs.fha.nhinc.properties.PropertyAccessor;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
-import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -83,19 +84,18 @@ public class CONNECTCXFClientSecuredTest {
     @Test
     public void ensureInterceptorCountIsConstant() {
         String url = "url";
-        String wsAddressingTo = "wsAddressingTo";
         AssertionType assertion = new AssertionType();
         assertion.setTransactionTimeout(-1);
 
-        CONNECTClient<TestServicePortType> client = createClient(url, assertion, wsAddressingTo);
+        CONNECTClient<TestServicePortType> client = createClient(url, assertion);
 
         Client cxfClient = ClientProxy.getClient(client.getPort());
         int numInInterceptors = cxfClient.getInInterceptors().size();
         int numOutInterceptors = cxfClient.getOutInterceptors().size();
 
-        createClient(url, assertion, wsAddressingTo);
-        createClient(url, assertion, wsAddressingTo);
-        CONNECTClient<TestServicePortType> client2 = createClient(url, assertion, wsAddressingTo);
+        createClient(url, assertion);
+        createClient(url, assertion);
+        CONNECTClient<TestServicePortType> client2 = createClient(url, assertion);
 
         Client cxfClient2 = ClientProxy.getClient(client2.getPort());
         assertEquals(numInInterceptors, cxfClient2.getInInterceptors().size());
@@ -106,7 +106,6 @@ public class CONNECTCXFClientSecuredTest {
     @Test
     public void securedClientConfiguration() {
         String url = "url";
-        String wsAddressingTo = "wsAddressingTo";
         String messageId = "urn:uuid:messageId";
         String relatesTo = "relatesTo";
         AssertionType assertion = new AssertionType();
@@ -114,7 +113,7 @@ public class CONNECTCXFClientSecuredTest {
         assertion.getRelatesToList().add(relatesTo);
         ServicePortDescriptor<TestServicePortType> portDescriptor = new TestServicePortDescriptor();
 
-        CONNECTClient<TestServicePortType> client = createClient(url, assertion, wsAddressingTo);
+        CONNECTClient<TestServicePortType> client = createClient(url, assertion);
 
         // default configuration
         timeoutTest.verifyTimeoutIsSet(client, TIMEOUT);
@@ -124,7 +123,7 @@ public class CONNECTCXFClientSecuredTest {
         // secured configuration
         samlTest.verifySAMLConfiguration(client, assertion);
         tlsTest.verifyTLSConfiguration(client);
-        addressTest.verifyAddressingProperties(client, wsAddressingTo, portDescriptor.getWSAddressingAction(),
+        addressTest.verifyAddressingProperties(client, url, portDescriptor.getWSAddressingAction(),
                 messageId, relatesTo);
         securityTest.verifyWsSecurityProperties(client);
     }
@@ -133,7 +132,6 @@ public class CONNECTCXFClientSecuredTest {
     @Test
     public void testEnableMtom() {
         String url = "url";
-        String wsAddressingTo = "wsAddressingTo";
         String messageId = "urn:uuid:messageId";
         String relatesTo = "relatesTo";
         AssertionType assertion = new AssertionType();
@@ -141,7 +139,7 @@ public class CONNECTCXFClientSecuredTest {
         assertion.getRelatesToList().add(relatesTo);
         ServicePortDescriptor<TestServicePortType> portDescriptor = new TestServicePortDescriptor();
 
-        CONNECTClient<TestServicePortType> client = createClient(url, assertion, wsAddressingTo);
+        CONNECTClient<TestServicePortType> client = createClient(url, assertion);
         client.enableMtom();
 
         // default configuration
@@ -152,7 +150,7 @@ public class CONNECTCXFClientSecuredTest {
         // secured configuration
         samlTest.verifySAMLConfiguration(client, assertion);
         tlsTest.verifyTLSConfiguration(client);
-        addressTest.verifyAddressingProperties(client, wsAddressingTo, portDescriptor.getWSAddressingAction(),
+        addressTest.verifyAddressingProperties(client, url, portDescriptor.getWSAddressingAction(),
                 messageId, relatesTo);
         securityTest.verifyWsSecurityProperties(client);
 
@@ -160,9 +158,9 @@ public class CONNECTCXFClientSecuredTest {
         mtomTest.verifyMTOMEnabled(client);
     }
 
-    private CONNECTClient<TestServicePortType> createClient(String url, AssertionType assertion, String wsAddressingTo) {
+    private CONNECTClient<TestServicePortType> createClient(String url, AssertionType assertion) {
         return CONNECTClientFactory.getInstance().getCONNECTClientSecured(new TestServicePortDescriptor(), url,
-                assertion, wsAddressingTo, null);
+            assertion);
     }
 
 }

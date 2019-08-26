@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,7 +26,10 @@
  */
 package gov.hhs.fha.nhinc.messaging.client;
 
+import gov.hhs.fha.nhinc.exchangemgr.InternalExchangeManager;
+
 import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
+import gov.hhs.fha.nhinc.common.nhinccommon.NhinTargetSystemType;
 import gov.hhs.fha.nhinc.messaging.service.port.ServicePortDescriptor;
 
 /**
@@ -34,17 +37,26 @@ import gov.hhs.fha.nhinc.messaging.service.port.ServicePortDescriptor;
  *
  */
 public abstract class CONNECTClientFactory {
-    abstract public <T> CONNECTClient<T> getCONNECTClientSecured(ServicePortDescriptor<T> portDescriptor, String url,
-            AssertionType assertion);
+    public abstract <T> CONNECTClient<T> getCONNECTClientSecured(ServicePortDescriptor<T> portDescriptor, String url,
+        String exchangeName, AssertionType assertion);
 
-    abstract public <T> CONNECTClient<T> getCONNECTClientSecured(ServicePortDescriptor<T> portDescriptor, String url,
-            AssertionType assertion, String wsAddressing, String subscriptionId);
+    public <T> CONNECTClient<T> getCONNECTClientSecured(ServicePortDescriptor<T> portDescriptor, String url,
+        AssertionType assertion) {
+        return getCONNECTClientSecured(portDescriptor, url, InternalExchangeManager.getInstance().getDefaultExchange(),
+            assertion);
+    }
 
-    abstract public <T> CONNECTClient<T> getCONNECTClientSecured(ServicePortDescriptor<T> portDescriptor,
-            AssertionType assertion, String url, String targetHomeCommunityId, String serviceName);
+    public abstract <T> CONNECTClient<T> getCONNECTClientSecured(ServicePortDescriptor<T> portDescriptor,
+        AssertionType assertion, String url, NhinTargetSystemType target, String serviceName);
 
-    abstract public <T> CONNECTClient<T> getCONNECTClientUnsecured(ServicePortDescriptor<T> portDescriptor, String url,
-            AssertionType assertion);
+    public abstract <T> CONNECTClient<T> getCONNECTClientUnsecured(ServicePortDescriptor<T> portDescriptor, String url,
+        String exchangeName, AssertionType assertion);
+
+    public <T> CONNECTClient<T> getCONNECTClientUnsecured(ServicePortDescriptor<T> portDescriptor, String url,
+        AssertionType assertion) {
+        return getCONNECTClientUnsecured(portDescriptor, url, InternalExchangeManager.getInstance()
+            .getDefaultExchange(), assertion);
+    }
 
     public static CONNECTClientFactory getInstance() {
         return new CONNECTCXFClientFactory();

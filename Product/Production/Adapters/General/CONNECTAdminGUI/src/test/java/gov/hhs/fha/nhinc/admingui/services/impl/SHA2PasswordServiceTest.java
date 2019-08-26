@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,18 +23,16 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.admingui.services.impl;
 
-import gov.hhs.fha.nhinc.admingui.services.PasswordService;
 import gov.hhs.fha.nhinc.admingui.services.exception.PasswordServiceException;
-
+import gov.hhs.fha.nhinc.util.SHA2PasswordUtil;
+import gov.hhs.fha.nhinc.util.UtilException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-
 import junit.framework.Assert;
-
 import org.junit.Test;
 
 /**
@@ -54,13 +52,14 @@ public class SHA2PasswordServiceTest {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     @Test
-    public void test() throws PasswordServiceException, NoSuchAlgorithmException, IOException {
+    public void test() throws PasswordServiceException, UtilException {
         byte[] candidatePassword = "password".getBytes();
         byte[] salt = "ABCD".getBytes();
         byte[] passwordHash = "eFw9+D8egYfAGv1QjUMdVzI9dtvwiH3Amc6XlBoXZj03ebwzuQU8yoYzyLtz40JOn69a7P8zqtT7A6lEyIMBmw=="
-                .getBytes();
-        PasswordService service = getSHA2PasswordService();
-        Assert.assertTrue("Password should match",service.checkPassword(passwordHash, candidatePassword, salt));
+            .getBytes();
+
+        Assert.assertTrue("Password should match",
+            SHA2PasswordUtil.checkPassword(passwordHash, candidatePassword, salt));
     }
 
     /**
@@ -71,16 +70,17 @@ public class SHA2PasswordServiceTest {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     @Test
-    public void testNegative() throws PasswordServiceException, NoSuchAlgorithmException, IOException {
+    public void testNegative() throws PasswordServiceException, UtilException {
         byte[] candidatePassword = "candidatePassword".getBytes();
         byte[] salt = "ABCD".getBytes();
         byte[] passwordHash = "nottherighthash".getBytes();
-        PasswordService service = getSHA2PasswordService();
-        Assert.assertFalse("Password doesn't match",service.checkPassword(passwordHash, candidatePassword, salt));
+
+        Assert.assertFalse("Password doesn't match",
+            SHA2PasswordUtil.checkPassword(passwordHash, candidatePassword, salt));
     }
 
     @Test
-    public void generateHash() throws IOException, PasswordServiceException {
+    public void generateHash() throws IOException, NoSuchAlgorithmException, UtilException {
         String salt = "ABCD";// generateRandomSalt();
         String password = "password";
         String sha1 = new String(calculateHash(salt.getBytes(), password.getBytes()));
@@ -88,23 +88,13 @@ public class SHA2PasswordServiceTest {
         Assert.assertEquals("eFw9+D8egYfAGv1QjUMdVzI9dtvwiH3Amc6XlBoXZj03ebwzuQU8yoYzyLtz40JOn69a7P8zqtT7A6lEyIMBmw==", sha1);
     }
 
-    private byte[] calculateHash(byte[] salt, byte[] password) throws IOException, PasswordServiceException {
+    private byte[] calculateHash(byte[] salt, byte[] password) throws UtilException, IOException {
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         outputStream.write(salt);
         outputStream.write(password);
 
-        PasswordService service = getSHA2PasswordService();
-        return service.calculateHash(outputStream.toByteArray());
-    }
-
-    /**
-     * Gets the SHA2 password service.
-     *
-     * @return the SHA2 password service
-     */
-    private PasswordService getSHA2PasswordService() {
-        return new SHA2PasswordService();
+        return SHA2PasswordUtil.calculateHash(salt, password);
     }
 
 }

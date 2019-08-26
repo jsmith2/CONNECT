@@ -1,19 +1,16 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
         <groupId>org.connectopensource</groupId>
         <artifactId>General</artifactId>
-        <version>4.8.0-SNAPSHOT</version>
+        <version>5.4.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>CONNECTAdminGUI</artifactId>
     <name>CONNECT Administration GUI</name>
     <packaging>war</packaging>
     <modelVersion>4.0.0</modelVersion>
-
-    <properties>
-        <cxf.version>2.7.8</cxf.version>
-    </properties>
 
     <dependencies>
         <!-- Java EE APIs -->
@@ -22,17 +19,6 @@
             <artifactId>javaee-api</artifactId>
         </dependency>
         <!-- CXF -->
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-api</artifactId>
-            <version>${cxf.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.geronimo.specs</groupId>
-                    <artifactId>geronimo-javamail_1.4_spec</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxws</artifactId>
@@ -100,6 +86,11 @@
         </dependency>
         <dependency>
             <groupId>org.connectopensource</groupId>
+            <artifactId>PatientCorrelationCore</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.connectopensource</groupId>
             <artifactId>DocumentQueryCore</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
@@ -108,7 +99,31 @@
             <artifactId>DocumentRetrieveCore</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.connectopensource</groupId>
+            <artifactId>ConfigAdminWebservices</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.connectopensource</groupId>
+            <artifactId>AdminGUIManagementWebservices</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.connectopensource</groupId>
+            <artifactId>ConnectionManagerCore</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.connectopensource</groupId>
+            <artifactId>ExchangeManagementWebservices</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.connectopensource</groupId>
+            <artifactId>InternalExchangeManagementWebservices</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.connectopensource</groupId>
+            <artifactId>ComponentWebservices</artifactId>
+        </dependency>
         <!-- Persistence -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -185,38 +200,19 @@
 
         <!-- XML -->
         <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>xmltooling</artifactId>
-            <scope>runtime</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>xalan</groupId>
-                    <artifactId>xalan</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>jul-to-slf4j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>log4j-over-slf4j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>ca.juliusdavies</groupId>
-                    <artifactId>not-yet-commons-ssl</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>net.jcip</groupId>
-                    <artifactId>jcip-annotations</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-xjc</artifactId>
         </dependency>
 
         <!-- JSF -->
         <dependency>
             <groupId>org.apache.myfaces.core</groupId>
             <artifactId>myfaces-bundle</artifactId>
-            <scope>runtime</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -270,9 +266,9 @@
 
         <!-- xalan dependency required for XSL transformation -->
         <dependency>
-            <groupId>xalan</groupId>
-            <artifactId>xalan</artifactId>
-            <scope>runtime</scope>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>9.8.0-14</version>
         </dependency>
 
 
@@ -298,20 +294,20 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--  AntiSamy -->
-         <dependency>
+        <!-- AntiSamy -->
+        <dependency>
             <groupId>org.owasp.antisamy</groupId>
             <artifactId>antisamy</artifactId>
             <version>1.5.3</version>
         </dependency>
-   </dependencies>
-  <repositories>
-    <repository>
-      <id>prime-repo</id>
-      <name>PrimeFaces Maven Repository</name>
-      <url>http://repository.primefaces.org</url>
-      <layout>default</layout>
-      </repository>
+    </dependencies>
+    <repositories>
+        <repository>
+            <id>prime-repo</id>
+            <name>PrimeFaces Maven Repository</name>
+            <url>http://repository.primefaces.org</url>
+            <layout>default</layout>
+        </repository>
     </repositories>
 
     <build>
@@ -325,9 +321,23 @@
                             <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
                     </archive>
+                    <packagingExcludes>
+                        WEB-INF/lib/bcprov-jdk15on-1.51.jar,
+                        WEB-INF/lib/geronimo*,
+                        WEB-INF/lib/cxf-rt-management-3.1.9.jar,
+                        WEB-INF/lib/cxf-rt-security-3.1.9.jar,
+                        WEB-INF/lib/cxf-rt-security-saml-3.1.9.jar,
+                        WEB-INF/lib/cxf-tools*,
+                        WEB-INF/lib/jasypt-1.9.2.jar,
+                        WEB-INF/lib/jcl-over-slf4j-1.7.13.jar,
+                        WEB-INF/lib/opensaml*,
+                        WEB-INF/lib/spring-jms-4.1.9.RELEASE.jar,
+                        WEB-INF/lib/spring-messaging-4.1.9.RELEASE.jar,
+                        WEB-INF/lib/velocity*,
+                        WEB-INF/lib/ehcache-2.10.3.jar
+                    </packagingExcludes>
                 </configuration>
             </plugin>
         </plugins>
     </build>
 </project>
-

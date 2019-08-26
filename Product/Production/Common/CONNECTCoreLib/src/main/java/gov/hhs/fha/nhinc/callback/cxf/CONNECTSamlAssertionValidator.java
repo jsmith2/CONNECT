@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,28 +26,38 @@
  */
 package gov.hhs.fha.nhinc.callback.cxf;
 
+import gov.hhs.fha.nhinc.callback.SamlConstants;
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
+import gov.hhs.fha.nhinc.nhinclib.NullChecker;
+import gov.hhs.fha.nhinc.properties.PropertyAccessException;
 import gov.hhs.fha.nhinc.properties.PropertyAccessor;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import javax.xml.namespace.QName;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.ws.security.WSSecurityException;
-import org.apache.ws.security.handler.RequestData;
-import org.apache.ws.security.saml.SAMLKeyInfo;
-import org.apache.ws.security.saml.ext.AssertionWrapper;
-import org.apache.ws.security.saml.ext.OpenSAMLUtil;
-import org.apache.ws.security.validate.Credential;
-import org.apache.ws.security.validate.SamlAssertionValidator;
-import org.opensaml.saml2.core.AuthzDecisionStatement;
-import org.opensaml.saml2.core.Issuer;
-import org.opensaml.xml.validation.ValidationException;
-import org.opensaml.xml.validation.ValidatorSuite;
+import org.apache.wss4j.common.ext.WSSecurityException;
+import org.apache.wss4j.common.ext.WSSecurityException.ErrorCode;
+import org.apache.wss4j.common.saml.OpenSAMLUtil;
+import org.apache.wss4j.common.saml.SAMLKeyInfo;
+import org.apache.wss4j.common.saml.SamlAssertionWrapper;
+import org.apache.wss4j.dom.handler.RequestData;
+import org.apache.wss4j.dom.validate.Credential;
+import org.apache.wss4j.dom.validate.SamlAssertionValidator;
+import org.opensaml.core.xml.XMLObject;
+import org.opensaml.core.xml.schema.impl.XSAnyImpl;
+import org.opensaml.core.xml.schema.impl.XSStringImpl;
+import org.opensaml.core.xml.util.AttributeMap;
+import org.opensaml.saml.saml2.core.Assertion;
+import org.opensaml.saml.saml2.core.Attribute;
+import org.opensaml.saml.saml2.core.AttributeStatement;
+import org.opensaml.saml.saml2.core.Issuer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,32 +66,22 @@ import org.slf4j.LoggerFactory;
  *
  * {@inheritDoc}
  *
- * In addition, this class can be configured to allow Assertions with No Subjects. This is required for interoperability
- * with previous CONNECT gateways.
+ * In addition, this class can be configured to allow Assertions with No
+ * Subjects. This is required for interoperability with previous CONNECT
+ * gateways.
  */
 public class CONNECTSamlAssertionValidator extends SamlAssertionValidator {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(CONNECTSamlAssertionValidator.class);
+    private static final String IS_PRESENT = "is present.";
 
-    /** The Constant ALLOW_NO_SUBJECT_ASSERTION_PROP. */
-    private static final String ALLOW_NO_SUBJECT_ASSERTION_PROP = "allowNoSubjectAssertion";
+    private static final Set<String> VALIDATED_ATTRIBUTES = new HashSet<>(
+        Arrays.asList(SamlConstants.ATTRIBUTE_NAME_SUBJECT_ID_XSPA, SamlConstants.ATTRIBUTE_NAME_ORG,
+            SamlConstants.ATTRIBUTE_NAME_ORG_ID, SamlConstants.ATTRIBUTE_NAME_HCID,
+            SamlConstants.ATTRIBUTE_NAME_SUBJECT_ROLE, SamlConstants.ATTRIBUTE_NAME_PURPOSE_OF_USE));
 
-    /** The Constant ALLOW_NO_SUBJECT_ASSERTION_ID. */
-    private static final String ALLOW_NO_SUBJECT_ASSERTION_ID = "saml2-core-spec-validator-allow-no-subject-assertion";
+    private final PropertyAccessor propertyAccessor;
 
-    /** The Constant EXCHANGE_AUTH_FRWK_VALIDATOR_SUITE. */
-    private static final String EXCHANGE_AUTH_FRWK_VALIDATOR_SUITE = "exchange-authorization-framework-validator-suite";
-
-    /** The Constant TEMP_RESOURCE_FOR_VALIDATION. */
-    private static final String TEMP_RESOURCE_FOR_VALIDATION = "TEMPORARY_RESOURCE_FOR_VALIDATION";
-
-    /** The property accessor. */
-    private PropertyAccessor propertyAccessor;
-
-    /**
-     * Instantiates a new cONNECT saml assertion validator.
-     */
     public CONNECTSamlAssertionValidator() {
         propertyAccessor = PropertyAccessor.getInstance();
     }
@@ -91,7 +91,7 @@ public class CONNECTSamlAssertionValidator extends SamlAssertionValidator {
      *
      * @param propertyAccessor the property accessor
      */
-    public CONNECTSamlAssertionValidator(PropertyAccessor propertyAccessor) {
+    public CONNECTSamlAssertionValidator(final PropertyAccessor propertyAccessor) {
         this.propertyAccessor = propertyAccessor;
     }
 
@@ -102,64 +102,56 @@ public class CONNECTSamlAssertionValidator extends SamlAssertionValidator {
      * @throws WSSecurityException the wS security exception
      */
     @Override
-    protected void validateAssertion(AssertionWrapper assertion) throws WSSecurityException {
+    protected void validateAssertion(final SamlAssertionWrapper assertion) throws WSSecurityException {
         if (assertion.getSaml1() != null) {
-            ValidatorSuite schemaValidators = org.opensaml.Configuration.getValidatorSuite("saml1-schema-validator");
-            ValidatorSuite specValidators = org.opensaml.Configuration.getValidatorSuite("saml1-spec-validator");
-            try {
-                schemaValidators.validate(assertion.getSaml1());
-                specValidators.validate(assertion.getSaml1());
-            } catch (ValidationException e) {
-                LOG.debug("Saml Validation error: " + e.getMessage(), e);
-                throw new WSSecurityException(WSSecurityException.FAILURE, "invalidSAMLsecurity");
-            }
+            assertion.validateSignatureAgainstProfile();
         } else if (assertion.getSaml2() != null) {
-            List<ValidatorSuite> validators = new LinkedList<>();
-            validators.add(org.opensaml.Configuration.getValidatorSuite("saml2-core-schema-validator"));
-            validators.addAll(getSaml2SpecValidators());
-
-            for (AuthzDecisionStatement auth : assertion.getSaml2().getAuthzDecisionStatements()) {
-                if (StringUtils.isBlank(auth.getResource())) {
-                    auth.setResource(TEMP_RESOURCE_FOR_VALIDATION);
-                }
-            }
-
-            Issuer issuer = assertion.getSaml2().getIssuer();
-            if (issuer.getFormat().equals("urn:oasis:names:tc:SAML:1.1:nameid-format:entity")) {
-                if (!StringUtils.isBlank(issuer.getSPProvidedID())) {
-                    throw new WSSecurityException("SOAP header element Security/Assertion/Issuer/@Format = " + ""
-                            + "urn:oasis:names:tc:SAML:1.1:nameid-format:entity" + "" + "and"
-                            + "Security/Assertion/Issuer/@SPProvidedID" + " " + "is present.");
-                }
-                if (!StringUtils.isBlank(issuer.getNameQualifier())) {
-                    throw new WSSecurityException("SOAP header element Security/Assertion/Issuer/@Format = " + ""
-                            + "urn:oasis:names:tc:SAML:1.1:nameid-format:entity" + "" + "and"
-                            + "Security/Assertion/Issuer/@NameQualifier" + " " + "is present.");
-                }
-
-                if (!StringUtils.isBlank(issuer.getSPNameQualifier())) {
-                    throw new WSSecurityException("SOAP header element Security/Assertion/Issuer/@Format = " + ""
-                            + "urn:oasis:names:tc:SAML:1.1:nameid-format:entity" + "" + "and"
-                            + "Security/Assertion/Issuer/@SPNameQualifier" + " " + "is present.");
-
-                }
-            }
-
+            final Issuer issuer = assertion.getSaml2().getIssuer();
+            validateIssuer(issuer);
             try {
-                for (ValidatorSuite v : validators) {
-                    v.validate(assertion.getSaml2());
+                // need to process custom saml validator
+                for (final Saml2ExchangeAuthFrameworkValidator validator : getSaml2SpecValidators()) {
+                    validator.validateAssertion(assertion);
                 }
-            } catch (ValidationException e) {
-                LOG.error("Saml Validation error: " + e.getMessage(), e);
-                throw new WSSecurityException(WSSecurityException.FAILURE, "invalidSAMLsecurity");
-            }
-
-            for (AuthzDecisionStatement auth : assertion.getSaml2().getAuthzDecisionStatements()) {
-                if (StringUtils.equals(auth.getResource(), TEMP_RESOURCE_FOR_VALIDATION)) {
-                    auth.setResource(StringUtils.EMPTY);
-                }
+            } catch (final WSSecurityException e) {
+                LOG.error("Saml Validation error: {}", e.getLocalizedMessage(), e);
+                throw new WSSecurityException(ErrorCode.FAILED_CHECK, "invalidSAMLsecurity");
             }
         }
+    }
+
+    /**
+     * @param issuer
+     * @throws WSSecurityException
+     */
+    private static void validateIssuer(Issuer issuer) throws WSSecurityException {
+        if (SamlConstants.URN_OASIS_NAMES.equals(issuer.getFormat())) {
+            if (StringUtils.isNotBlank(issuer.getSPProvidedID())) {
+                throw new WSSecurityException(ErrorCode.FAILED_CHECK,
+                    getCustomErrorMsg(SamlConstants.SECURITY_ASSERTION_SPPROVIDEDID));
+            }
+            if (StringUtils.isNotBlank(issuer.getNameQualifier())) {
+                throw new WSSecurityException(ErrorCode.FAILED_CHECK,
+                    getCustomErrorMsg(SamlConstants.SECURITY_ASSERTION_NAME_QUALIFIER));
+            }
+            if (StringUtils.isNotBlank(issuer.getSPNameQualifier())) {
+                throw new WSSecurityException(ErrorCode.FAILED_CHECK,
+                    getCustomErrorMsg(SamlConstants.SECURITY_ASSERTION_SPNAME_QUALIFIER));
+            }
+        }
+    }
+
+    /**
+     * Generate custom error msg based on template for validating assertion
+     * issuer
+     *
+     * @param errorType error type
+     * @return custom error msg
+     */
+    private static String getCustomErrorMsg(final String errorType) {
+        return new StringBuilder(SamlConstants.SECURITY_ASSERTION_ISSUER_FORMAT).append("").append(" ")
+            .append(SamlConstants.URN_OASIS_NAMES).append(" and ").append(errorType).append(" ").append(IS_PRESENT)
+            .toString();
     }
 
     /**
@@ -167,17 +159,8 @@ public class CONNECTSamlAssertionValidator extends SamlAssertionValidator {
      *
      * @return the exchange auth framework validator suite
      */
-    protected ValidatorSuite getExchangeAuthFrameworkValidatorSuite() {
-        ValidatorSuite specValidator = org.opensaml.Configuration.getValidatorSuite(EXCHANGE_AUTH_FRWK_VALIDATOR_SUITE);
-
-        if (specValidator == null) {
-            QName qName = new QName("urn:oasis:names:tc:SAML:2.0:assertion", "Assertion", "saml2");
-            specValidator = new ValidatorSuite(EXCHANGE_AUTH_FRWK_VALIDATOR_SUITE);
-            specValidator.registerValidator(qName, new Saml2ExchangeAuthFrameworkValidator());
-            org.opensaml.Configuration.registerValidatorSuite(EXCHANGE_AUTH_FRWK_VALIDATOR_SUITE, specValidator);
-        }
-
-        return specValidator;
+    protected Saml2ExchangeAuthFrameworkValidator getExchangeAuthFrameworkValidatorSuite() {
+        return new Saml2ExchangeAuthFrameworkValidator();
     }
 
     /**
@@ -185,10 +168,10 @@ public class CONNECTSamlAssertionValidator extends SamlAssertionValidator {
      *
      * @return the saml2 spec validators
      */
-    protected Collection<ValidatorSuite> getSaml2SpecValidators() {
+    protected Collection<Saml2ExchangeAuthFrameworkValidator> getSaml2SpecValidators() {
         try {
-            Boolean allowNoSubjectAssertion = propertyAccessor.getPropertyBoolean(NhincConstants.GATEWAY_PROPERTY_FILE,
-                    ALLOW_NO_SUBJECT_ASSERTION_PROP);
+            final Boolean allowNoSubjectAssertion = propertyAccessor
+                .getPropertyBoolean(NhincConstants.SAML_PROPERTY_FILE, SamlConstants.ALLOW_NO_SUBJECT_ASSERTION_PROP);
 
             if (allowNoSubjectAssertion) {
                 return getSaml2AllowNoSubjectAssertionSpecValidators();
@@ -196,9 +179,9 @@ public class CONNECTSamlAssertionValidator extends SamlAssertionValidator {
                 return getSaml2DefaultAssertionSpecValidators();
             }
 
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOG.warn("Failed to get SAML 2 assertion validator. " + e.getMessage(), e);
-            return null;
+            return CollectionUtils.EMPTY_COLLECTION;
         }
     }
 
@@ -207,7 +190,7 @@ public class CONNECTSamlAssertionValidator extends SamlAssertionValidator {
      *
      * @return the saml2 allow no subject assertion spec validators
      */
-    protected Collection<ValidatorSuite> getSaml2AllowNoSubjectAssertionSpecValidators() {
+    protected Collection<Saml2ExchangeAuthFrameworkValidator> getSaml2AllowNoSubjectAssertionSpecValidators() {
         return Collections.singleton(getSaml2AllowNoSubjectAssertionSpecValidator());
     }
 
@@ -216,17 +199,8 @@ public class CONNECTSamlAssertionValidator extends SamlAssertionValidator {
      *
      * @return the saml2 allow no subject assertion spec validator
      */
-    protected ValidatorSuite getSaml2AllowNoSubjectAssertionSpecValidator() {
-        ValidatorSuite specValidators = org.opensaml.Configuration.getValidatorSuite(ALLOW_NO_SUBJECT_ASSERTION_ID);
-
-        if (specValidators == null) {
-            QName qName = new QName("urn:oasis:names:tc:SAML:2.0:assertion", "Assertion", "saml2");
-            specValidators = new ValidatorSuite(ALLOW_NO_SUBJECT_ASSERTION_ID);
-            specValidators.registerValidator(qName, new Saml2AllowNoSubjectAssertionSpecValidator());
-            org.opensaml.Configuration.registerValidatorSuite(ALLOW_NO_SUBJECT_ASSERTION_ID, specValidators);
-        }
-
-        return specValidators;
+    protected Saml2ExchangeAuthFrameworkValidator getSaml2AllowNoSubjectAssertionSpecValidator() {
+        return new Saml2AllowNoSubjectAssertionSpecValidator();
     }
 
     /**
@@ -234,9 +208,8 @@ public class CONNECTSamlAssertionValidator extends SamlAssertionValidator {
      *
      * @return the saml2 assertion spec validator
      */
-    protected Collection<ValidatorSuite> getSaml2DefaultAssertionSpecValidators() {
-        Collection<ValidatorSuite> suites = new HashSet<>();
-        suites.add(org.opensaml.Configuration.getValidatorSuite("saml2-core-spec-validator"));
+    protected Collection<Saml2ExchangeAuthFrameworkValidator> getSaml2DefaultAssertionSpecValidators() {
+        final Collection<Saml2ExchangeAuthFrameworkValidator> suites = new HashSet<>();
         suites.add(getExchangeAuthFrameworkValidatorSuite());
         return suites;
     }
@@ -244,33 +217,24 @@ public class CONNECTSamlAssertionValidator extends SamlAssertionValidator {
     /*
      * (non-Javadoc)
      *
-     * @see org.apache.ws.security.validate.SamlAssertionValidator( org.apache.ws.security.validate.Credential,
-     * org.apache.ws.security.handler.RequestData)
+     * @see org.apache.wss4j.dom.validate.SamlAssertionValidator#validate(org.apache.wss4j.dom.validate.Credential,
+     * org.apache.wss4j.dom.handler.RequestData)
      */
     @Override
-    public Credential validate(Credential credential, RequestData data) throws WSSecurityException {
-        if (credential == null || credential.getAssertion() == null) {
-            throw new WSSecurityException(WSSecurityException.FAILURE, "noCredential");
+    public Credential validate(final Credential credential, final RequestData data) throws WSSecurityException {
+        if (credential == null || credential.getSamlAssertion() == null) {
+            throw new WSSecurityException(ErrorCode.FAILED_CHECK, "noCredential");
         }
-        AssertionWrapper assertion = credential.getAssertion();
+        final SamlAssertionWrapper assertion = credential.getSamlAssertion();
 
         // Check HOK requirements
         String confirmMethod = null;
-        List<String> methods = assertion.getConfirmationMethods();
-        if (methods != null && methods.size() > 0) {
+        final List<String> methods = assertion.getConfirmationMethods();
+        if (CollectionUtils.isNotEmpty(methods)) {
             confirmMethod = methods.get(0);
         }
-        if (OpenSAMLUtil.isMethodHolderOfKey(confirmMethod)) {
-            if (assertion.getSubjectKeyInfo() == null) {
-                LOG.debug("There is no Subject KeyInfo to match the holder-of-key subject conf method");
-                throw new WSSecurityException(WSSecurityException.FAILURE, "noKeyInSAMLToken");
-            }
-            // The assertion must have been signed for HOK
-            if (!assertion.isSigned()) {
-                LOG.debug("A holder-of-key assertion must be signed");
-                throw new WSSecurityException(WSSecurityException.FAILURE, "invalidSAMLsecurity");
-            }
-        }
+        // Check assertion
+        checkAssertion(assertion, confirmMethod);
 
         // Check conditions
         checkConditions(assertion);
@@ -284,28 +248,123 @@ public class CONNECTSamlAssertionValidator extends SamlAssertionValidator {
     }
 
     /**
+     * @param assertion
+     * @param confirmMethod
+     * @throws WSSecurityException
+     */
+    private void checkAssertion(SamlAssertionWrapper assertion, String confirmMethod)
+        throws WSSecurityException {
+        if (OpenSAMLUtil.isMethodHolderOfKey(confirmMethod)) {
+            if (assertion.getSubjectKeyInfo() == null) {
+                LOG.info("There is no Subject KeyInfo to match the holder-of-key subject conf method");
+                throw new WSSecurityException(ErrorCode.FAILED_CHECK, "noKeyInSAMLToken");
+            }
+            // The assertion must have been signed for HOK
+            if (!assertion.isSigned()) {
+                LOG.info("A holder-of-key assertion must be signed");
+                throw new WSSecurityException(ErrorCode.FAILED_CHECK, "invalidSAMLsecurity");
+            }
+        }
+
+        if (validateAttributes()) {
+            checkAttributes(assertion);
+        }
+    }
+
+    public void checkAttributes(SamlAssertionWrapper assertion) throws WSSecurityException {
+        Assertion saml2Assertion = assertion.getSaml2();
+        Set<String> foundAttr = new HashSet<>();
+
+        for (AttributeStatement statement : saml2Assertion.getAttributeStatements()) {
+            for (Attribute attribute : statement.getAttributes()) {
+                if (CollectionUtils.isNotEmpty(attribute.getAttributeValues()) && attribute.getAttributeValues().get(0) != null
+                    && isAttributeValueValid(attribute.getAttributeValues().get(0), attribute.getName())) {
+                    foundAttr.add(attribute.getName());
+                }
+            }
+        }
+
+        Set<String> missingAttrs = new HashSet<>(VALIDATED_ATTRIBUTES);
+        missingAttrs.removeAll(foundAttr);
+
+        if (CollectionUtils.isNotEmpty(missingAttrs)) {
+            LOG.error("Missing Required Attributes: {}", missingAttrs);
+            throw new WSSecurityException(ErrorCode.FAILED_CHECK, "missingRequiredSAMLAttribute");
+        }
+    }
+
+    private static boolean isAttributeValueValid(XMLObject value, String name) {
+        if (value instanceof XSStringImpl) {
+            return NullChecker.isNotNullish(((XSStringImpl) value).getValue());
+        } else if (value instanceof XSAnyImpl) {
+            if (SamlConstants.ATTRIBUTE_NAME_SUBJECT_ROLE.equals(name)
+                || SamlConstants.ATTRIBUTE_NAME_PURPOSE_OF_USE.equals(name)) {
+                return containsCodeQName((XSAnyImpl) value);
+            } else {
+                return NullChecker.isNotNullish(((XSAnyImpl) value).getTextContent());
+            }
+        } else {
+            LOG.warn("Unknown type of Attribute object for name: {}, default to add to found list.", name);
+            return true;
+        }
+    }
+
+    private static boolean containsCodeQName(XSAnyImpl value) {
+        if (CollectionUtils.isNotEmpty(value.getUnknownXMLObjects())
+            && value.getUnknownXMLObjects().get(0) instanceof XSAnyImpl) {
+            XSAnyImpl attributeValues = (XSAnyImpl) value.getUnknownXMLObjects().get(0);
+            if (!attributeValues.getUnknownAttributes().isEmpty()) {
+                return containsCodeQName(attributeValues.getUnknownAttributes());
+            }
+        }
+        return false;
+    }
+
+    private static boolean containsCodeQName(AttributeMap unknownAttributes) {
+        for (QName qName : unknownAttributes.keySet()) {
+            if (NhincConstants.CE_CODE.equals(qName.getLocalPart())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Check signed assertion.
      *
      * @param assertion the assertion
      * @param data the data
      * @throws WSSecurityException the wS security exception
      */
-    protected void checkSignedAssertion(AssertionWrapper assertion, RequestData data) throws WSSecurityException {
+    protected void checkSignedAssertion(final SamlAssertionWrapper assertion, final RequestData data)
+        throws WSSecurityException {
 
-        SAMLKeyInfo samlKeyInfo = assertion.getSignatureKeyInfo();
-        X509Certificate[] certs = samlKeyInfo.getCerts();
-        PublicKey publicKey = samlKeyInfo.getPublicKey();
+        final SAMLKeyInfo samlKeyInfo = assertion.getSignatureKeyInfo();
+        final X509Certificate[] certs = samlKeyInfo.getCerts();
+        final PublicKey publicKey = samlKeyInfo.getPublicKey();
 
         try {
             super.verifySignedAssertion(assertion, data);
-        } catch (WSSecurityException e) {
+        } catch (final WSSecurityException e) {
             if (certs == null && publicKey != null) {
                 LOG.warn("Could not establish trust of the signature's public key because no matching public key "
-                        + "exists in the truststore. Please see GATEWAY-3146 for more details.");
+                    + "exists in the truststore.");
             } else {
                 throw e;
             }
         }
+    }
+
+    protected boolean validateAttributes() {
+        boolean validate = false;
+        try {
+            validate = PropertyAccessor.getInstance().getPropertyBoolean(NhincConstants.SAML_PROPERTY_FILE,
+                SamlConstants.VALIDATE_ATTRIBUTES_PROP);
+        } catch (PropertyAccessException ex) {
+            LOG.warn("Unable to access property for validating SAML attributes due to: {}", ex.getLocalizedMessage(), ex);
+        }
+
+        return validate;
     }
 
 }

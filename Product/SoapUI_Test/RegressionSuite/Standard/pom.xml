@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.connectopensource</groupId>
         <artifactId>RegressionSuite</artifactId>
-        <version>4.8.0-SNAPSHOT</version>
+        <version>5.4.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>Standard</artifactId>
@@ -27,7 +27,7 @@
                 <properties.dir>${project.parent.parent.parent.basedir}/${wildfly.properties.dir}</properties.dir>
             </properties>
             <modules>
-                <module>Admin-Distribution-Standard</module>
+                <!--<module>Admin-Distribution-Standard</module> -->
                 <module>AuditLogging-Standard</module>
                 <module>DocQueryErrorCodesStandard</module>
                 <module>DocQueryFanoutTestTarget</module>
@@ -48,6 +48,12 @@
                 <module>EntityDocRetrieveSecuredInterfaceTest</module>
                 <module>PDSAMLIssuerWithX509SubjectNameTest</module>
                 <module>ValidateConnectionManagerForAllServices</module>
+                <module>KeepAliveHeader</module>
+                <module>TransactionIDTest</module>
+                <module>EntitySendingXDRAsyncReqTests</module>
+                <module>EntitySendingXDRAsyncResponseTests</module>
+                <module>Fanout-Test</module>
+                <module>ExchangeManager</module>
             </modules>
         </profile>
     </profiles>

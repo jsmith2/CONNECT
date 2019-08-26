@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,13 +23,17 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.configuration.jmx;
 
-import javax.servlet.ServletContext;
+import static gov.hhs.fha.nhinc.util.CoreHelpUtils.debugApplicationContext;
+
 import org.apache.commons.lang.StringUtils;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 /**
  * The Class AbstractWebServicesMXBean. This abstract class provides some common methods for retrieving beans and
@@ -37,19 +41,10 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *
  * @author msw
  */
-public abstract class AbstractWebServicesMXBean implements WebServicesMXBean {
+public abstract class AbstractWebServicesMXBean implements ApplicationContextAware, WebServicesMXBean {
 
-    /** The ServletContext. */
-    private ServletContext sc;
-
-    /**
-     * Instantiates a new abstract web services mx bean.
-     *
-     * @param sc the ServletContext
-     */
-    public AbstractWebServicesMXBean(ServletContext sc) {
-        this.sc = sc;
-    }
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractWebServicesMXBean.class);
+    protected ApplicationContext context;
 
     /**
      * Gets the Nhin interface bean name.
@@ -110,62 +105,14 @@ public abstract class AbstractWebServicesMXBean implements WebServicesMXBean {
      * @return the t
      */
     protected <T> T retrieveBean(final Class<T> beanType, String beanName) {
-        WebApplicationContext webApplicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(sc);
-
-        return beanType.cast(webApplicationContext.getBean(beanName));
+        try {
+            return beanType.cast(context.getBean(beanName));
+        } catch (BeansException ex) {
+            debugApplicationContext(this.getClass(), context);
+            LOG.error("debug--retrieveBean: {}, {}", beanName, ex.getMessage(), ex);
+        }
+        return null;
     }
-
-    /**
-     * Configure inbound Standard implementation. This method is abstract because subclass implementations must use
-     * actual types as opposed to the type parameters use in {@link #retrieveBean(Class, String)} and
-     *
-     * @param className the class name
-     * @throws InstantiationException the instantiation exception
-     * @throws IllegalAccessException the illegal access exception
-     * @throws ClassNotFoundException the class not found exception {@link #retrieveDependency(Class, String)}.
-     */
-    @Override
-    public abstract void configureInboundStdImpl()
-            throws InstantiationException, IllegalAccessException, ClassNotFoundException;
-
-    /**
-     * Configure inbound Passthrough implementation. This method is abstract because subclass implementations must use
-     * actual types as opposed to the type parameters use in {@link #retrieveBean(Class, String)} and
-     *
-     * @param className the class name
-     * @throws InstantiationException the instantiation exception
-     * @throws IllegalAccessException the illegal access exception
-     * @throws ClassNotFoundException the class not found exception {@link #retrieveDependency(Class, String)}.
-     */
-    @Override
-    public abstract void configureInboundPtImpl()
-            throws InstantiationException, IllegalAccessException, ClassNotFoundException;
-
-    /**
-     * Configure outbound Standard implementation. This method is abstract because subclass implementations must use
-     * actual types as opposed to the type parameters use in {@link #retrieveBean(Class, String)} and
-     *
-     * @param className the class name
-     * @throws InstantiationException the instantiation exception
-     * @throws IllegalAccessException the illegal access exception
-     * @throws ClassNotFoundException the class not found exception {@link #retrieveDependency(Class, String)}.
-     */
-    @Override
-    public abstract void configureOutboundStdImpl()
-            throws InstantiationException, IllegalAccessException, ClassNotFoundException;
-
-    /**
-     * Configure outbound Passthrough implementation. This method is abstract because subclass implementations must use
-     * actual types as opposed to the type parameters use in {@link #retrieveBean(Class, String)} and
-     *
-     * @param className the class name
-     * @throws InstantiationException the instantiation exception
-     * @throws IllegalAccessException the illegal access exception
-     * @throws ClassNotFoundException the class not found exception {@link #retrieveDependency(Class, String)}.
-     */
-    @Override
-    public abstract void configureOutboundPtImpl()
-            throws InstantiationException, IllegalAccessException, ClassNotFoundException;
 
     /**
      * Compares the class name of an object vs the class name passed in.
@@ -178,10 +125,15 @@ public abstract class AbstractWebServicesMXBean implements WebServicesMXBean {
     protected boolean compareClassName(Object clazz, String className) {
         boolean matches = false;
         if (clazz != null && clazz.getClass() != null
-                && StringUtils.startsWith(clazz.getClass().getName(), className)) {
+            && StringUtils.startsWith(clazz.getClass().getName(), className)) {
             matches = true;
         }
         return matches;
     }
 
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        context = applicationContext;
+    }
 }

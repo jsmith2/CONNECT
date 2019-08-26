@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.asyncmsgs.dao;
 
 import gov.hhs.fha.nhinc.asyncmsgs.model.AsyncMsgRecord;
@@ -97,7 +97,7 @@ public class AsyncMsgRecordDao {
      */
     public List<AsyncMsgRecord> queryByMessageIdAndDirection(String messageId, String direction) {
         LOG.debug(
-                "Performing database record retrieve using message id: " + messageId + " and direction: " + direction);
+            "Performing database record retrieve using message id: " + messageId + " and direction: " + direction);
 
         List<AsyncMsgRecord> asyncMsgRecs = null;
         Session sess = null;
@@ -115,7 +115,7 @@ public class AsyncMsgRecordDao {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Completed database record retrieve by message id. Results found: "
-                        + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
+                    + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
             }
         } finally {
             if (sess != null) {
@@ -138,8 +138,8 @@ public class AsyncMsgRecordDao {
      * @return matching records
      */
     public List<AsyncMsgRecord> queryByMessageIdAndServiceName(String messageId, String serviceName) {
-        LOG.debug("Performing database record retrieve using message id: " + messageId + "and service name: "
-                + serviceName);
+        LOG.debug(
+            "Performing database record retrieve using message id: " + messageId + "and service name: " + serviceName);
 
         List<AsyncMsgRecord> asyncMsgRecs = null;
         Session sess = null;
@@ -157,7 +157,7 @@ public class AsyncMsgRecordDao {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Completed database record retrieve by message id and service name. Results found: "
-                        + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
+                    + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
             }
         } finally {
             if (sess != null) {
@@ -196,7 +196,7 @@ public class AsyncMsgRecordDao {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Completed database record retrieve by timestamp. Results found: "
-                        + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
+                    + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
             }
         } finally {
             if (sess != null) {
@@ -235,7 +235,7 @@ public class AsyncMsgRecordDao {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Completed database record retrieve by timestamp. Results found: "
-                        + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
+                    + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
             }
         } finally {
             if (sess != null) {
@@ -272,7 +272,7 @@ public class AsyncMsgRecordDao {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Completed database record retrieve for deferred queue manager processing. Results found: "
-                        + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
+                    + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
             }
         } finally {
             if (sess != null) {
@@ -310,7 +310,7 @@ public class AsyncMsgRecordDao {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Completed database record retrieve for deferred queue manager selected. Results found: "
-                        + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
+                    + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
             }
         } finally {
             if (sess != null) {
@@ -397,7 +397,7 @@ public class AsyncMsgRecordDao {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Completed database record retrieve by criteria. Results found: "
-                        + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
+                    + (asyncMsgRecs == null ? "0" : Integer.toString(asyncMsgRecs.size())));
             }
         } finally {
             if (sess != null) {
@@ -451,7 +451,11 @@ public class AsyncMsgRecordDao {
             } finally {
                 // Actual insertion will happen at this step
                 if (session != null) {
-                    session.close();
+                    try {
+                        session.close();
+                    } catch (HibernateException he) {
+                        LOG.error("Failed to close session: {}", he.getLocalizedMessage(), he);
+                    }
                 }
             }
         }
@@ -621,11 +625,11 @@ public class AsyncMsgRecordDao {
         String units = null;
         try {
             units = accessor.getProperty(NhincConstants.GATEWAY_PROPERTY_FILE,
-                    NhincConstants.ASYNC_DB_REC_EXP_VAL_UNITS_PROP);
+                NhincConstants.ASYNC_DB_REC_EXP_VAL_UNITS_PROP);
         } catch (PropertyAccessException ex) {
             LOG.error("Error: Failed to retrieve {} from property file {}: {}",
-                    NhincConstants.ASYNC_DB_REC_EXP_VAL_UNITS_PROP, NhincConstants.GATEWAY_PROPERTY_FILE,
-                    ex.getLocalizedMessage(), ex);
+                NhincConstants.ASYNC_DB_REC_EXP_VAL_UNITS_PROP, NhincConstants.GATEWAY_PROPERTY_FILE,
+                ex.getLocalizedMessage(), ex);
         }
         return units;
     }
@@ -637,11 +641,11 @@ public class AsyncMsgRecordDao {
         long value = 0;
         try {
             value = accessor.getPropertyLong(NhincConstants.GATEWAY_PROPERTY_FILE,
-                    NhincConstants.ASYNC_DB_REC_EXP_VAL_PROP);
+                NhincConstants.ASYNC_DB_REC_EXP_VAL_PROP);
         } catch (PropertyAccessException ex) {
             LOG.error("Error: Failed to retrieve {} from property file {}: {}",
-                    NhincConstants.ASYNC_DB_REC_EXP_VAL_PROP, NhincConstants.GATEWAY_PROPERTY_FILE,
-                    ex.getLocalizedMessage(), ex);
+                NhincConstants.ASYNC_DB_REC_EXP_VAL_PROP, NhincConstants.GATEWAY_PROPERTY_FILE,
+                ex.getLocalizedMessage(), ex);
         }
         return value;
     }
@@ -652,11 +656,11 @@ public class AsyncMsgRecordDao {
         // Convert the long to a Long Object and change the sign to negative so our query value ends up in the past.
         Long longObj = -value;
 
-        if (units.equalsIgnoreCase(NhincConstants.ASYNC_DB_REC_EXP_VAL_UNITS_SEC)) {
+        if (NhincConstants.ASYNC_DB_REC_EXP_VAL_UNITS_SEC.equalsIgnoreCase(units)) {
             currentTime.add(Calendar.SECOND, longObj.intValue());
-        } else if (units.equalsIgnoreCase(NhincConstants.ASYNC_DB_REC_EXP_VAL_UNITS_MIN)) {
+        } else if (NhincConstants.ASYNC_DB_REC_EXP_VAL_UNITS_MIN.equalsIgnoreCase(units)) {
             currentTime.add(Calendar.MINUTE, longObj.intValue());
-        } else if (units.equalsIgnoreCase(NhincConstants.ASYNC_DB_REC_EXP_VAL_UNITS_HOUR)) {
+        } else if (NhincConstants.ASYNC_DB_REC_EXP_VAL_UNITS_HOUR.equalsIgnoreCase(units)) {
             currentTime.add(Calendar.HOUR_OF_DAY, longObj.intValue());
         } else {
             // Default to days

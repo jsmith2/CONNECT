@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,7 +26,9 @@
  */
 package gov.hhs.fha.nhinc.docrepository.adapter.model;
 
+import gov.hhs.fha.nhinc.common.loadtestdatamanagement.EventCodeType;
 import gov.hhs.fha.nhinc.nhinclib.NullChecker;
+import gov.hhs.fha.nhinc.util.CoreHelpUtils;
 
 /**
  * Data class for a document event code.
@@ -39,7 +41,28 @@ public class EventCode {
     private String eventCode;
     private String eventCodeScheme;
     private String eventCodeDisplayName;
-    private Document document;
+    private DocumentMetadata document;
+
+    public EventCode() {
+    }
+
+    public EventCode(EventCodeType evCode, DocumentMetadata docMetadata) {
+        eventCodeId = CoreHelpUtils.isId(evCode.getEventCodeId()) ? evCode.getEventCodeId() : null;
+        eventCode = evCode.getEventCode();
+        eventCodeScheme = evCode.getEventCodeScheme();
+        eventCodeDisplayName = evCode.getEventCodeDisplayName();
+        document = docMetadata;
+    }
+
+    public EventCodeType getEventCodeType() {
+        EventCodeType build = new EventCodeType();
+        build.setEventCodeId(eventCodeId);
+        build.setEventCode(eventCode);
+        build.setEventCodeScheme(eventCodeScheme);
+        build.setEventCodeDisplayName(eventCodeDisplayName);
+        build.setDocumentid(document.getDocumentid());
+        return build;
+    }
 
     public String getEventCode() {
         return eventCode;
@@ -73,11 +96,11 @@ public class EventCode {
         this.eventCodeScheme = eventCodeScheme;
     }
 
-    public Document getDocument() {
+    public DocumentMetadata getDocument() {
         return document;
     }
 
-    public void setDocument(Document document) {
+    public void setDocument(DocumentMetadata document) {
         this.document = document;
     }
 
@@ -126,10 +149,21 @@ public class EventCode {
         if (getEventCodeDisplayName() == null && toCheck.getEventCodeDisplayName() != null) {
             return false;
         } else if (getEventCodeDisplayName() != null
-                && !getEventCodeDisplayName().equals(toCheck.getEventCodeDisplayName())) {
+            && !getEventCodeDisplayName().equals(toCheck.getEventCodeDisplayName())) {
             return false;
         }
         return true;
     }
 
+    public EventCode cloneEventCode() {
+        EventCode clone = new EventCode();
+
+        clone.setEventCodeId(null);
+        clone.setEventCode(eventCode);
+        clone.setEventCodeScheme(eventCodeScheme);
+        clone.setEventCodeDisplayName(eventCodeDisplayName);
+        clone.setDocument(null);
+
+        return clone;
+    }
 }

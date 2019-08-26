@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,8 +28,8 @@ package gov.hhs.fha.nhinc.callback;
 
 import static org.junit.Assert.assertTrue;
 
-import gov.hhs.fha.nhinc.callback.openSAML.CallbackMapProperties;
-import gov.hhs.fha.nhinc.callback.openSAML.CallbackProperties;
+import gov.hhs.fha.nhinc.callback.opensaml.CallbackMapProperties;
+import gov.hhs.fha.nhinc.callback.opensaml.CallbackProperties;
 import gov.hhs.fha.nhinc.callback.purposeuse.PurposeUseProxy;
 import gov.hhs.fha.nhinc.connectmgr.NhinEndpointManager;
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
@@ -154,13 +154,13 @@ public abstract class AbstractPurposeOfForDeciderMockBaseTest {
 
     protected Map<String, Object> createTokenValuesg0() {
         Map<String, Object> tokenVals = createTokenValues();
-        tokenVals.put(NhincConstants.TARGET_API_LEVEL, NhincConstants.GATEWAY_API_LEVEL.LEVEL_g0);
+        tokenVals.put(SamlConstants.TARGET_API_LEVEL, NhincConstants.GATEWAY_API_LEVEL.LEVEL_g0);
         return tokenVals;
     }
 
     protected Map<String, Object> createTokenValuesg1() {
         Map<String, Object> tokenVals = createTokenValues();
-        tokenVals.put(NhincConstants.TARGET_API_LEVEL, NhincConstants.GATEWAY_API_LEVEL.LEVEL_g1);
+        tokenVals.put(SamlConstants.TARGET_API_LEVEL, NhincConstants.GATEWAY_API_LEVEL.LEVEL_g1);
         return tokenVals;
     }
 
@@ -173,7 +173,7 @@ public abstract class AbstractPurposeOfForDeciderMockBaseTest {
         context.checking(new Expectations() {
             {
                 exactly(0).of(mockNhinEndpointManager).getApiVersion(with(any(String.class)),
-                        with(any(NhincConstants.NHIN_SERVICE_NAMES.class)));
+                    with(any(NhincConstants.NHIN_SERVICE_NAMES.class)));
             }
         });
     }
@@ -185,7 +185,7 @@ public abstract class AbstractPurposeOfForDeciderMockBaseTest {
         context.checking(new Expectations() {
             {
                 exactly(1).of(mockNhinEndpointManager).getApiVersion(with(any(String.class)),
-                        with(any(NhincConstants.NHIN_SERVICE_NAMES.class)));
+                    with(any(NhincConstants.NHIN_SERVICE_NAMES.class)));
                 will(returnValue(level));
             }
         });

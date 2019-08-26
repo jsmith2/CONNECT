@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,6 +30,7 @@ import gov.hhs.fha.nhinc.nhinclib.NullChecker;
 import java.io.File;
 import java.util.Properties;
 import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +43,7 @@ public class PropertyAccessor implements IPropertyAcessor {
 
     private PropertyFileDAO propertyFileDAO;
     private PropertyAccessorFileUtilities fileUtilities;
+    public static final PropertyAccessor INSTANCE = new PropertyAccessor();
 
     private static final Logger LOG = LoggerFactory.getLogger(PropertyAccessor.class);
 
@@ -53,19 +55,14 @@ public class PropertyAccessor implements IPropertyAcessor {
         fileUtilities = createPropertyAccessorFileUtilities();
     }
 
-    private static class SingletonHolder {
-
-        public static final PropertyAccessor INSTANCE = new PropertyAccessor();
-    }
-
     // singleton
     public static PropertyAccessor getInstance() {
-        return SingletonHolder.INSTANCE;
+        return INSTANCE;
     }
 
     /**
      * @param propertyFileName The name of the property file. This is the name of the file without a path and without
-     *            the ".properties" extension. Examples of this would be "connection" or "gateway".
+     * the ".properties" extension. Examples of this would be "connection" or "gateway".
      *
      */
     public synchronized void setPropertyFile(String propertyFileName) {
@@ -86,7 +83,7 @@ public class PropertyAccessor implements IPropertyAcessor {
      * the property will be retrieved from the properties file and returned.
      *
      * @param propertyFile The name of the property file. This is the name of the file without a path and without the
-     *            ".properties" extension. Examples of this would be "connection" or "gateway".
+     * ".properties" extension. Examples of this would be "connection" or "gateway".
      * @param propertyName This is the name of the property within the property file.
      * @throws PropertyAccessException This is thrown if an error occurs accessing the property.
      */
@@ -98,6 +95,18 @@ public class PropertyAccessor implements IPropertyAcessor {
         return propertyFileDAO.getProperty(propertyFile, propertyName);
     }
 
+    @Override
+    public synchronized String getProperty(String propertyFile, String propertyName, String defaultValue) {
+        String result = null;
+        try {
+            result = getProperty(propertyFile, propertyName);
+        } catch (PropertyAccessException e) {
+            LOG.error("Fail to retrieve {} from {}.property file", propertyName, propertyFile, e.getLocalizedMessage(),
+                e);
+        }
+        return StringUtils.isNotBlank(result) ? result : defaultValue;
+    }
+
     /**
      * Sets a property.
      *
@@ -107,7 +116,8 @@ public class PropertyAccessor implements IPropertyAcessor {
      * @throws PropertyAccessException the property access exception
      */
     @Override
-    public void setProperty(String propertyFileName, String key, String value) throws PropertyAccessException {
+    public synchronized void setProperty(String propertyFileName, String key, String value) throws
+        PropertyAccessException {
         loadPropertyFile(propertyFileName);
 
         propertyFileDAO.setProperty(propertyFileName, key, value);
@@ -126,16 +136,37 @@ public class PropertyAccessor implements IPropertyAcessor {
      *
      * @param propertyFile The name of the property file.
      * @param propertyName The name of the property that contains a boolean value. This will return true if the value
-     *            is: T, t, or any case combination of "TRUE" and it will return false for all other values.
+     * is: T, t, or any case combination of "TRUE" and it will return false for all other values.
      * @throws PropertyAccessException This is thrown if an error occurs accessing the property.
      */
     @Override
     public synchronized boolean getPropertyBoolean(String propertyFile, String propertyName)
-            throws PropertyAccessException {
+        throws PropertyAccessException {
         validateInput(propertyFile, propertyName);
         loadPropertyFile(propertyFile);
 
         return propertyFileDAO.getPropertyBoolean(propertyFile, propertyName);
+    }
+
+    /**
+     * This will return true if the property value is: T, t, or any case combination of "TRUE" and it will return false
+     * for all other values. If entry is not found, it will return the default value
+     *
+     * @param propertyFile The name of the property file.
+     * @param propertyName The name of the property that contains a boolean value. This will return true if the value
+     * is: T, t, or any case combination of "TRUE" and it will return false for all other values.
+     * @param defaultValue default value if entry doesn't exist in property file
+     */
+    @Override
+    public synchronized boolean getPropertyBoolean(String propertyFile, String propertyName, boolean defaultValue) {
+        try {
+            return getPropertyBoolean(propertyFile, propertyName);
+        } catch (PropertyAccessException e) {
+            LOG.error("Fail to retrieve {} from {}.property file. Default to {} ", propertyName, defaultValue,
+                propertyFile, e);
+            return defaultValue;
+        }
+
     }
 
     /**
@@ -154,6 +185,19 @@ public class PropertyAccessor implements IPropertyAcessor {
         return propertyFileDAO.getPropertyLong(propertyFile, propertyName);
     }
 
+    @Override
+    public Long getPropertyLongObject(String propertyFile, String propertyName, Long defaultValue) {
+        try {
+            validateInput(propertyFile, propertyName);
+            loadPropertyFile(propertyFile);
+            return propertyFileDAO.getPropertyLongObject(propertyFile, propertyName, defaultValue);
+        } catch (PropertyAccessException anEx) {
+            LOG.error("Fail to retrieve {} from {}.property file. Default to {} ", propertyName, defaultValue,
+                propertyFile, anEx);
+            return defaultValue;
+        }
+    }
+
     /**
      * This method returns the set of keys in a property file.
      *
@@ -161,7 +205,7 @@ public class PropertyAccessor implements IPropertyAcessor {
      * @return An enumeration of property keys in the property file.
      * @throws PropertyAccessException This is thrown if an error occurs accessing the property.
      */
-    public synchronized final Set<String> getPropertyNames(String propertyFile) throws PropertyAccessException {
+    public synchronized Set<String> getPropertyNames(String propertyFile) throws PropertyAccessException {
         validateInput(propertyFile);
         loadPropertyFile(propertyFile);
 
@@ -174,7 +218,7 @@ public class PropertyAccessor implements IPropertyAcessor {
      * but the cache is not fresh, then the cache will be updated with the current values in the properties file and
      * then the property values will be returned. If the properties for that file are not cached at all, the property
      * will be retrieved from the properties file and returned.
-     *
+     * <p>
      * NOTE: THIS IS AN EXPENSIVE OPERATION. IT WILL CREATE A DEEP COPY OF THE PROPERTIES AND RETURN IT. THAT MEANS IT
      * WILL CREATE AN EXACT REPLICA WITH ALL DATA. THIS IS A PROTECTION TO MAKE SURE THAT A PROPERTY IS NOT
      * INADVERTANTLY CHANGED OUTSIDE OF THIS CLASS.

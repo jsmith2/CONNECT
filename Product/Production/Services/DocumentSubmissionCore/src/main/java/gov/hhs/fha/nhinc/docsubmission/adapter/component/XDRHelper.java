@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,22 +23,27 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.docsubmission.adapter.component;
 
 import gov.hhs.fha.nhinc.docsubmission.adapter.component.routing.RoutingObjectFactory;
 import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
 import gov.hhs.fha.nhinc.properties.PropertyAccessor;
 import ihe.iti.xds_b._2007.ProvideAndRegisterDocumentSetRequestType;
+import ihe.iti.xds_b._2007.ProvideAndRegisterDocumentSetRequestType.Document;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.JAXBElement;
+import oasis.names.tc.ebxml_regrep.xsd.lcm._3.SubmitObjectsRequest;
 import oasis.names.tc.ebxml_regrep.xsd.rim._3.ExtrinsicObjectType;
+import oasis.names.tc.ebxml_regrep.xsd.rim._3.IdentifiableType;
 import oasis.names.tc.ebxml_regrep.xsd.rim._3.RegistryObjectListType;
 import oasis.names.tc.ebxml_regrep.xsd.rim._3.RegistryPackageType;
 import oasis.names.tc.ebxml_regrep.xsd.rim._3.SlotType1;
 import oasis.names.tc.ebxml_regrep.xsd.rs._3.RegistryError;
 import oasis.names.tc.ebxml_regrep.xsd.rs._3.RegistryErrorList;
 import oasis.names.tc.ebxml_regrep.xsd.rs._3.RegistryResponseType;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,64 +57,15 @@ public class XDRHelper {
 
     public static final String XDR_EC_XDSMissingDocument = "XDSMissingDocument";
     public static final String XDR_EC_XDSMissingDocumentMetadata = "XDSMissingDocumentMetadata";
-    public static final String XDR_EC_XDSNonIdenticalHash = "XDSNonIdenticalHash";
-    public static final String XDR_EC_XDSRegistryDuplicateUniqueIdInMessage = "XDSRegistryDuplicateUniqueIdInMessage";
-    public static final String XDR_EC_XDSRegistryBusy = "XDSRegistryBusy";
-    public static final String XDR_EC_XDSRegistryMetadataError = "XDSRegistryMetadataError";
     public static final String XDR_EC_XDSUnknownPatientId = "XDSUnknownPatientId";
     public static final String XDR_EC_XDSPatientIdDoesNotMatch = "XDSPatientIdDoesNotMatch";
 
     public static final String XDS_RETRIEVE_RESPONSE_STATUS_FAILURE = "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Failure";
     public static final String XDS_RETRIEVE_RESPONSE_STATUS_SUCCESS = "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Success";
-    public static final String XDS_AVAILABLILTY_STATUS_APPROVED = "Active";
-    public static final String XDS_STATUS = "urn:oasis:names:tc:ebxml-regrep:StatusType:Approved";
-    public static final String XDS_STATUS_ONLINE = "Online";
-    public static final String XDS_STATUS_OFFLINE = "Offline";
-    public static final String XDS_NAME = "Name";
-    public static final String XDS_CLASSIFIED_OBJECT = "classifiedObject"; // this is the reference to the
-    // extrinsicObject/document element
-    public static final String XDS_NODE_REPRESENTATION = "nodeRepresentation"; // this the actual code in a
-    // classification element
-    public static final String XDS_CLASSIFICATION_ID = "id"; // this is the id of the classification element
-    public static final String XDS_DOCUMENT_UNIQUE_ID = "XDSDocumentEntry.uniqueId";
-    public static final String XDS_PATIENT_ID = "XDSDocumentEntry.patientId";
-    public static final String XDS_CREATION_TIME_SLOT = "creationTime";
-    public static final String XDS_START_TIME_SLOT = "serviceStartTime";
-    public static final String XDS_STOP_TIME_SLOT = "serviceStopTime";
     public static final String XDS_SOURCE_PATIENT_ID_SLOT = "sourcePatientId";
-    public static final String XDS_SOURCE_PATIENT_INFO_SLOT = "sourcePatientInfo";
-    public static final String XDS_AUTHOR_PERSON_SLOT = "authorPerson";
-    public static final String XDS_AUTHOR_INSTITUTION_SLOT = "authorInstitution";
-    public static final String XDS_AUTHOR_ROLE_SLOT = "authorRole";
-    public static final String XDS_AUTHOR_SPECIALITY_SLOT = "authorSpecialty";
-    public static final String XDS_CODING_SCHEME_SLOT = "codingScheme";
     public static final String XDS_INTENDED_RECIPIENT_SLOT = "intendedRecipient";
-    public static final String XDS_LANGUAGE_CODE_SLOT = "languageCode";
-    public static final String XDS_LEGAL_AUTHENTICATOR_SLOT = "legalAuthenticator";
-    public static final String XDS_SOURCE_PATIENT_INFO_PID3 = "PID-3";
-    public static final String XDS_SOURCE_PATIENT_INFO_PID5 = "PID-5";
-    public static final String XDS_SOURCE_PATIENT_INFO_PID7 = "PID-7";
-    public static final String XDS_SOURCE_PATIENT_INFO_PID8 = "PID-8";
-    public static final String XDS_SOURCE_PATIENT_INFO_PID11 = "PID-11";
-    public static final String XDS_AUTHOR_CLASSIFICATION = "urn:uuid:93606bcf-9494-43ec-9b4e-a7748d1a838d";
-    public static final String XDS_CLASSCODE_CLASSIFICATION = "urn:uuid:41a5887f-8865-4c09-adf7-e362475b143a";
-    public static final String XDS_CONTENT_TYPE_CODE_CLASSIFICATION = "urn:uuid:aa543740-bdda-424e-8c96-df4873be8500";
-    public static final String XDS_CONFIDENTIALITY_CODE_CLASSIFICATION = "urn:uuid:f4f85eac-e6cb-4883-b524-f2705394840f";
-    public static final String XDS_FORMAT_CODE_CLASSIFICATION = "urn:uuid:a09d5840-386c-46f2-b5ad-9c3699a4309d";
-    public static final String XDS_HEALTHCARE_FACILITY_TYPE_CODE_CLASSIFICATION = "urn:uuid:f33fb8ac-18af-42cc-ae0e-ed0b0bdb91e1";
-    public static final String XDS_PRACTICE_SETTING_CODE_CLASSIFICATION = "urn:uuid:cccf5598-8b07-4b77-a05e-ae952c785ead";
-    public static final String XDS_EVENT_CODE_LIST_CLASSIFICATION = "urn:uuid:2c6b8cb7-8b2a-4051-b291-b1ae6a575ef4";
-    public static final String XDS_CODE_LIST_CLASSIFICATION = "urn:uuid:1ba97051-7806-41a8-a48b-8fce7af683c5";
-    public static final String XDS_TYPE_CODE_CLASSIFICATION = "urn:uuid:f0306f51-975f-434e-a61c-c59651d33983";
-    public static final String XDS_ERROR_CODE_MISSING_REQUEST_MESSAGE_DATA = "MISSING_DATA";
-    public static final String XDS_ERROR_CODE_MISSING_DOCUMENT_METADATA = "MISSING_METADATA";
-    public static final String XDS_ERROR_CODE_REPOSITORY_ERROR = "REPOSITORY_ERROR";
-    public static final String XDS_MISSING_REQUEST_MESSAGE_DATA = "The ProvideAndRegisterDocumentSetRequest message did not contain any data to operate on. No documents will be stored.";
-    public static final String XDS_MISSING_DOCUMENT_METADATA = "A document exists in the submission with no corresponding document metadata. Document will not be stored.";
-    public static final String XDS_REPOSITORY_ERROR = "An error occurred while storing a document to the repository.";
-    public static final String XDS_ASSOCIATION_TYPE_REPLACE = "urn:oasis:names:tc:ebxml-regrep:AssociationType:RPLC";
 
-    public RegistryResponseType createErrorResponse(RegistryErrorList errorList) {
+    public static RegistryResponseType createErrorResponse(RegistryErrorList errorList) {
         RegistryResponseType result = new RegistryResponseType();
         LOG.debug("begin createErrorResponse()");
         result.setStatus(XDS_RETRIEVE_RESPONSE_STATUS_FAILURE);
@@ -118,7 +74,7 @@ public class XDRHelper {
         return result;
     }
 
-    public RegistryResponseType createPositiveAck() {
+    public static RegistryResponseType createPositiveAck() {
         RegistryResponseType result = new RegistryResponseType();
 
         result.setStatus(XDS_RETRIEVE_RESPONSE_STATUS_SUCCESS);
@@ -126,88 +82,130 @@ public class XDRHelper {
         return result;
     }
 
+
     public RegistryErrorList validateDocumentMetaData(ProvideAndRegisterDocumentSetRequestType body) {
         RegistryErrorList result = new RegistryErrorList();
 
         LOG.debug("begin validateDocumentMetaData()");
         if (body == null) {
-            RegistryError error = createRegistryError(XDR_EC_XDSMissingDocument, NhincConstants.XDS_REGISTRY_ERROR_SEVERITY_ERROR,
-                "ProvideAndRegisterDocumentSetRequestType was null");
+            RegistryError error = createRegistryError(XDR_EC_XDSMissingDocument,
+                NhincConstants.XDS_REGISTRY_ERROR_SEVERITY_ERROR, "ProvideAndRegisterDocumentSetRequestType was null");
 
             result.getRegistryError().add(error);
 
             // Request message was null, cannot continue. Return result.
             return processErrorList(result);
         }
-        if (body.getDocument() == null) {
-            RegistryError error = createRegistryError(XDR_EC_XDSMissingDocument, NhincConstants.XDS_REGISTRY_ERROR_SEVERITY_ERROR,
-                "ProvideAndRegisterDocumentSetRequestType did not contain a DocumentList");
-            result.getRegistryError().add(error);
-        } else if (body.getDocument().isEmpty()) {
-            RegistryError error = createRegistryError(XDR_EC_XDSMissingDocument, NhincConstants.XDS_REGISTRY_ERROR_SEVERITY_ERROR,
-                "DocumentList did not contain any documents");
-            result.getRegistryError().add(error);
-        }
 
-        if (result.getRegistryError().size() > 0) {
+        if (validateDocumentData(body, result)) {
             return processErrorList(result);
         }
 
-        RegistryObjectListType regList = body.getSubmitObjectsRequest().getRegistryObjectList();
-
-        ArrayList<String> metaDocIds = new ArrayList<>();
-        ArrayList<String> metaPatIds = new ArrayList<>();
-
-        for (int x = 0; x < regList.getIdentifiable().size(); x++) {
-            if (regList.getIdentifiable().get(x).getDeclaredType().equals(ExtrinsicObjectType.class)) {
-
-                ExtrinsicObjectType extObj = (ExtrinsicObjectType) regList.getIdentifiable().get(x).getValue();
-                String mimeType = extObj.getMimeType();
-                if (isSupportedMimeType(mimeType) == false) {
-
-                    RegistryError error = createRegistryError(XDR_EC_XDSMissingDocumentMetadata,
-                        NhincConstants.XDS_REGISTRY_ERROR_SEVERITY_ERROR, "Unsupported Mime Type: " + mimeType);
-                    result.getRegistryError().add(error);
-                }
-                String docId = extObj.getId();
-                metaDocIds.add(docId);
-
-                if (isDocIdPresent(body.getDocument(), docId) == false) {
-
-                    RegistryError error = createRegistryError(XDR_EC_XDSMissingDocument, NhincConstants.XDS_REGISTRY_ERROR_SEVERITY_ERROR,
-                        "Document Id: " + docId + " exists in metadata with no corresponding attached document");
-                    result.getRegistryError().add(error);
-                }
-                String localPatId = getPatientId(extObj.getSlot());
-
-                if (localPatId.isEmpty()) {
-                    RegistryError error = createRegistryError(XDR_EC_XDSUnknownPatientId, NhincConstants.XDS_REGISTRY_ERROR_SEVERITY_ERROR,
-                        "Patient ID referenced in metadata is not known to the Receiving NHIE");
-                    result.getRegistryError().add(error);
-                }
-                metaPatIds.add(localPatId);
-            }
-        }
-
-        if (patientIdsMatch(metaPatIds) == false) {
-            RegistryError error = createRegistryError(XDR_EC_XDSPatientIdDoesNotMatch, NhincConstants.XDS_REGISTRY_ERROR_SEVERITY_ERROR,
-                "Patient Ids do not match");
-            result.getRegistryError().add(error);
-        }
+        validateSubmittedObjectsRequest(body.getSubmitObjectsRequest(), result, body.getDocument());
 
         return processErrorList(result);
 
     }
 
-    public List<String> getIntendedRecepients(ProvideAndRegisterDocumentSetRequestType body) {
+    /**
+     * Validate SubmittedObjectRequest on a Document Submission or Document Data Submission. If docListToCheck is NULL
+     * then there will be no validation done to see if the document id is present in the payload.
+     *
+     * Any RegistryErrors found will be added to the errorList parameter and the method will return true. If no
+     * RegistryErrors are created, this method will return false.
+     *
+     * @param body
+     * @param errorList
+     * @param docListToCheck - Optional, may be NULL if this is a DDS call.
+     */
+    private boolean validateSubmittedObjectsRequest(SubmitObjectsRequest submittedObject,
+        RegistryErrorList errorList, List<Document> docListToCheck) {
+
+        boolean added = false;
+
+        RegistryObjectListType regList = submittedObject.getRegistryObjectList();
+        ArrayList<String> metaPatIds = new ArrayList<>();
+        for (JAXBElement<? extends IdentifiableType> item : regList.getIdentifiable()) {
+            if (item.getDeclaredType().equals(ExtrinsicObjectType.class)) {
+
+                ExtrinsicObjectType extObj = (ExtrinsicObjectType) item.getValue();
+                String mimeType = extObj.getMimeType();
+                if (!isSupportedMimeType(mimeType)) {
+                    RegistryError error = createRegistryError(XDR_EC_XDSMissingDocumentMetadata,
+                        NhincConstants.XDS_REGISTRY_ERROR_SEVERITY_ERROR, "Unsupported Mime Type: " + mimeType);
+                    errorList.getRegistryError().add(error);
+                    added = true;
+                }
+
+                // Explicit check for NULL here. If docListToCheck is null, under the assumption this is a DSS
+                // submission and not a DS submission. If it is not null, check if the id is present.
+                // An empty list should enter this branch and add a registry error.
+                String docId = extObj.getId();
+                if (docListToCheck != null && !isDocIdPresent(docListToCheck, docId)) {
+
+                    RegistryError error = createRegistryError(XDR_EC_XDSMissingDocument,
+                        NhincConstants.XDS_REGISTRY_ERROR_SEVERITY_ERROR,
+                        "Document Id: " + docId + " exists in metadata with no corresponding attached document");
+                    errorList.getRegistryError().add(error);
+                    added = true;
+                }
+
+                String localPatId = getPatientId(extObj.getSlot());
+                if (localPatId.isEmpty()) {
+                    RegistryError error = createRegistryError(XDR_EC_XDSUnknownPatientId,
+                        NhincConstants.XDS_REGISTRY_ERROR_SEVERITY_ERROR,
+                        "Patient ID referenced in metadata is not known to the Receiving NHIE");
+                    errorList.getRegistryError().add(error);
+                    added = true;
+                }
+                metaPatIds.add(localPatId);
+            }
+        }
+
+        if (!patientIdsMatch(metaPatIds)) {
+            RegistryError error = createRegistryError(XDR_EC_XDSPatientIdDoesNotMatch,
+                NhincConstants.XDS_REGISTRY_ERROR_SEVERITY_ERROR, "Patient Ids do not match");
+            errorList.getRegistryError().add(error);
+            added = true;
+        }
+
+        return added;
+    }
+
+    /**
+     * Validates that the body has a document attached to it. If it does not or if it is empty, a RegistryError will be
+     * added to the error list.
+     *
+     * If there was an error added to the list, this method will return true. Otherwise this method will return false
+     *
+     * @param body
+     * @param errorList
+     */
+    private static boolean validateDocumentData(ProvideAndRegisterDocumentSetRequestType body,
+        RegistryErrorList errorList) {
+        boolean result = false;
+        if (body.getDocument() == null) {
+            RegistryError error = createRegistryError(XDR_EC_XDSMissingDocument,
+                NhincConstants.XDS_REGISTRY_ERROR_SEVERITY_ERROR,
+                "ProvideAndRegisterDocumentSetRequestType did not contain a DocumentList");
+            errorList.getRegistryError().add(error);
+            result = true;
+        } else if (body.getDocument().isEmpty()) {
+            RegistryError error = createRegistryError(XDR_EC_XDSMissingDocument,
+                NhincConstants.XDS_REGISTRY_ERROR_SEVERITY_ERROR, "DocumentList did not contain any documents");
+            errorList.getRegistryError().add(error);
+            result = true;
+        }
+
+        return result;
+    }
+
+    public static List<String> getIntendedRecepients(ProvideAndRegisterDocumentSetRequestType body) {
 
         List<String> result = new ArrayList<>();
 
         LOG.debug("begin getIntendedRecepients()");
-        if (body == null || body.getSubmitObjectsRequest() == null) {
-            return null;
-        }
-        try {
+        if (body != null && body.getSubmitObjectsRequest() != null) {
             RegistryObjectListType regList = body.getSubmitObjectsRequest().getRegistryObjectList();
 
             for (int x = 0; x < regList.getIdentifiable().size(); x++) {
@@ -217,20 +215,28 @@ public class XDRHelper {
                     SlotType1 recipSlot = getNamedSlotItem(extObj.getSlot(), XDS_INTENDED_RECIPIENT_SLOT);
                     if (recipSlot != null) {
                         result = recipSlot.getValueList().getValue();
+                        LOG.info("Intended Recipients: {}", result);
                     }
 
                 }
 
             }
-        } catch (Exception ex) {
-            LOG.error("Unable to pull intended recipients: {}", ex.getLocalizedMessage(), ex);
         }
 
-        LOG.debug("Found " + result.size() + " recipients");
+        LOG.debug("Found {} recipients", result.size());
         return result;
     }
 
-    public List<String> getRoutingBeans(List<String> intendedRecipients) {
+    /**
+     * Grabs the intended recipient bean names as defined in XDRConfiguration.xml and attempts to load them as beans
+     * defined in DocumentSubmissionProxyConfig.xml
+     *
+     * If no intended recipients are found, "reference" will be added by default.
+     *
+     * @param List of recipients. Possible values defined in XDRConfiguration.xml
+     * @return List of corresponding bean names for the given recipient list
+     */
+    public static List<String> getRoutingBeans(List<String> intendedRecipients) {
         ArrayList<String> result = new ArrayList<>();
 
         ConfigurationManager configMgr = new ConfigurationManager();
@@ -241,12 +247,11 @@ public class XDRHelper {
             // Loop through List of configured beans
             for (RoutingConfig rc : config.getRoutingInfo()) {
                 if (rc.getRecepient().equalsIgnoreCase(recipient)) {
-                    if (result.contains(rc.getBean()) == false) {
+                    if (!result.contains(rc.getBean())) {
                         result.add(rc.getBean());
                     }
                     break;
                 }
-
             }
         }
 
@@ -254,7 +259,7 @@ public class XDRHelper {
             result.add(RoutingObjectFactory.BEAN_REFERENCE_IMPLEMENTATION);
         }
 
-        LOG.debug("Found " + result.size() + " beans");
+        LOG.debug("Found {} beans", result.size());
         return result;
     }
 
@@ -274,8 +279,8 @@ public class XDRHelper {
         String[] mimeArray = getSupportedMimeTypes();
         boolean result = false;
 
-        for (int x = 0; x < mimeArray.length; x++) {
-            if (mimeArray[x].equalsIgnoreCase(mimeType)) {
+        for (String element : mimeArray) {
+            if (element.equalsIgnoreCase(mimeType)) {
                 result = true;
                 break;
             }
@@ -284,7 +289,7 @@ public class XDRHelper {
         return result;
     }
 
-    protected String[] getSupportedMimeTypes() {
+    protected static String[] getSupportedMimeTypes() {
         String[] mimeArray = new String[0];
 
         try {
@@ -298,19 +303,22 @@ public class XDRHelper {
         return mimeArray;
     }
 
-    private boolean isDocIdPresent(List<ProvideAndRegisterDocumentSetRequestType.Document> documents, String docId) {
+    private static boolean isDocIdPresent(List<Document> documents, String docId) {
         boolean result = false;
 
-        for (ProvideAndRegisterDocumentSetRequestType.Document doc : documents) {
-            if (doc.getId().equals(docId)) {
-                result = true;
+        if (CollectionUtils.isEmpty(documents)) {
+            return false;
+        } else {
+            for (Document doc : documents) {
+                if (doc.getId().equals(docId)) {
+                    result = true;
+                }
             }
+            return result;
         }
-
-        return result;
     }
 
-    private RegistryError createRegistryError(String errorCode, String severity, String codeContext) {
+    private static RegistryError createRegistryError(String errorCode, String severity, String codeContext) {
         RegistryError result = new oasis.names.tc.ebxml_regrep.xsd.rs._3.ObjectFactory().createRegistryError();
 
         result.setSeverity(severity);
@@ -320,18 +328,19 @@ public class XDRHelper {
         return result;
     }
 
-    public String getSubmissionSetPatientId(ProvideAndRegisterDocumentSetRequestType body) {
+    public static String getSubmissionSetPatientId(ProvideAndRegisterDocumentSetRequestType body) {
         String result = "";
 
         RegistryObjectListType object = body.getSubmitObjectsRequest().getRegistryObjectList();
 
         for (int x = 0; x < object.getIdentifiable().size(); x++) {
-            System.out.println(object.getIdentifiable().get(x).getName());
+            LOG.debug("List of Identifiable Registry Object On Submission Patient ID {}",
+                object.getIdentifiable().get(x).getName());
 
             if (object.getIdentifiable().get(x).getDeclaredType().equals(RegistryPackageType.class)) {
                 RegistryPackageType registryPackage = (RegistryPackageType) object.getIdentifiable().get(x).getValue();
 
-                System.out.println(registryPackage.getSlot().size());
+                LOG.debug("Slot(s) in registry Package is {}", registryPackage.getSlot().size());
 
                 for (int y = 0; y < registryPackage.getExternalIdentifier().size(); y++) {
                     String test = registryPackage.getExternalIdentifier().get(y).getName().getLocalizedString().get(0)
@@ -348,18 +357,19 @@ public class XDRHelper {
         return result;
     }
 
-    public String getSourcePatientId(ProvideAndRegisterDocumentSetRequestType body) {
+    public static String getSourcePatientId(ProvideAndRegisterDocumentSetRequestType body) {
         String result = "";
 
         RegistryObjectListType object = body.getSubmitObjectsRequest().getRegistryObjectList();
 
         for (int x = 0; x < object.getIdentifiable().size(); x++) {
-            System.out.println(object.getIdentifiable().get(x).getName());
+            LOG.debug("List of Identifiable Registry Object On Source Patient ID {}",
+                object.getIdentifiable().get(x).getName());
 
             if (object.getIdentifiable().get(x).getDeclaredType().equals(ExtrinsicObjectType.class)) {
                 ExtrinsicObjectType extObj = (ExtrinsicObjectType) object.getIdentifiable().get(x).getValue();
 
-                System.out.println(extObj.getSlot().size());
+                LOG.debug("Slot(s) in registry Package is {}", extObj.getSlot().size());
 
                 SlotType1 slot = getNamedSlotItem(extObj.getSlot(), "sourcePatientId");
 
@@ -377,7 +387,7 @@ public class XDRHelper {
         return result;
     }
 
-    private String getPatientId(List<SlotType1> slots) {
+    private static String getPatientId(List<SlotType1> slots) {
         String result = "";
         SlotType1 patientIdSlot;
 
@@ -393,7 +403,7 @@ public class XDRHelper {
 
     }
 
-    private SlotType1 getNamedSlotItem(List<SlotType1> slots, String name) {
+    private static SlotType1 getNamedSlotItem(List<SlotType1> slots, String name) {
         SlotType1 result = null;
 
         LOG.debug("begin getNamedSlotItem()");
@@ -428,7 +438,7 @@ public class XDRHelper {
         return result;
     }
 
-    private RegistryErrorList processErrorList(RegistryErrorList list) {
+    private static RegistryErrorList processErrorList(RegistryErrorList list) {
         int highestError = 0;
 
         if (list == null) {
@@ -448,7 +458,7 @@ public class XDRHelper {
         return list;
     }
 
-    private String getErrorDescription(int rank) {
+    private static String getErrorDescription(int rank) {
         String result;
 
         switch (rank) {
@@ -474,7 +484,7 @@ public class XDRHelper {
         return result;
     }
 
-    private int getErrorRanking(String severity) {
+    private static int getErrorRanking(String severity) {
         int result;
 
         if (severity.isEmpty()) {

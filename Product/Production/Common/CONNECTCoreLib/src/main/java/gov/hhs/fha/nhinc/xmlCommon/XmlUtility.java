@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.xmlCommon;
 
 import gov.hhs.fha.nhinc.nhinclib.NullChecker;
@@ -77,7 +77,7 @@ public class XmlUtility {
     }
 
     public static String serializeElement(Element element)
-            throws TransformerFactoryConfigurationError, TransformerException {
+        throws TransformerFactoryConfigurationError, TransformerException {
         String serializedElement = null;
         if (element != null) {
             StringWriter output = new StringWriter();
@@ -91,7 +91,7 @@ public class XmlUtility {
     }
 
     public static String serializeNode(Node node) throws LSException, IllegalAccessException, DOMException,
-            InstantiationException, ClassNotFoundException, ClassCastException {
+        InstantiationException, ClassNotFoundException, ClassCastException {
         String serializedElement = null;
         if (node != null) {
             DOMImplementationLS impl = getDOMImplementationLS(node);
@@ -135,7 +135,7 @@ public class XmlUtility {
      */
     @Deprecated
     public static Node performXpathQuery(Element sourceElement, String xpathQuery, NamespaceContext namespaceContext)
-            throws XPathExpressionException {
+        throws XPathExpressionException {
         return XpathHelper.performXpathQuery(sourceElement, xpathQuery, namespaceContext);
     }
 
@@ -180,14 +180,17 @@ public class XmlUtility {
 
     private static Element convertXmlToElementWorker(String xml) throws Exception {
         Element element = initializeElement();
+        if (element != null) {
+            DOMImplementationLS impl = getDOMImplementationLS(element);
 
-        DOMImplementationLS impl = getDOMImplementationLS(element);
-        LSParser parser = impl.createLSParser(DOMImplementationLS.MODE_SYNCHRONOUS, "http://www.w3.org/2001/XMLSchema");
-        LSInput lsInput = impl.createLSInput();
-        lsInput.setStringData(xml);
-        Document doc = parser.parse(lsInput);
-        if (doc != null) {
-            element = doc.getDocumentElement();
+            LSParser parser = impl.createLSParser(DOMImplementationLS.MODE_SYNCHRONOUS,
+                "http://www.w3.org/2001/XMLSchema");
+            LSInput lsInput = impl.createLSInput();
+            lsInput.setStringData(xml);
+            Document doc = parser.parse(lsInput);
+            if (doc != null) {
+                element = doc.getDocumentElement();
+            }
         }
         return element;
     }

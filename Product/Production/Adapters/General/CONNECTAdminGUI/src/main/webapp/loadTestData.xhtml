@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  /*
+   * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
+   * All rights reserved.
+   *
+   * Redistribution and use in source and binary forms, with or without
+   * modification, are permitted provided that the following conditions are met:
+   *     * Redistributions of source code must retain the above
+   *       copyright notice, this list of conditions and the following disclaimer.
+   *     * Redistributions in binary form must reproduce the above copyright
+   *       notice, this list of conditions and the following disclaimer in the documentation
+   *       and/or other materials provided with the distribution.
+   *     * Neither the name of the United States Government nor the
+   *       names of its contributors may be used to endorse or promote products
+   *       derived from this software without specific prior written permission.
+   *
+   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+   * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+   * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+   * DISCLAIMED. IN NO EVENT SHALL THE UNITED STATES GOVERNMENT BE LIABLE FOR ANY
+   * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+   * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+   * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+   * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+   * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+   */
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<head>
+<title>Admin GUI Load Test Data</title>
+<link rel="icon" type="image/ico" href="/images/favicon-admingui.ico" />
+</head>
+
+<h:body>
+    <ui:composition template="/resources/Templates/BaseTemplate.xhtml">
+        <ui:define name="metatag"></ui:define>
+        <ui:define name="content">
+            <h1 class="section-header">Test Data</h1>
+
+            <!-- BEGIN: MAIN CONTENT - TAB BAR NAVIGATION -->
+            <p:tabView id="testdataTabview" effect="fade" effectDuration="normal" dynamic="true"
+                activeIndex="#{tabBean.loadTestDataTabIndex}" styleClass="tabs-override tabs-ovr-amethyst">
+                <p:ajax event="tabChange" listener="#{tabBean.onLoadTestDataTabChange}" />
+
+                <!-- BEGIN: MAIN CONTENT - TAB PANES - All the data/information is contained here -->
+                <div class="tab-content">
+                    <!-- BEGIN: TAB-PANE-BLOCK -->
+                    <p:tab id="#{tabBean.LTDPATIENTTAB}" title="Patient" closable="false">
+                        <div class="tab-pane active" id="patients">
+
+                            <!-- BEGIN: LISTING-BLOCK -->
+                            <div class="content-block">
+                                <h2 class="subsection-header">Manage Patients</h2>
+                                <div class="content form-block center-block">
+                                       <h:form id="patientsList" class="form-horizontal">
+                                            <p:messages id="patientsListMessages" redisplay="false" autoUpdate="true"
+                                                closable="true" severity="warning" />
+                                            <p:dataTable id="patientDataTable" var="patient"
+                                                value="#{loadTestDataPatientBean.patients}"
+                                                selection="#{loadTestDataPatientBean.selectedPatient}"
+                                                rowKey="#{patient.patientId}"
+                                                styleClass="table table-striped table-domains"
+                                                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                paginator="true" rowsPerPageTemplate="5,10,15" rows="10" >
+                                                <p:ajax event="rowSelectRadio" process="@this"
+                                                   update=":testdataTabview:patientsList:editPatient :testdataTabview:patientsList:deletePatient :testdataTabview:patientsList:duplicatePatient" />
+                                                <p:column headerText="" selectionMode="single" />
+                                                <p:column headerText="Patient Id" sortBy="#{patient.patientIdentifierId}">
+                                                    <h:outputText value="#{patient.patientIdentifierId}" />
+                                                </p:column>
+                                                <p:column headerText="Last Name" sortBy="#{patient.lastName}" >
+                                                    <h:outputText value="#{patient.lastName}" />
+                                                </p:column>
+                                                <p:column headerText="First Name" sortBy="#{patient.firstName}" >
+                                                    <h:outputText value="#{patient.firstName}" />
+                                                </p:column>
+                                                <p:column headerText="Birth Date" sortBy="#{patient.firstName}">
+                                                    <h:outputText value="#{patient.dateOfBirthDate}">
+                                                        <f:convertDateTime pattern="MM-dd-yyyy" />
+                                                    </h:outputText>
+                                                </p:column>
+                                                <p:column headerText="Gender" sortBy="#{patient.gender}">
+                                                    <h:outputText value="#{patient.gender}" />
+                                                </p:column>
+                                            </p:dataTable>
+
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <div class="form-button-row">
+                                                        <p:commandButton id="newPatient" value="New"
+                                                            actionListener="#{loadTestDataPatientBean.newPatient}"
+                                                            update=":patientSaveDlg"
+                                                            oncomplete="PF('patientSaveDlg').show();"
+                                                            styleClass="btn btn-primary pull-left"
+                                                            icon="ui-icon-circle-plus">
+                                                            <p:resetInput target=":patientAccordionPanel:basicInfoForm" />
+                                                        </p:commandButton>
+                                                    </div>
+                                                    <div class="form-button-row">
+                                                        <p:commandButton id="editPatient" value="View/Edit"
+                                                            actionListener="#{loadTestDataPatientBean.editPatient}"
+                                                            update=":patientSaveDlg"
+                                                            oncomplete="PF('patientSaveDlg').show();"
+                                                            disabled="#{loadTestDataPatientBean.disablePatientButtons}"
+                                                            styleClass="edit-button" icon="ui-icon-pencil" >
+                                                            <p:resetInput target=":patientAccordionPanel:basicInfoForm" />
+                                                        </p:commandButton>
+                                                         <p:commandButton id="duplicatePatient" value="Duplicate"
+                                                            actionListener="#{loadTestDataPatientBean.duplicatePatient}"
+                                                            update=":patientSaveDlg :testdataTabview:patientsList"
+                                                            oncomplete="PF('patientSaveDlg').show();"
+                                                            disabled="#{loadTestDataPatientBean.disablePatientButtons}"
+                                                            styleClass="duplicate-button" icon="ui-icon-copy">
+                                                            <p:resetInput target=":patientSaveDlg"  />
+                                                        </p:commandButton>
+                                                        <p:commandButton id="deletePatient" update=":testdataTabview:patientsList, :testdataTabview:documentsList"
+                                                            value="Delete"
+                                                            actionListener="#{loadTestDataPatientBean.deletePatient}"
+                                                            disabled="#{loadTestDataPatientBean.disablePatientButtons}"
+                                                            styleClass="delete-button" icon="ui-icon-closethick"
+                                                            >
+                                                            <p:confirm header="Delete Patient Confirmation"
+                                                               message="WARNING: All documents linked to this patient record will also be deleted. Continue delete?"
+                                                               icon="ui-icon-alert" />
+                                                        </p:commandButton>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </h:form>
+                                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                               <p:commandButton value="Yes" type="button"
+                                                  styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                               <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"
+                                                icon="ui-icon-close" />
+                                            </p:confirmDialog>
+                                </div>
+                            </div>
+                            <!-- BEGIN: LISTING-BLOCK -->
+
+                        </div>
+                    </p:tab>
+                    <!-- END: TAB-PANE-BLOCK -->
+
+                    <!-- BEGIN: TAB-PANE-BLOCK -->
+                    <p:tab id="#{tabBean.LTDDOCUMENTTAB}" title="Document" closable="false">
+                        <div class="tab-pane active">
+
+                            <!-- BEGIN: LISTING-BLOCK -->
+                            <div class="content-block">
+                                <h2 class="subsection-header">Manage Documents</h2>
+                                <div class="content form-block center-block">
+                                        <h:form id="documentsList" class="form-horizontal">
+                                            <p:messages closable="true" autoUpdate="true" severity="warn" />
+                                            <p:dataTable id="documentDataTable" var="record"
+                                                value="#{loadTestDataDocumentBean.documents}"
+                                                selection="#{loadTestDataDocumentBean.selectedDocument}"
+                                                rowKey="#{record.documentId}"
+                                                styleClass="table table-striped table-domains"
+                                                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                paginator="true" rowsPerPageTemplate="5,10,15" rows="10">
+                                                <p:ajax event="rowSelectRadio" process="@this"
+                                                   update=":testdataTabview:documentsList:editDocument :testdataTabview:documentsList:deleteDocument :testdataTabview:documentsList:duplicateDocument" />
+                                                <p:column headerText="" selectionMode="single" />
+                                                <p:column headerText="Document Id" sortBy="#{record.documentUniqueId}" >
+                                                    <h:outputText value="#{record.documentUniqueId}" />
+                                                </p:column>
+                                                <p:column headerText="Patient" sortBy="#{record.patientIdentifier}" >
+                                                    <h:outputText value="#{record.patientIdentifier}" />
+                                                </p:column>
+                                                <p:column headerText="Title" sortBy="#{record.documentTitle}" >
+                                                    <h:outputText value="#{record.documentTitle}" />
+                                                </p:column>
+                                                <p:column headerText="Status" sortBy="#{record.statusDisplay}" >
+                                                    <h:outputText value="#{record.statusDisplay}" />
+                                                </p:column>
+                                                <p:column headerText="Created" sortBy="#{record.creationTimeDate}" >
+                                                    <h:outputText value="#{record.creationTimeDate}">
+                                                        <f:convertDateTime pattern="MM-dd-yyyy HH:mm:ss" />
+                                                    </h:outputText>
+                                                </p:column>
+                                            </p:dataTable>
+
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <div class="form-button-row">
+                                                        <p:commandButton id="newDocument" value="New"
+                                                            update=":documentSaveDlg, :documentAccordionPanel"
+                                                            actionListener="#{loadTestDataDocumentBean.newDocument}"
+                                                            oncomplete="PF('documentSaveDlg').show();"
+                                                            styleClass="btn btn-primary pull-left"
+                                                            icon="ui-icon-circle-plus">
+                                                            <p:resetInput target=":documentAccordionPanel:documentForm" />
+                                                            <p:resetInput target=":documentAccordionPanel:documentFormOpt" />
+                                                        </p:commandButton>
+                                                        <p:commandButton id="editDocument" value="View/Edit"
+                                                            actionListener="#{loadTestDataDocumentBean.editDocument}"
+                                                            disabled="#{loadTestDataDocumentBean.disableDocumentButtons}"
+                                                            oncomplete="PF('documentSaveDlg').show();"
+                                                            update=":documentSaveDlg, :msgGrowl"
+                                                            styleClass="edit-button" icon="ui-icon-pencil">
+                                                            <p:resetInput target=":documentAccordionPanel:documentForm" />
+                                                        </p:commandButton>
+                                                        <p:commandButton id="duplicateDocument" value="Duplicate"
+                                                            actionListener="#{loadTestDataDocumentBean.duplicateDocument}"
+                                                            update=":documentSaveDlg :testdataTabview:documentsList"
+                                                            oncomplete="PF('documentSaveDlg').show();"
+                                                            disabled="#{loadTestDataDocumentBean.disableDocumentButtons}"
+                                                            styleClass="duplicate-button" icon="ui-icon-copy">
+                                                            <p:resetInput target=":documentSaveDlg"  />
+                                                        </p:commandButton>
+                                                        <p:commandButton id="deleteDocument"
+                                                            actionListener="#{loadTestDataDocumentBean.deleteDocument}"
+                                                            disabled="#{loadTestDataDocumentBean.disableDocumentButtons}"
+                                                            update="documentDataTable, :msgGrowl" value="Delete"
+                                                            styleClass="delete-button" icon="ui-icon-closethick" >
+                                                            <p:confirm header="Delete Document Confirmation"
+                                                               message="Do you want to delete this record?"
+                                                               icon="ui-icon-alert" />
+                                                        </p:commandButton>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </h:form>
+                                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                               <p:commandButton value="Yes" type="button"
+                                                  styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                               <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"
+                                                icon="ui-icon-close" />
+                                            </p:confirmDialog>
+                                </div>
+                            </div>
+                            <!-- BEGIN: LISTING-BLOCK -->
+
+                        </div>
+                    </p:tab>
+                    <!-- END: TAB-PANE-BLOCK -->
+
+                    <!-- TODO: ADD-MORE-TABS -->
+                </div>
+                <!-- END: MAIN CONTENT - TAB PANES - All the data/information -->
+            </p:tabView>
+            <!-- END: MAIN CONTENT - TAB BAR NAVIGATION -->
+
+            <!-- include any dialog -->
+            <p:growl id="msgGrowl" for="msgForGrowl" closable="true" />
+            <ui:include src="ltdPatientSaveDialog.xhtml" />
+            <ui:include src="ltdDocumentSaveDialog.xhtml" />
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

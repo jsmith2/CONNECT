@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<faces-config
-    xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="
      http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
     version="2.1">
@@ -49,14 +47,6 @@
     <navigation-rule>
         <from-view-id>/*</from-view-id>
         <navigation-case>
-            <from-outcome>connectionManager</from-outcome>
-            <to-view-id>/connectionManager.xhtml</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/*</from-view-id>
-        <navigation-case>
             <from-outcome>properties</from-outcome>
             <to-view-id>/properties.xhtml</to-view-id>
             <redirect />
@@ -86,8 +76,32 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
-  <factory>
-    <!-- Any run time exception will route to this exceptionFactory and render customerror.xhtml -->
-    <exception-handler-factory>gov.hhs.fha.nhinc.admingui.exceptionhandler.CustomExceptionHandlerFactory</exception-handler-factory>
-  </factory>
+    <navigation-rule>
+        <from-view-id>/*</from-view-id>
+        <navigation-case>
+            <from-outcome>loadTestData</from-outcome>
+            <to-view-id>/loadTestData.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/*</from-view-id>
+        <navigation-case>
+            <from-outcome>certificateManager</from-outcome>
+            <to-view-id>/certificateManager.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/*</from-view-id>
+        <navigation-case>
+            <from-outcome>exchangeManager</from-outcome>
+            <to-view-id>/exchangeManager.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    <factory>
+        <!-- Any run time exception will route to this exceptionFactory and render customerror.xhtml -->
+        <exception-handler-factory>gov.hhs.fha.nhinc.admingui.exceptionhandler.CustomExceptionHandlerFactory</exception-handler-factory>
+    </factory>
 </faces-config>

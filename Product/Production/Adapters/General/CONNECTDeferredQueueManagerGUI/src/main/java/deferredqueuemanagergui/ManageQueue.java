@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,7 +23,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package deferredqueuemanagergui;
 
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
@@ -44,6 +44,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.faces.FacesException;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,6 +64,8 @@ public class ManageQueue extends AbstractPageBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(ManageQueue.class);
     private static final String PATIENT_DISCOVERY = "PatientDiscovery";
+    private static final String DATE_PARSING_ERROR
+        = "Unable to parse given input dates, please recheck the given dates and retry with the sample format(MMDDYYYY HH:MM:SS)";
     private TabSet processTabSet = new TabSet();
     private Tab processQueueTab = new Tab();
     private Tab unProcessQueueTab = new Tab();
@@ -175,7 +178,9 @@ public class ManageQueue extends AbstractPageBean {
         this.status = status;
     }
 
-    /** Creates a new instance of ManageQueue */
+    /**
+     * Creates a new instance of ManageQueue
+     */
     public ManageQueue() {
     }
 
@@ -185,7 +190,7 @@ public class ManageQueue extends AbstractPageBean {
      * navigation. Customize this method to acquire resources that will be needed for event handlers and lifecycle
      * methods, whether or not this page is performing post back processing.
      * </p>
-     *
+     * <p>
      * <p>
      * Note that, if the current request is a postback, the property values of the components do <strong>not</strong>
      * represent any values submitted with this request. Instead, they represent the property values that were saved for
@@ -270,7 +275,7 @@ public class ManageQueue extends AbstractPageBean {
         return null;
     }
 
-    public String retrieveProcessButton_action() throws Exception {
+    public String retrieveProcessButtonAction() {
         // Process the action. Return value is a navigation
         // case name where null will return to the same page.
         errorMessages.setText("");
@@ -289,7 +294,7 @@ public class ManageQueue extends AbstractPageBean {
         return null;
     }
 
-    public String retrieveUnProcessButton_action() throws Exception {
+    public String retrieveUnProcessButton_action() {
         // Process the action. Return value is a navigation
         // case name where null will return to the same page.
 
@@ -301,48 +306,20 @@ public class ManageQueue extends AbstractPageBean {
             return null;
         }
 
-        Date startDate = new Date();
-        Date stopDate = new Date();
-        String startCreationTime;
-        String stopCreationTime;
-        String statusValue;
-        try {
-            startCreationTime = (String) startCreationDate.getText();
-            stopCreationTime = (String) stopCreationDate.getText();
-            statusValue = (String) status.getValue();
+        String startCreationTime = (String) startCreationDate.getText();
+        String stopCreationTime = (String) stopCreationDate.getText();
+        String statusValue = (String) status.getValue();
 
-            if (startCreationTime == null) {
-                startCreationTime = "";
-            }
-            if (stopCreationTime == null) {
-                stopCreationTime = "";
-            }
-            if (statusValue == null) {
-                statusValue = "";
-            }
-
-            Calendar cal1 = Format.getCalendarInstance(Format.MMDDYYYYHHMMSS_DATEFORMAT, startCreationTime);
-            Calendar cal2 = Format.getCalendarInstance(Format.MMDDYYYYHHMMSS_DATEFORMAT, stopCreationTime);
-
-            if (cal1 == null || cal2 == null) {
-                errorMessages.setText(
-                        "Unable to parse given input dates, please recheck the given dates and retry with the sample format(MMDDYYYY HH:MM:SS)");
-                return null;
-            }
-
-            startDate = cal1.getTime();
-            stopDate = cal2.getTime();
-
-        } catch (Exception ex) {
-            LOG.error("Error Message: " + ex);
-            errorMessages.setText(
-                    "Unable to parse given input dates, please recheck the given dates and retry with the sample format(MMDDYYYY HH:MM:SS)");
+        Date startDate = getDate(startCreationTime);
+        Date stopDate = getDate(stopCreationTime);
+        if (startDate == null || stopDate == null) {
             return null;
         }
         DeferredQueueManagerFacade deferredQueueManagerFacade = new DeferredQueueManagerFacade();
 
         List<AsyncMsgRecord> unProcessQueueResults;
-        if (startCreationTime.isEmpty() && stopCreationTime.isEmpty() && statusValue.isEmpty()) {
+        if (StringUtils.isBlank(startCreationTime) && StringUtils.isBlank(stopCreationTime) && StringUtils.
+            isBlank(statusValue)) {
             unProcessQueueResults = deferredQueueManagerFacade.queryForDeferredQueueSelected();
         } else {
             unProcessQueueResults = deferredQueueManagerFacade.queryBySearchCriteria(startDate, stopDate, statusValue);
@@ -373,7 +350,7 @@ public class ManageQueue extends AbstractPageBean {
         return isValid;
     }
 
-    public String process_action(javax.faces.event.ActionEvent event) throws Exception {
+    public String process_action(javax.faces.event.ActionEvent event) {
         String asyncMsgId = (String) messageId.getText();
         String serviceName = (String) this.serviceName.getText();
         PatientDiscoveryDeferredReqQueueProcessResponseType pdResponse;
@@ -382,15 +359,31 @@ public class ManageQueue extends AbstractPageBean {
             PatientDiscoveryDeferredReqQueueClient pdClient = new PatientDiscoveryDeferredReqQueueClient();
             pdResponse = pdClient.processPatientDiscoveryDeferredReqQueue(asyncMsgId);
             gov.hhs.fha.nhinc.gateway.adapterpatientdiscoveryreqqueueprocess.SuccessOrFailType sfpd = pdResponse
-                    .getSuccessOrFail();
+                .getSuccessOrFail();
             if (sfpd.isSuccess()) {
                 userInfo.setText("Succesfully Patient Discovery Deferred Response Msg got Processed.");
             } else {
                 errorMessages.setText(
-                        "Unable to process the Patient Discovery Deferred Response, Please contact system administrator for further details.");
+                    "Unable to process the Patient Discovery Deferred Response, Please contact system administrator for further details.");
             }
         }
 
         return null;
+    }
+
+    private Date getDate(String dateString) {
+        String datetime = dateString == null ? "" : dateString;
+        try {
+            Calendar cal1 = Format.getCalendarInstance(Format.MMDDYYYYHHMMSS_DATEFORMAT, datetime);
+            if (cal1 == null) {
+                errorMessages.setText(DATE_PARSING_ERROR);
+                return null;
+            }
+            return cal1.getTime();
+        } catch (Exception ex) {
+            LOG.error("Error Message: {}", ex.getMessage(), ex);
+            errorMessages.setText(DATE_PARSING_ERROR);
+            return null;
+        }
     }
 }

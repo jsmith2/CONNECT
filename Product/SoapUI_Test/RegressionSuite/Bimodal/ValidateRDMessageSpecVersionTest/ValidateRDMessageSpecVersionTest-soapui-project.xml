@@ -37,7 +37,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a0",
 	log);</script>
         </con:config>
@@ -251,12 +251,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -264,7 +264,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -375,8 +375,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g1.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g1.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);</con:setupScript>
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g1.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g1.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);</con:setupScript>
       <con:tearDownScript>def dir = context.findProperty('GatewayPropDir');
 nhinc.FileUtils.restoreConfiguration(dir, log);</con:tearDownScript>
       <con:properties>
@@ -412,7 +412,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a1",
 	log);</script>
         </con:config>
@@ -626,12 +626,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -639,7 +639,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -750,8 +750,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g1.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g1.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);</con:setupScript>
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g1.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g1.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);</con:setupScript>
       <con:tearDownScript>def dir = context.findProperty('GatewayPropDir');
 nhinc.FileUtils.restoreConfiguration(dir, log);</con:tearDownScript>
       <con:properties>
@@ -792,7 +792,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a0",
 	log);</script>
         </con:config>
@@ -1006,12 +1006,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -1019,7 +1019,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -1130,8 +1130,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g1.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g0.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);</con:setupScript>
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g1.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g0.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);</con:setupScript>
       <con:tearDownScript>def dir = context.findProperty('GatewayPropDir');
 nhinc.FileUtils.restoreConfiguration(dir, log);</con:tearDownScript>
       <con:properties>
@@ -1167,7 +1167,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a0",
 	log);</script>
         </con:config>
@@ -1381,12 +1381,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -1394,7 +1394,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -1505,8 +1505,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g1.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g0.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);</con:setupScript>
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g1.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g0.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);</con:setupScript>
       <con:tearDownScript>def dir = context.findProperty('GatewayPropDir');
 nhinc.FileUtils.restoreConfiguration(dir, log);</con:tearDownScript>
       <con:properties>
@@ -1547,7 +1547,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a1",
 	log);</script>
         </con:config>
@@ -1761,12 +1761,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -1774,7 +1774,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -1885,8 +1885,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g1.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g1only.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);</con:setupScript>
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g1.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g1only.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);</con:setupScript>
       <con:tearDownScript>def dir = context.findProperty('GatewayPropDir');
 nhinc.FileUtils.restoreConfiguration(dir, log);</con:tearDownScript>
       <con:properties>
@@ -1922,7 +1922,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a1",
 	log);</script>
         </con:config>
@@ -2136,12 +2136,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -2149,7 +2149,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -2260,8 +2260,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g1.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g1only.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);</con:setupScript>
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g1.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g1only.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);</con:setupScript>
       <con:tearDownScript>def dir = context.findProperty('GatewayPropDir');
 nhinc.FileUtils.restoreConfiguration(dir, log);</con:tearDownScript>
       <con:properties>
@@ -2302,7 +2302,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a0",
 	log);</script>
         </con:config>
@@ -2516,12 +2516,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -2529,7 +2529,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -2640,8 +2640,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g0.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g0.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);</con:setupScript>
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g0.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g0.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);</con:setupScript>
       <con:tearDownScript>def dir = context.findProperty('GatewayPropDir');
 nhinc.FileUtils.restoreConfiguration(dir, log);</con:tearDownScript>
       <con:properties>
@@ -2682,7 +2682,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a1",
 	log);</script>
         </con:config>
@@ -2896,12 +2896,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -2909,7 +2909,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -3020,8 +3020,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g0.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g1only.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);</con:setupScript>
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g0.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g1only.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);</con:setupScript>
       <con:tearDownScript>def dir = context.findProperty('GatewayPropDir');
 nhinc.FileUtils.restoreConfiguration(dir, log);</con:tearDownScript>
       <con:properties>
@@ -3062,7 +3062,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a1",
 	log);</script>
         </con:config>
@@ -3276,12 +3276,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -3289,7 +3289,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -3400,8 +3400,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g1only.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g1only.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);</con:setupScript>
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g1only.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g1only.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);</con:setupScript>
       <con:tearDownScript>def dir = context.findProperty('GatewayPropDir');
 nhinc.FileUtils.restoreConfiguration(dir, log);</con:tearDownScript>
       <con:properties>
@@ -3442,7 +3442,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a0",
 	log);</script>
         </con:config>
@@ -3656,12 +3656,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -3669,7 +3669,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -3780,8 +3780,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g1only.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g0.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);</con:setupScript>
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g1only.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g0.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);</con:setupScript>
       <con:tearDownScript>def dir = context.findProperty('GatewayPropDir');
 nhinc.FileUtils.restoreConfiguration(dir, log);</con:tearDownScript>
       <con:properties>
@@ -3822,7 +3822,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a0",
 	log);</script>
         </con:config>
@@ -4036,12 +4036,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -4049,7 +4049,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -4160,8 +4160,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g1.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g1.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g1.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g1.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);
 context.setGatewayStandard(false);</con:setupScript>
       <con:tearDownScript>nhinc.FileUtils.restoreConfiguration(context.findProperty("GatewayPropDir"), log);
 def isStandardMode = context.checkGatewayMode("docretrieve.20.inbound",context);
@@ -4200,7 +4200,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a1",
 	log);</script>
         </con:config>
@@ -4414,12 +4414,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -4427,7 +4427,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -4538,8 +4538,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g1.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g1.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g1.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g1.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);
 context.setGatewayStandard(false);</con:setupScript>
       <con:tearDownScript>nhinc.FileUtils.restoreConfiguration(context.findProperty("GatewayPropDir"), log);
 def isStandardMode = context.checkGatewayMode("docretrieve.30.inbound",context);
@@ -4583,7 +4583,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a0",
 	log);</script>
         </con:config>
@@ -4797,12 +4797,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -4810,7 +4810,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -4921,8 +4921,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g1.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g0.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g1.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g0.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);
 context.setGatewayStandard(false);</con:setupScript>
       <con:tearDownScript>nhinc.FileUtils.restoreConfiguration(context.findProperty("GatewayPropDir"), log);
 def isStandardMode = context.checkGatewayMode("docretrieve.20.inbound",context);
@@ -4961,7 +4961,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a0",
 	log);</script>
         </con:config>
@@ -5175,12 +5175,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -5188,7 +5188,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -5299,8 +5299,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g1.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g0.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g1.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g0.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);
 context.setGatewayStandard(false);</con:setupScript>
       <con:tearDownScript>nhinc.FileUtils.restoreConfiguration(context.findProperty("GatewayPropDir"), log);
 def isStandardMode = context.checkGatewayMode("docretrieve.30.inbound",context);
@@ -5344,7 +5344,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a1",
 	log);</script>
         </con:config>
@@ -5558,12 +5558,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -5571,7 +5571,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -5682,8 +5682,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g1.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g1only.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g1.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g1only.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);
 context.setGatewayStandard(false);</con:setupScript>
       <con:tearDownScript>nhinc.FileUtils.restoreConfiguration(context.findProperty("GatewayPropDir"), log);
 def isStandardMode = context.checkGatewayMode("docretrieve.20.inbound",context);
@@ -5722,7 +5722,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a1",
 	log);</script>
         </con:config>
@@ -5936,12 +5936,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -5949,7 +5949,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -6060,8 +6060,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g1.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g1only.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g1.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g1only.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);
 context.setGatewayStandard(false);</con:setupScript>
       <con:tearDownScript>nhinc.FileUtils.restoreConfiguration(context.findProperty("GatewayPropDir"), log);
 def isStandardMode = context.checkGatewayMode("docretrieve.30.inbound",context);
@@ -6105,7 +6105,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a0",
 	log);</script>
         </con:config>
@@ -6319,12 +6319,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -6332,7 +6332,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -6443,8 +6443,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g0.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g0.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g0.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g0.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);
 context.setGatewayStandard(false);</con:setupScript>
       <con:tearDownScript>nhinc.FileUtils.restoreConfiguration(context.findProperty("GatewayPropDir"), log);
 def isStandardMode = context.checkGatewayMode("docretrieve.20.inbound",context);
@@ -6488,7 +6488,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a1",
 	log);</script>
         </con:config>
@@ -6702,12 +6702,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -6715,7 +6715,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -6826,8 +6826,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g0.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g1only.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g0.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g1only.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);
 context.setGatewayStandard(false);</con:setupScript>
       <con:tearDownScript>nhinc.FileUtils.restoreConfiguration(context.findProperty("GatewayPropDir"), log);
 def isStandardMode = context.checkGatewayMode("docretrieve.20.inbound",context);
@@ -6871,7 +6871,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a1",
 	log);</script>
         </con:config>
@@ -7085,12 +7085,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -7098,7 +7098,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -7209,8 +7209,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g1only.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g1only.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g1only.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g1only.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);
 context.setGatewayStandard(false);</con:setupScript>
       <con:tearDownScript>nhinc.FileUtils.restoreConfiguration(context.findProperty("GatewayPropDir"), log);
 def isStandardMode = context.checkGatewayMode("docretrieve.30.inbound",context);
@@ -7254,7 +7254,7 @@ def replaceName = 'adapterdocretrievewsunsecured';
 	
 nhinc.FileUtils.updateSpringConfig(dir, "DocumentRetrieveProxyConfig.xml", alias, aliasName, replaceName, log);
 
-nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.configureConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterdocretrieve", "http://localhost:1720/MockDRAdapter", "LEVEL_a0",
 	log);</script>
         </con:config>
@@ -7468,12 +7468,12 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -7481,7 +7481,7 @@ nhinc.FileUtils.configureConnection("internalConnectionInfo.xml", dir, "1.1",
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -7592,8 +7592,8 @@ s:Envelope/s:Body/a:RespondingGateway_CrossGatewayRetrieveRequest/a:assertion/c:
         </con:config>
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "uddiConnectionInfo_g1only.xml", context.findProperty('GatewayPropDir'), "uddiConnectionInfo.xml", log);
-nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalConnectionInfo_g0.xml", context.findProperty('GatewayPropDir'), "internalConnectionInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "exchangeInfo_g1only.xml", context.findProperty('GatewayPropDir'), "exchangeInfo.xml", log);
+nhinc.FileUtils.copyFile(context.expand(context.testCase.testSuite.project.resourceRoot), "internalExchangeInfo_g0.xml", context.findProperty('GatewayPropDir'), "internalExchangeInfo.xml", log);
 context.setGatewayStandard(false);</con:setupScript>
       <con:tearDownScript>nhinc.FileUtils.restoreConfiguration(context.findProperty("GatewayPropDir"), log);
 def isStandardMode = context.checkGatewayMode("docretrieve.30.inbound",context);

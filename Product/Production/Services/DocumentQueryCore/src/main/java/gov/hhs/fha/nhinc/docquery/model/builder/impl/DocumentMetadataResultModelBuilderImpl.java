@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,8 +23,10 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.docquery.model.builder.impl;
+
+import static gov.hhs.fha.nhinc.util.CoreHelpUtils.getDate;
 
 import gov.hhs.fha.nhinc.docquery.model.DocumentMetadataResult;
 import gov.hhs.fha.nhinc.docquery.model.builder.DocumentMetadataResultModelBuilder;
@@ -33,13 +35,9 @@ import gov.hhs.fha.nhinc.docquery.xdsb.helper.XDSbAdhocQueryResponseHelperImpl;
 import gov.hhs.fha.nhinc.docquery.xdsb.helper.XDSbConstants.ClassificationScheme;
 import gov.hhs.fha.nhinc.docquery.xdsb.helper.XDSbConstants.IdentificationScheme;
 import gov.hhs.fha.nhinc.docquery.xdsb.helper.XDSbConstants.ResponseSlotName;
-import gov.hhs.fha.nhinc.nhinclib.NhincConstants;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import oasis.names.tc.ebxml_regrep.xsd.rim._3.ExtrinsicObjectType;
 import oasis.names.tc.ebxml_regrep.xsd.rim._3.RegistryObjectType;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,20 +97,16 @@ class DocumentMetadataResultModelBuilderImpl implements DocumentMetadataResultMo
         result.setObjectType(extrinsicObject.getObjectType());
 
         result.setStatus(extrinsicObject.getStatus());
-        if ((extrinsicObject.getName() != null) && (extrinsicObject.getName().getLocalizedString().size() > 0)) {
+        if (extrinsicObject.getName() != null && CollectionUtils.isNotEmpty(extrinsicObject.getName().getLocalizedString())) {
             result.setName(extrinsicObject.getName().getLocalizedString().get(0).getValue());
         }
-        if ((extrinsicObject.getDescription() != null) && (extrinsicObject.getDescription().getLocalizedString().size() > 0)) {
+        if (extrinsicObject.getDescription() != null && CollectionUtils.isNotEmpty(extrinsicObject.getDescription().getLocalizedString())) {
             result.setDescription(extrinsicObject.getDescription().getLocalizedString().get(0).getValue());
         }
 
-        try {
-            result.setCreationDate(getDateTime(creationDate));
-            result.setServiceStartTime(getDateTime(serviceStartTime));
-            result.setServiceStopTime(getDateTime(serviceStopTime));
-        } catch (ParseException e) {
-            LOG.error("Failed to convert the String to Date: {}", e.getLocalizedMessage(), e);
-        }
+        result.setCreationDate(getDate(creationDate));
+        result.setServiceStartTime(getDate(serviceStartTime));
+        result.setServiceStopTime(getDate(serviceStopTime));
 
         String repositoryId = helper.getSingleSlotValue(ResponseSlotName.repositoryUniqueId, extrinsicObject);
         result.setRepositoryId(repositoryId);
@@ -157,18 +151,4 @@ class DocumentMetadataResultModelBuilderImpl implements DocumentMetadataResultMo
         this.extrinsicObject = extrinsicObject;
     }
 
-    /**
-     * Creates a Date object from String
-     *
-     * @param String the date
-     * @return the java.util.Date
-     * @throws ParseException the parse exception
-     */
-    private Date getDateTime(String date) throws ParseException {
-        Date formattedDate = null;
-        if (!StringUtils.isBlank(date)) {
-            formattedDate = new SimpleDateFormat(NhincConstants.DATE_PARSE_FORMAT).parse(date);
-        }
-        return formattedDate;
-    }
 }

@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,14 +23,13 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.direct.messagemonitoring.util;
 
 import static gov.hhs.fha.nhinc.direct.DirectReceiverImpl.X_DIRECT_FINAL_DESTINATION_DELIVERY_HEADER_VALUE;
-
-import gov.hhs.fha.nhinc.connectmgr.ConnectionManagerException;
 import gov.hhs.fha.nhinc.direct.edge.proxy.DirectEdgeProxy;
 import gov.hhs.fha.nhinc.direct.edge.proxy.DirectEdgeProxyObjectFactory;
+import gov.hhs.fha.nhinc.exchangemgr.ExchangeManagerException;
 import gov.hhs.fha.nhinc.messaging.client.CONNECTCXFClientFactory;
 import gov.hhs.fha.nhinc.messaging.client.CONNECTClient;
 import gov.hhs.fha.nhinc.messaging.service.port.ServicePortDescriptor;
@@ -81,7 +80,8 @@ public class MessageMonitoringUtil {
 
     public static final String DISPOSITION_NOTIFICATION_OPTIONS_HEADER_NAME = "Disposition-Notification-Options";
     public static final String DISPOSITION_NOTIFICATION_PROCESSED = "automatic-action/mdn-sent-automatically;processed";
-    public static final String DISPOSITION_NOTIFICATION_DISPATCHED = "automatic-action/MDN-sent-automatically;dispatched";
+    public static final String DISPOSITION_NOTIFICATION_DISPATCHED
+        = "automatic-action/MDN-sent-automatically;dispatched";
     public static final int DEFAULT_OUTBOUND_FAILED_MESSAGE_RETRY_COUNT = 1;
     public static final int DEFAULT_INBOUND_FAILED_MESSAGE_RETRY_COUNT = 1;
     public static final boolean DEFAULT_NOTIFIY_OUTBOUND_SECURITY_FAILURE_IMMEDIATE = true;
@@ -99,6 +99,9 @@ public class MessageMonitoringUtil {
     public static final String SUCCESSFUL_MESSAGE_EMAIL_TEXT = "Message successfully delivered to the recipient ";
     public static final String AGENT_SETTINGS_CACHE_REFRESH_TIME = "AgentSettingsCacheRefreshTime";
     public static final String AGENT_SETTINGS_CACHE_REFRESH_ACTIVE = "AgentSettingsCacheRefreshActive";
+
+    private MessageMonitoringUtil() {
+    }
 
     /**
      * Returns Mail Recipients as a NHINDAddressCollection
@@ -131,11 +134,11 @@ public class MessageMonitoringUtil {
 
             if (sender != null) {
                 details.put(TxDetailType.FROM.getType(),
-                        new TxDetail(TxDetailType.FROM, sender.toLowerCase(Locale.getDefault())));
+                    new TxDetail(TxDetailType.FROM, sender.toLowerCase(Locale.getDefault())));
             }
             if (recipients != null && !recipients.isEmpty()) {
                 details.put(TxDetailType.RECIPIENTS.getType(),
-                        new TxDetail(TxDetailType.RECIPIENTS, recipients.toString().toLowerCase(Locale.getDefault())));
+                    new TxDetail(TxDetailType.RECIPIENTS, recipients.toString().toLowerCase(Locale.getDefault())));
             }
 
             return new Tx(TxUtil.getMessageType(msg), details);
@@ -184,7 +187,7 @@ public class MessageMonitoringUtil {
 
         final TxDetail detail = tx.getDetail(TxDetailType.DISPOSITION);
         return detail != null && !detail.getDetailValue().isEmpty()
-                && detail.getDetailValue().equalsIgnoreCase(DISPOSITION_NOTIFICATION_PROCESSED);
+            && detail.getDetailValue().equalsIgnoreCase(DISPOSITION_NOTIFICATION_PROCESSED);
     }
 
     /**
@@ -203,7 +206,7 @@ public class MessageMonitoringUtil {
 
         final TxDetail detail = tx.getDetail(TxDetailType.DISPOSITION);
         return detail != null && !detail.getDetailValue().isEmpty()
-                && detail.getDetailValue().equalsIgnoreCase(DISPOSITION_NOTIFICATION_DISPATCHED);
+            && detail.getDetailValue().equalsIgnoreCase(DISPOSITION_NOTIFICATION_DISPATCHED);
     }
 
     /**
@@ -270,9 +273,9 @@ public class MessageMonitoringUtil {
      * @return
      */
     public static boolean checkHeaderForDispatchedRequest(String header) {
-        // TODO: need a beeter approcah to verify the value
+        // Need a better approach to verify the value
         return StringUtils.contains(header, X_DIRECT_FINAL_DESTINATION_DELIVERY_HEADER_VALUE)
-                && StringUtils.contains(header, "true");
+            && StringUtils.contains(header, "true");
     }
 
     /**
@@ -283,7 +286,7 @@ public class MessageMonitoringUtil {
      */
     public static int getOutboundFailedMessageRetryCount() {
         int messageRetryCount = getPropertyIntegerValue("OutboundFailedMessageRetryCount");
-        LOG.info("Outbound Failed Message Retry Count " + messageRetryCount);
+        LOG.info("Outbound Failed Message Retry Count {}", messageRetryCount);
         if (messageRetryCount >= 0) {
             return messageRetryCount;
         }
@@ -333,7 +336,7 @@ public class MessageMonitoringUtil {
         LOG.info("processedReceiveTimeLimit " + processedReceiveTimeLimit);
         // If not found, then use the default value
         return processedReceiveTimeLimit >= 0 ? processedReceiveTimeLimit
-                : DEFAULT_PROCESSED_MESSAGE_RECEIVE_TIME_LIMIT;
+            : DEFAULT_PROCESSED_MESSAGE_RECEIVE_TIME_LIMIT;
     }
 
     /**
@@ -344,7 +347,7 @@ public class MessageMonitoringUtil {
      */
     public static String getDomainPostmasterEmailId() {
         String postmasterEmailPrefix = getPropertyStringValue("PostmasterEmailIdPrefix");
-        LOG.info("postmasterEmailPrefix " + postmasterEmailPrefix);
+        LOG.info("postmasterEmailPrefix {}", postmasterEmailPrefix);
         if (postmasterEmailPrefix != null) {
             return postmasterEmailPrefix;
         }
@@ -360,10 +363,10 @@ public class MessageMonitoringUtil {
      */
     public static int getDispatchedMessageReceiveTimeLimit() {
         int dispatchedReceiveTimeLimit = getPropertyIntegerValue("DispatchedMessageReceiveTimeLimit");
-        LOG.info("dispatchedReceiveTimeLimit " + dispatchedReceiveTimeLimit);
+        LOG.info("dispatchedReceiveTimeLimit {}", dispatchedReceiveTimeLimit);
         // If not found, then use the default value
         return dispatchedReceiveTimeLimit >= 0 ? dispatchedReceiveTimeLimit
-                : DEFAULT_DISPATCHED_MESSAGE_RECEIVE_TIME_LIMIT;
+            : DEFAULT_DISPATCHED_MESSAGE_RECEIVE_TIME_LIMIT;
     }
 
     public static boolean isMessageMonitoringEnabled() {
@@ -383,7 +386,7 @@ public class MessageMonitoringUtil {
      */
     public static boolean isMdnOrDsn(MimeMessage message) {
         return TxUtil.getMessageType(message).equals(TxMessageType.DSN)
-                || TxUtil.getMessageType(message).equals(TxMessageType.MDN);
+            || TxUtil.getMessageType(message).equals(TxMessageType.MDN);
     }
 
     /**
@@ -395,8 +398,8 @@ public class MessageMonitoringUtil {
     public static boolean isProcessedMDNReceiveTimeLapsed(Date createTime) {
         // check if the currenttime - createTime > the time limit
         long diff = new Date().getTime() - createTime.getTime();
-        LOG.info("Processed MDN time difference:" + diff);
-        LOG.info("getProcessedMessageReceiveTimeLimit -->" + getProcessedMessageReceiveTimeLimit());
+        LOG.info("Processed MDN time difference:{}", diff);
+        LOG.info("getProcessedMessageReceiveTimeLimit -->{}", getProcessedMessageReceiveTimeLimit());
         return diff >= getProcessedMessageReceiveTimeLimit();
     }
 
@@ -425,7 +428,7 @@ public class MessageMonitoringUtil {
      * @throws MessagingException
      */
     public static MimeMessage createMimeMessage(String postMasterEmailId, String subject, String recipient, String text,
-            String messageId) throws AddressException, MessagingException {
+        String messageId) throws MessagingException {
         MimeMessage message = new MimeMessage((Session) null);
         message.setSender(new InternetAddress(postMasterEmailId));
         message.setSubject(subject);
@@ -444,7 +447,7 @@ public class MessageMonitoringUtil {
      */
     public static String getFailedMessageSubjectPrefix() {
         String failedMessageSubjectPrefix = getPropertyStringValue("FailedMessageSubjectPrefix");
-        LOG.info("failedMessageSubjectPrefix " + failedMessageSubjectPrefix);
+        LOG.info("failedMessageSubjectPrefix {}", failedMessageSubjectPrefix);
         if (failedMessageSubjectPrefix != null) {
             return failedMessageSubjectPrefix;
         }
@@ -458,7 +461,7 @@ public class MessageMonitoringUtil {
      */
     public static String getFailedMessageEmailText() {
         String failedMessageEmailText = getPropertyStringValue("FailedMessageEmailText");
-        LOG.info("failedMessageEmailText " + failedMessageEmailText);
+        LOG.info("failedMessageEmailText {}", failedMessageEmailText);
         if (failedMessageEmailText != null) {
             return failedMessageEmailText;
         }
@@ -472,7 +475,7 @@ public class MessageMonitoringUtil {
      */
     public static String getSuccessfulMessageSubjectPrefix() {
         String successfulMessageSubjectPrefix = getPropertyStringValue("SuccessfulMessageSubjectPrefix");
-        LOG.info("successfulMessageSubjectPrefix " + successfulMessageSubjectPrefix);
+        LOG.info("successfulMessageSubjectPrefix {}", successfulMessageSubjectPrefix);
         if (successfulMessageSubjectPrefix != null) {
             return successfulMessageSubjectPrefix;
         }
@@ -486,7 +489,7 @@ public class MessageMonitoringUtil {
      */
     public static String getSuccessfulMessageEmailText() {
         String successfulMessageEmailText = getPropertyStringValue("SuccessfulMessageEmailText");
-        LOG.info("successfulMessageEmailText " + successfulMessageEmailText);
+        LOG.info("successfulMessageEmailText {}", successfulMessageEmailText);
         if (successfulMessageEmailText != null) {
             return successfulMessageEmailText;
         }
@@ -529,7 +532,7 @@ public class MessageMonitoringUtil {
     public static String getSetting(String propertyName) {
         try {
             Setting setting = (Setting) getClient().invokePort(directConfigClazz,
-                    DIRECT_SERVICE_NAME_GET_SETTING_BY_NAME, propertyName);
+                DIRECT_SERVICE_NAME_GET_SETTING_BY_NAME, propertyName);
             // if setting is not null
             if (setting != null) {
                 return setting.getValue();
@@ -564,15 +567,13 @@ public class MessageMonitoringUtil {
      * @return
      *
      */
-    private static CONNECTClient<ConfigurationService> getClient() throws ConnectionManagerException {
+    private static CONNECTClient<ConfigurationService> getClient() throws ExchangeManagerException {
         // get the direct config URL
         String url = oProxyHelper.getAdapterEndPointFromConnectionManager(DIRECT_CONFIG_SERVICE_NAME);
-        LOG.debug("Direct config URL:" + url);
+        LOG.debug("Direct config URL: {}", url);
         ServicePortDescriptor<ConfigurationService> portDescriptor = new DirectConfigUnsecuredServicePortDescriptor();
 
-        CONNECTClient<ConfigurationService> client = CONNECTCXFClientFactory.getInstance()
-                .getCONNECTClientUnsecured(portDescriptor, url, null);
-        return client;
+        return CONNECTCXFClientFactory.getInstance().getCONNECTClientUnsecured(portDescriptor, url, null);
     }
 
     private static String getPropertyStringValue(String propertyName) {
@@ -587,25 +588,24 @@ public class MessageMonitoringUtil {
     private static int getPropertyIntegerValue(String propertyName) {
         try {
             return Integer.parseInt(
-                    PropertyAccessor.getInstance().getProperty(NhincConstants.GATEWAY_PROPERTY_FILE, propertyName));
+                PropertyAccessor.getInstance().getProperty(NhincConstants.GATEWAY_PROPERTY_FILE, propertyName));
         } catch (PropertyAccessException ex) {
             LOG.info("Property Not found in getPropertyIntegerValue() for {}: {}", propertyName, ex.getMessage(), ex);
             return -1;
         } catch (NumberFormatException n) {
-            LOG.info("Invalid value for the Property:" + propertyName);
+            LOG.info("Invalid value for the Property: {}", propertyName);
             return -1;
         }
     }
 
     /**
      * Update the Agent Settings Cache
-     *
      */
     public static void updateAgentSettingsCacheTimeoutValue() {
         GatewayState gatewayState = GatewayState.getInstance();
         // Read the agentSettingsCacheRefreshTime property from gateway.properties
         int agentSettingsCacheRefreshTime = getAgentSettingsCacheRefreshTime();
-        LOG.trace("AgentSettingsCacheRefreshTime agentSettingsCacheRefreshTime value:" + agentSettingsCacheRefreshTime);
+        LOG.trace("AgentSettingsCacheRefreshTime agentSettingsCacheRefreshTime value:{}", agentSettingsCacheRefreshTime);
         boolean refreshRequired = gatewayState.getSettingsUpdateInterval() != agentSettingsCacheRefreshTime / 1000;
 
         // set the Settings Update Interval value only if the proeprty value retrieved is greater than zero
@@ -626,7 +626,7 @@ public class MessageMonitoringUtil {
         try {
             if (getAgentSettingsCacheRefreshActive()) {
                 return Integer.parseInt(PropertyAccessor.getInstance().getProperty(NhincConstants.GATEWAY_PROPERTY_FILE,
-                        AGENT_SETTINGS_CACHE_REFRESH_TIME));
+                    AGENT_SETTINGS_CACHE_REFRESH_TIME));
             }
             return -1;
         } catch (PropertyAccessException ex) {
@@ -647,15 +647,15 @@ public class MessageMonitoringUtil {
     public static boolean getAgentSettingsCacheRefreshActive() {
         try {
             String agentSettingsCacheRefreshActive = PropertyAccessor.getInstance()
-                    .getProperty(NhincConstants.GATEWAY_PROPERTY_FILE, AGENT_SETTINGS_CACHE_REFRESH_ACTIVE);
+                .getProperty(NhincConstants.GATEWAY_PROPERTY_FILE, AGENT_SETTINGS_CACHE_REFRESH_ACTIVE);
             return agentSettingsCacheRefreshActive != null && "true".equals(agentSettingsCacheRefreshActive);
         } catch (PropertyAccessException ex) {
             LOG.error("Property Not found in getAgentSettingsCacheRefreshActive() for {}: {}",
-                    AGENT_SETTINGS_CACHE_REFRESH_ACTIVE, ex.getMessage(), ex);
+                AGENT_SETTINGS_CACHE_REFRESH_ACTIVE, ex.getMessage(), ex);
             return false;
         } catch (NumberFormatException n) {
             LOG.info("Invalid value for the Proeprty for {}: {}", AGENT_SETTINGS_CACHE_REFRESH_ACTIVE, n.getMessage(),
-                    n);
+                n);
             return false;
         }
     }

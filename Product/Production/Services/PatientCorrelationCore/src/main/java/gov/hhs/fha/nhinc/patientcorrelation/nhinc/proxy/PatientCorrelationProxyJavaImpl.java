@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2009-2016, United States Government, as represented by the Secretary of Health and Human Services.
+ * Copyright (c) 2009-2019, United States Government, as represented by the Secretary of Health and Human Services.
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above
@@ -12,7 +12,7 @@
  *     * Neither the name of the United States Government nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,13 +23,14 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 package gov.hhs.fha.nhinc.patientcorrelation.nhinc.proxy;
 
 import gov.hhs.fha.nhinc.common.nhinccommon.AssertionType;
 import gov.hhs.fha.nhinc.patientcorrelation.nhinc.PatientCorrelationOrch;
 import gov.hhs.fha.nhinc.patientcorrelation.nhinc.PatientCorrelationOrchImpl;
 import gov.hhs.fha.nhinc.patientcorrelation.nhinc.dao.CorrelatedIdentifiersDaoImpl;
+import ihe.iti.xcpd._2009.PatientLocationQueryResponseType;
 import org.hl7.v3.AddPatientCorrelationResponseType;
 import org.hl7.v3.PRPAIN201301UV02;
 import org.hl7.v3.PRPAIN201309UV02;
@@ -52,7 +53,7 @@ public class PatientCorrelationProxyJavaImpl implements PatientCorrelationProxy 
      */
     @Override
     public RetrievePatientCorrelationsResponseType retrievePatientCorrelations(PRPAIN201309UV02 request,
-            AssertionType assertion) {
+        AssertionType assertion) {
         return orchestration.retrievePatientCorrelations(request, assertion);
     }
 
@@ -67,4 +68,13 @@ public class PatientCorrelationProxyJavaImpl implements PatientCorrelationProxy 
         return orchestration.addPatientCorrelation(request, assertion);
     }
 
+    /**
+     * This method add PatientCorrelations to database with record locator service id.
+     * @param response PatientLocationQueryResponse HL7 type of response received.
+     * @param assertion Assertion received.
+     */
+    @Override
+    public void addPatientCorrelationPLQ(PatientLocationQueryResponseType plqRecords, AssertionType assertion) {
+        orchestration.addPatientCorrelationPLQ(plqRecords, assertion);
+    }
 }

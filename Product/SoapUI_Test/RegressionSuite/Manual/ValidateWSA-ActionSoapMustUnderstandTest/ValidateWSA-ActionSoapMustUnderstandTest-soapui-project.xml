@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project abortOnError="false" name="MustUnderstandSuite" resourceRoot="${projectDir}" runType="SEQUENTIAL" soapui-version="5.1.2" activeEnvironment="Default" id="5244be5e-9e45-4efa-bb2b-fcb21861f0da" xmlns:con="http://eviware.com/soapui/config">
+<con:soapui-project abortOnError="false" name="MustUnderstandSuite" resourceRoot="${projectDir}" runType="SEQUENTIAL" soapui-version="5.3.0" activeEnvironment="Default" id="5244be5e-9e45-4efa-bb2b-fcb21861f0da" xmlns:con="http://eviware.com/soapui/config">
   <con:settings/>
   <con:interface anonymous="optional" bindingName="{urn:gov:hhs:fha:nhinc:entitydocquery}EntityDocQueryBindingSoap" definition="../../../target/wsdl/EntityDocQuery.wsdl" name="EntityDocQueryBindingSoap" soapVersion="1_2" type="wsdl" wsaVersion="NONE" xsi:type="con:WsdlInterface" id="515e62ac-b455-42be-8e04-ec44d5bb3fe3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <con:settings/>
@@ -1038,12 +1038,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -1051,7 +1051,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -1637,12 +1637,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -1651,7 +1651,7 @@ if(passthruValue != null){
                      <!--Optional:-->
                      <urn1:version>2.0</urn1:version>
                      <!--Optional:-->
-                     <urn1:issuer>CN=SAML User,OU=Harris,0=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <!--Optional:-->
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
                      <!--Optional:-->
@@ -2023,12 +2023,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -2036,7 +2036,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -2599,12 +2599,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -2612,7 +2612,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -3043,12 +3043,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -3056,7 +3056,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -3251,9 +3251,9 @@ pdConfigFile.eachLine() {
 pdConfigFile.delete();
 pdConfigFileNew.renameTo(new File(dir + "/" + "PatientDiscoveryProxyConfig.xml"));
 **/
-log.info "Modifying internalConnectionInfo for adapterpatientdiscovery mock."
+log.info "Modifying internalExchangeInfo for adapterpatientdiscovery mock."
 
-nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterpatientdiscovery", "http://localhost:1720/MockPDAdapter", "2.0",
 	log);</script>
         </con:config>
@@ -3475,12 +3475,12 @@ nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", dir, "1.1
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -3488,7 +3488,7 @@ nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", dir, "1.1
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -4056,12 +4056,12 @@ if(passthruValue != null){
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
          <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -4069,7 +4069,7 @@ if(passthruValue != null){
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -4417,12 +4417,12 @@ if(passthruValue != null){
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -4430,7 +4430,7 @@ if(passthruValue != null){
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -4595,149 +4595,11 @@ if(passthruValue != null){
    <soap:Body testSuite="Entity_g1" testCase="Admin Distribution">
       <urn:RespondingGateway_SendAlertMessage>
          <urn:assertion>
-            <urn1:nationalProviderId>1234567890</urn1:nationalProviderId>         
-            <urn1:address>
-               <urn1:addressType>
-                  <urn1:code>AddrCode</urn1:code>
-                  <urn1:codeSystem>AddrCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>AddrCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>AddrCode</urn1:displayName>
-                  <urn1:originalText>AddrCode</urn1:originalText>
-               </urn1:addressType>
-               <urn1:city>AddrCity</urn1:city>
-               <urn1:country>AddrCountry</urn1:country>
-               <urn1:state>AddrState</urn1:state>
-               <urn1:streetAddress>AddrStreet</urn1:streetAddress>
-               <urn1:zipCode>AddrZip</urn1:zipCode>
-            </urn1:address>
-            <urn1:dateOfBirth>06/04/1959 05:21:00</urn1:dateOfBirth>
-            <urn1:explanationNonClaimantSignature>Electronic</urn1:explanationNonClaimantSignature>
-            <urn1:haveSecondWitnessSignature>false</urn1:haveSecondWitnessSignature>
-            <urn1:haveSignature>false</urn1:haveSignature>
-            <urn1:haveWitnessSignature>false</urn1:haveWitnessSignature>
             <urn1:homeCommunity>
                <urn1:description>${#Project#LocalHCDescription}</urn1:description>
                <urn1:homeCommunityId>${#Project#LocalHCID}</urn1:homeCommunityId>
                <urn1:name>${#Project#LocalHCDescription}</urn1:name>
             </urn1:homeCommunity>
-            <urn1:personName>
-               <urn1:familyName>Smith</urn1:familyName>
-               <urn1:givenName>Sandy</urn1:givenName>
-               <urn1:nameType>
-                  <urn1:code>nameCode</urn1:code>
-                  <urn1:codeSystem>nameCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>nameCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>nameCode</urn1:displayName>
-                  <urn1:originalText>nameCode</urn1:originalText>
-               </urn1:nameType>
-               <urn1:secondNameOrInitials>S</urn1:secondNameOrInitials>
-               <urn1:fullName>Sandy S. Smith</urn1:fullName>
-            </urn1:personName>
-            <urn1:phoneNumber>
-               <urn1:areaCode>321</urn1:areaCode>
-               <urn1:countryCode>1</urn1:countryCode>
-               <urn1:extension>5436</urn1:extension>
-               <urn1:localNumber>253-6849</urn1:localNumber>
-               <urn1:phoneNumberType>
-                  <urn1:code>phoneCode</urn1:code>
-                  <urn1:codeSystem>phoneCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>phoneCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>phoneCode</urn1:displayName>
-                  <urn1:originalText>phoneCode</urn1:originalText>
-               </urn1:phoneNumberType>
-            </urn1:phoneNumber>
-            <urn1:secondWitnessAddress>
-               <urn1:addressType>
-                  <urn1:code>AddrCode</urn1:code>
-                  <urn1:codeSystem>AddrCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>AddrCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>AddrCode</urn1:displayName>
-                  <urn1:originalText>AddrCode</urn1:originalText>
-               </urn1:addressType>
-               <urn1:city>Addr2City</urn1:city>
-               <urn1:country>Addr2Country</urn1:country>
-               <urn1:state>Addr2State</urn1:state>
-               <urn1:streetAddress>Addr2Street</urn1:streetAddress>
-               <urn1:zipCode>Addr2Zip</urn1:zipCode>
-            </urn1:secondWitnessAddress>
-            <urn1:secondWitnessName>
-               <urn1:familyName>Smith</urn1:familyName>
-               <urn1:givenName>Sammy</urn1:givenName>
-               <urn1:nameType>
-                  <urn1:code>nameCode</urn1:code>
-                  <urn1:codeSystem>nameCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>nameCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>nameCode</urn1:displayName>
-                  <urn1:originalText>nameCode</urn1:originalText>
-               </urn1:nameType>
-               <urn1:secondNameOrInitials>s</urn1:secondNameOrInitials>
-               <urn1:fullName>Sammy S. Smith</urn1:fullName>
-            </urn1:secondWitnessName>
-            <urn1:secondWitnessPhone>
-               <urn1:areaCode>321</urn1:areaCode>
-               <urn1:countryCode>1</urn1:countryCode>
-               <urn1:extension>5424</urn1:extension>
-               <urn1:localNumber>542-6823</urn1:localNumber>
-               <urn1:phoneNumberType>
-                  <urn1:code>phoneCode</urn1:code>
-                  <urn1:codeSystem>phoneCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>phoneCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>phoneCode</urn1:displayName>
-                  <urn1:originalText>phoneCode</urn1:originalText>
-               </urn1:phoneNumberType>
-            </urn1:secondWitnessPhone>
-            <urn1:SSN>253987546</urn1:SSN>
-            <!--1 or more repetitions:-->
-            <urn1:uniquePatientId>500000000^^^&amp;1.1&amp;ISO</urn1:uniquePatientId>
-            <urn1:witnessAddress>
-               <urn1:addressType>
-                  <urn1:code>addrCode</urn1:code>
-                  <urn1:codeSystem>addrCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>addrCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>addrCode</urn1:displayName>
-                  <urn1:originalText>addrCode</urn1:originalText>
-               </urn1:addressType>
-               <urn1:city>Burnell</urn1:city>
-               <urn1:country>USA</urn1:country>
-               <urn1:state>FL</urn1:state>
-               <urn1:streetAddress>825 North</urn1:streetAddress>
-               <urn1:zipCode>32184</urn1:zipCode>
-            </urn1:witnessAddress>
-            <urn1:witnessName>
-               <urn1:familyName>Smith</urn1:familyName>
-               <urn1:givenName>Scott</urn1:givenName>
-               <urn1:nameType>
-                  <urn1:code>nameCode</urn1:code>
-                  <urn1:codeSystem>nameCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>nameCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>nameCode</urn1:displayName>
-                  <urn1:originalText>nameCode</urn1:originalText>
-               </urn1:nameType>
-               <urn1:secondNameOrInitials>S.</urn1:secondNameOrInitials>
-               <urn1:fullName>Scott S. Smith</urn1:fullName>
-            </urn1:witnessName>
-            <urn1:witnessPhone>
-               <urn1:areaCode>321</urn1:areaCode>
-               <urn1:countryCode>1</urn1:countryCode>
-               <urn1:extension>8432</urn1:extension>
-               <urn1:localNumber>985-2239</urn1:localNumber>
-               <urn1:phoneNumberType>
-                  <urn1:code>phoneCode</urn1:code>
-                  <urn1:codeSystem>phoneCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>phoneCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>phoneCode</urn1:displayName>
-                  <urn1:originalText>phoneCode</urn1:originalText>
-               </urn1:phoneNumberType>
-            </urn1:witnessPhone>
             <urn1:userInfo>
                <urn1:personName>
                   <urn1:familyName>Skagerberg</urn1:familyName>
@@ -4761,8 +4623,6 @@ if(passthruValue != null){
                </urn1:org>
                <urn1:roleCoded>
                   <urn1:code>80584001</urn1:code>
-                  <urn1:codeSystem>2.16.840.1.113883.6.96</urn1:codeSystem>
-                  <urn1:codeSystemName>SNOMED_CT</urn1:codeSystemName>
                   <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
                   <urn1:displayName>Psychiatrist</urn1:displayName>
                   <urn1:originalText>Psychiatrist</urn1:originalText>
@@ -4771,36 +4631,34 @@ if(passthruValue != null){
             <urn1:authorized>true</urn1:authorized>
             <urn1:purposeOfDisclosureCoded>
                <urn1:code>PSYCHOTHERAPY</urn1:code>
-               <urn1:codeSystem>2.16.840.1.113883.3.18.7.1</urn1:codeSystem>
-               <urn1:codeSystemName>nhin-purpose</urn1:codeSystemName>
                <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
                <urn1:displayName>Use or disclosure of Psychotherapy Notes</urn1:displayName>
                <urn1:originalText>Psychotherapy Notes</urn1:originalText>
             </urn1:purposeOfDisclosureCoded>
             <urn1:samlAuthnStatement>
-               <urn1:authInstant>2009-09-01T13:00:00.000Z</urn1:authInstant>
-               <urn1:sessionIndex>mySessionIndex</urn1:sessionIndex>
-               <urn1:authContextClassRef>myContextClassRef</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>mySubjectLocalityAddress</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>mySubjectLocalityDns</urn1:subjectLocalityDNSName>
+               <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
+               <urn1:sessionIndex>987</urn1:sessionIndex>
+               <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>myAuthzDecisionStatementResource</urn1:resource>
-               <urn1:action>myAuthzDecisionStatementAction</urn1:action>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
-                     <urn1:id>AuthzDecisionStatementEvidenceAssertionId</urn1:id>
-                     <urn1:issueInstant>2009-09-02T14:00:00.000Z</urn1:issueInstant>
+                     <urn1:id>40df7c0a-ff3e-4b26-baeb-f2910f6d05a9</urn1:id>
+                     <urn1:issueInstant>2009-04-16T13:15:39Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuer>CN=Mr Saml User,OU=SU,O=Mr SAML Org,L=Chantilly,ST=VA,C=US</urn1:issuer>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
                      <urn1:conditions>
-                        <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
+                        <urn1:notBefore>2009-04-16T13:15:39Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
                      </urn1:conditions>
-                     <urn1:accessConsentPolicy>urn:oid:1.2.3.4</urn1:accessConsentPolicy>
-                     <urn1:instanceAccessConsentPolicy>urn:oid:1.2.3.4.123456789</urn1:instanceAccessConsentPolicy>
+                     <urn1:accessConsentPolicy>Claim-Ref-1234</urn1:accessConsentPolicy>
+                     <urn1:instanceAccessConsentPolicy>Claim-Instance-1</urn1:instanceAccessConsentPolicy>
                   </urn1:assertion>
                </urn1:evidence>
             </urn1:samlAuthzDecisionStatement>
@@ -4924,7 +4782,7 @@ if(passthruValue != null){
    </soap:Body>
 </soap:Envelope>]]></con:request>
             <con:credentials>
-              <con:authType>Global HTTP Settings</con:authType>
+              <con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:jmsPropertyConfig/>
@@ -5021,7 +4879,7 @@ if(passthruValue != null){
         <con:settings/>
         <con:config>
           <script>nhinc.FileUtils.updateProperty(context.findProperty('GatewayPropDir'), "gateway.properties", "documentQueryQuerySelf", "false", log);
-nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findProperty('GatewayPropDir'), context.findProperty('LocalHCID'), "adapterdocquerysecured", "http://localhost:8080/Adapter/DocumentQuery/A_0/AdapterDocQuerySecured-BADURL", "LEVEL_a0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", context.findProperty('GatewayPropDir'), context.findProperty('LocalHCID'), "adapterdocquerysecured", "http://localhost:8080/Adapter/DocumentQuery/A_0/AdapterDocQuerySecured-BADURL", "LEVEL_a0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="Clear Correlation Table &amp; Add Correlation" type="groovy" id="ea54e120-d321-42ea-9f04-31bbe82a2ae0">
@@ -5284,12 +5142,12 @@ nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.f
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
          <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -5297,7 +5155,7 @@ nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.f
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -5638,12 +5496,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -5651,7 +5509,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -6235,12 +6093,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -6249,7 +6107,7 @@ if(passthruValue != null){
                      <!--Optional:-->
                      <urn1:version>2.0</urn1:version>
                      <!--Optional:-->
-                     <urn1:issuer>CN=SAML User,OU=Harris,0=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <!--Optional:-->
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
                      <!--Optional:-->
@@ -6620,12 +6478,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -6633,7 +6491,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -7196,12 +7054,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -7209,7 +7067,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -7640,12 +7498,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -7653,7 +7511,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -7848,9 +7706,9 @@ pdConfigFile.eachLine() {
 pdConfigFile.delete();
 pdConfigFileNew.renameTo(new File(dir + "/" + "PatientDiscoveryProxyConfig.xml"));
 **/
-log.info "Modifying internalConnectionInfo for adapterpatientdiscovery mock."
+log.info "Modifying internalExchangeInfo for adapterpatientdiscovery mock."
 
-nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterpatientdiscovery", "http://localhost:1720/MockPDAdapter", "2.0",
 	log);</script>
         </con:config>
@@ -8072,12 +7930,12 @@ nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", dir, "1.1
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -8085,7 +7943,7 @@ nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", dir, "1.1
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -8653,12 +8511,12 @@ if(passthruValue != null){
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
          <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -8666,7 +8524,7 @@ if(passthruValue != null){
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -9014,12 +8872,12 @@ if(passthruValue != null){
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -9027,7 +8885,7 @@ if(passthruValue != null){
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -9192,149 +9050,11 @@ if(passthruValue != null){
    <soap:Body testSuite="Entity_g0" testCase="Admin Distribution">
       <urn:RespondingGateway_SendAlertMessage>
          <urn:assertion>
-            <urn1:nationalProviderId>1234567890</urn1:nationalProviderId>         
-            <urn1:address>
-               <urn1:addressType>
-                  <urn1:code>AddrCode</urn1:code>
-                  <urn1:codeSystem>AddrCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>AddrCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>AddrCode</urn1:displayName>
-                  <urn1:originalText>AddrCode</urn1:originalText>
-               </urn1:addressType>
-               <urn1:city>AddrCity</urn1:city>
-               <urn1:country>AddrCountry</urn1:country>
-               <urn1:state>AddrState</urn1:state>
-               <urn1:streetAddress>AddrStreet</urn1:streetAddress>
-               <urn1:zipCode>AddrZip</urn1:zipCode>
-            </urn1:address>
-            <urn1:dateOfBirth>06/04/1959 05:21:00</urn1:dateOfBirth>
-            <urn1:explanationNonClaimantSignature>Electronic</urn1:explanationNonClaimantSignature>
-            <urn1:haveSecondWitnessSignature>false</urn1:haveSecondWitnessSignature>
-            <urn1:haveSignature>false</urn1:haveSignature>
-            <urn1:haveWitnessSignature>false</urn1:haveWitnessSignature>
             <urn1:homeCommunity>
                <urn1:description>${#Project#LocalHCDescription}</urn1:description>
                <urn1:homeCommunityId>${#Project#LocalHCID}</urn1:homeCommunityId>
                <urn1:name>${#Project#LocalHCDescription}</urn1:name>
             </urn1:homeCommunity>
-            <urn1:personName>
-               <urn1:familyName>Smith</urn1:familyName>
-               <urn1:givenName>Sandy</urn1:givenName>
-               <urn1:nameType>
-                  <urn1:code>nameCode</urn1:code>
-                  <urn1:codeSystem>nameCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>nameCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>nameCode</urn1:displayName>
-                  <urn1:originalText>nameCode</urn1:originalText>
-               </urn1:nameType>
-               <urn1:secondNameOrInitials>S</urn1:secondNameOrInitials>
-               <urn1:fullName>Sandy S. Smith</urn1:fullName>
-            </urn1:personName>
-            <urn1:phoneNumber>
-               <urn1:areaCode>321</urn1:areaCode>
-               <urn1:countryCode>1</urn1:countryCode>
-               <urn1:extension>5436</urn1:extension>
-               <urn1:localNumber>253-6849</urn1:localNumber>
-               <urn1:phoneNumberType>
-                  <urn1:code>phoneCode</urn1:code>
-                  <urn1:codeSystem>phoneCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>phoneCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>phoneCode</urn1:displayName>
-                  <urn1:originalText>phoneCode</urn1:originalText>
-               </urn1:phoneNumberType>
-            </urn1:phoneNumber>
-            <urn1:secondWitnessAddress>
-               <urn1:addressType>
-                  <urn1:code>AddrCode</urn1:code>
-                  <urn1:codeSystem>AddrCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>AddrCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>AddrCode</urn1:displayName>
-                  <urn1:originalText>AddrCode</urn1:originalText>
-               </urn1:addressType>
-               <urn1:city>Addr2City</urn1:city>
-               <urn1:country>Addr2Country</urn1:country>
-               <urn1:state>Addr2State</urn1:state>
-               <urn1:streetAddress>Addr2Street</urn1:streetAddress>
-               <urn1:zipCode>Addr2Zip</urn1:zipCode>
-            </urn1:secondWitnessAddress>
-            <urn1:secondWitnessName>
-               <urn1:familyName>Smith</urn1:familyName>
-               <urn1:givenName>Sammy</urn1:givenName>
-               <urn1:nameType>
-                  <urn1:code>nameCode</urn1:code>
-                  <urn1:codeSystem>nameCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>nameCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>nameCode</urn1:displayName>
-                  <urn1:originalText>nameCode</urn1:originalText>
-               </urn1:nameType>
-               <urn1:secondNameOrInitials>s</urn1:secondNameOrInitials>
-               <urn1:fullName>Sammy S. Smith</urn1:fullName>
-            </urn1:secondWitnessName>
-            <urn1:secondWitnessPhone>
-               <urn1:areaCode>321</urn1:areaCode>
-               <urn1:countryCode>1</urn1:countryCode>
-               <urn1:extension>5424</urn1:extension>
-               <urn1:localNumber>542-6823</urn1:localNumber>
-               <urn1:phoneNumberType>
-                  <urn1:code>phoneCode</urn1:code>
-                  <urn1:codeSystem>phoneCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>phoneCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>phoneCode</urn1:displayName>
-                  <urn1:originalText>phoneCode</urn1:originalText>
-               </urn1:phoneNumberType>
-            </urn1:secondWitnessPhone>
-            <urn1:SSN>253987546</urn1:SSN>
-            <!--1 or more repetitions:-->
-            <urn1:uniquePatientId>500000000^^^&amp;1.1&amp;ISO</urn1:uniquePatientId>
-            <urn1:witnessAddress>
-               <urn1:addressType>
-                  <urn1:code>addrCode</urn1:code>
-                  <urn1:codeSystem>addrCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>addrCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>addrCode</urn1:displayName>
-                  <urn1:originalText>addrCode</urn1:originalText>
-               </urn1:addressType>
-               <urn1:city>Burnell</urn1:city>
-               <urn1:country>USA</urn1:country>
-               <urn1:state>FL</urn1:state>
-               <urn1:streetAddress>825 North</urn1:streetAddress>
-               <urn1:zipCode>32184</urn1:zipCode>
-            </urn1:witnessAddress>
-            <urn1:witnessName>
-               <urn1:familyName>Smith</urn1:familyName>
-               <urn1:givenName>Scott</urn1:givenName>
-               <urn1:nameType>
-                  <urn1:code>nameCode</urn1:code>
-                  <urn1:codeSystem>nameCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>nameCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>nameCode</urn1:displayName>
-                  <urn1:originalText>nameCode</urn1:originalText>
-               </urn1:nameType>
-               <urn1:secondNameOrInitials>S.</urn1:secondNameOrInitials>
-               <urn1:fullName>Scott S. Smith</urn1:fullName>
-            </urn1:witnessName>
-            <urn1:witnessPhone>
-               <urn1:areaCode>321</urn1:areaCode>
-               <urn1:countryCode>1</urn1:countryCode>
-               <urn1:extension>8432</urn1:extension>
-               <urn1:localNumber>985-2239</urn1:localNumber>
-               <urn1:phoneNumberType>
-                  <urn1:code>phoneCode</urn1:code>
-                  <urn1:codeSystem>phoneCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>phoneCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>phoneCode</urn1:displayName>
-                  <urn1:originalText>phoneCode</urn1:originalText>
-               </urn1:phoneNumberType>
-            </urn1:witnessPhone>
             <urn1:userInfo>
                <urn1:personName>
                   <urn1:familyName>Skagerberg</urn1:familyName>
@@ -9358,8 +9078,6 @@ if(passthruValue != null){
                </urn1:org>
                <urn1:roleCoded>
                   <urn1:code>80584001</urn1:code>
-                  <urn1:codeSystem>2.16.840.1.113883.6.96</urn1:codeSystem>
-                  <urn1:codeSystemName>SNOMED_CT</urn1:codeSystemName>
                   <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
                   <urn1:displayName>Psychiatrist</urn1:displayName>
                   <urn1:originalText>Psychiatrist</urn1:originalText>
@@ -9368,36 +9086,34 @@ if(passthruValue != null){
             <urn1:authorized>true</urn1:authorized>
             <urn1:purposeOfDisclosureCoded>
                <urn1:code>PSYCHOTHERAPY</urn1:code>
-               <urn1:codeSystem>2.16.840.1.113883.3.18.7.1</urn1:codeSystem>
-               <urn1:codeSystemName>nhin-purpose</urn1:codeSystemName>
                <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
                <urn1:displayName>Use or disclosure of Psychotherapy Notes</urn1:displayName>
                <urn1:originalText>Psychotherapy Notes</urn1:originalText>
             </urn1:purposeOfDisclosureCoded>
             <urn1:samlAuthnStatement>
-               <urn1:authInstant>2009-09-01T13:00:00.000Z</urn1:authInstant>
-               <urn1:sessionIndex>mySessionIndex</urn1:sessionIndex>
-               <urn1:authContextClassRef>myContextClassRef</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>mySubjectLocalityAddress</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>mySubjectLocalityDns</urn1:subjectLocalityDNSName>
+               <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
+               <urn1:sessionIndex>987</urn1:sessionIndex>
+               <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>myAuthzDecisionStatementResource</urn1:resource>
-               <urn1:action>myAuthzDecisionStatementAction</urn1:action>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
-                     <urn1:id>AuthzDecisionStatementEvidenceAssertionId</urn1:id>
-                     <urn1:issueInstant>2009-09-02T14:00:00.000Z</urn1:issueInstant>
+                     <urn1:id>40df7c0a-ff3e-4b26-baeb-f2910f6d05a9</urn1:id>
+                     <urn1:issueInstant>2009-04-16T13:15:39Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuer>CN=Mr Saml User,OU=SU,O=Mr SAML Org,L=Chantilly,ST=VA,C=US</urn1:issuer>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
                      <urn1:conditions>
-                        <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
+                        <urn1:notBefore>2009-04-16T13:15:39Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
                      </urn1:conditions>
-                     <urn1:accessConsentPolicy>urn:oid:1.2.3.4</urn1:accessConsentPolicy>
-                     <urn1:instanceAccessConsentPolicy>urn:oid:1.2.3.4.123456789</urn1:instanceAccessConsentPolicy>
+                     <urn1:accessConsentPolicy>Claim-Ref-1234</urn1:accessConsentPolicy>
+                     <urn1:instanceAccessConsentPolicy>Claim-Instance-1</urn1:instanceAccessConsentPolicy>
                   </urn1:assertion>
                </urn1:evidence>
             </urn1:samlAuthzDecisionStatement>
@@ -9405,14 +9121,14 @@ if(passthruValue != null){
                <!--Optional:-->
                <urn1:keyInfo>
                   <!--Optional:-->
-                  <urn1:rsaKeyValueModulus>cid:921853060605</urn1:rsaKeyValueModulus>
+                  <urn1:rsaKeyValueModulus>cid:243113487404</urn1:rsaKeyValueModulus>
                   <!--Optional:-->
-                  <urn1:rsaKeyValueExponent>cid:507157468547</urn1:rsaKeyValueExponent>
+                  <urn1:rsaKeyValueExponent>cid:159355901562</urn1:rsaKeyValueExponent>
                </urn1:keyInfo>
                <!--Optional:-->
-               <urn1:signatureValue>cid:175264679488</urn1:signatureValue>
+               <urn1:signatureValue>cid:383675305350</urn1:signatureValue>
             </urn1:samlSignature>
-         </urn:assertion>
+            </urn:assertion>
          <!--Optional:-->
          <urn:nhinTargetCommunities>
             <!--1 or more repetitions:-->
@@ -9521,7 +9237,7 @@ if(passthruValue != null){
    </soap:Body>
 </soap:Envelope>]]></con:request>
             <con:credentials>
-              <con:authType>Global HTTP Settings</con:authType>
+              <con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:jmsPropertyConfig/>
@@ -9619,7 +9335,7 @@ if(passthruValue != null){
         <con:settings/>
         <con:config>
           <script>nhinc.FileUtils.updateProperty(context.findProperty('GatewayPropDir'), "gateway.properties", "documentQueryQuerySelf", "false", log);
-nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.findProperty('GatewayPropDir'), context.findProperty('LocalHCID'), "adapterdocquerysecured", "http://localhost:8080/Adapter/DocumentQuery/A_0/AdapterDocQuerySecured-BADURL", "LEVEL_a0", log);</script>
+nhinc.FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", context.findProperty('GatewayPropDir'), context.findProperty('LocalHCID'), "adapterdocquerysecured", "http://localhost:8080/Adapter/DocumentQuery/A_0/AdapterDocQuerySecured-BADURL", "LEVEL_a0", log);</script>
         </con:config>
       </con:testStep>
       <con:testStep name="Clear Correlation Table &amp; Add Correlation" type="groovy" id="0b33ec0c-bb28-4fad-86dc-e686ebd56e51">
@@ -9882,12 +9598,12 @@ nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.f
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
          <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -9895,7 +9611,7 @@ nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", context.f
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -10238,12 +9954,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -10251,7 +9967,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -10540,8 +10256,7 @@ assert request["//add:MessageID/text()"] == response["//add:RelatesTo/text()"];<
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);  
 nhinc.FileUtils.setG1ConnectionInfo(context.expand(context.testCase.testSuite.project.resourceRoot), context.findProperty('GatewayPropDir'), log);
-def config = context.getConfiguration();
-config.setPassthruMode();</con:setupScript>
+context.setGatewayStandard(false);</con:setupScript>
       <con:tearDownScript>def dir = context.findProperty('GatewayPropDir');
 nhinc.FileUtils.restoreConfiguration(dir, log);
 def config = context.getConfiguration();
@@ -10837,12 +10552,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -10851,7 +10566,7 @@ if(passthruValue != null){
                      <!--Optional:-->
                      <urn1:version>2.0</urn1:version>
                      <!--Optional:-->
-                     <urn1:issuer>CN=SAML User,OU=Harris,0=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <!--Optional:-->
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
                      <!--Optional:-->
@@ -10961,8 +10676,7 @@ if(passthruValue != null){
       </con:testStep>
       <con:setupScript>nhinc.FileUtils.backupConfiguration(context.findProperty('GatewayPropDir'), log);  
 nhinc.FileUtils.setG1ConnectionInfo(context.expand(context.testCase.testSuite.project.resourceRoot), context.findProperty('GatewayPropDir'), log);
-def config = context.getConfiguration();
-config.setPassthruMode();</con:setupScript>
+context.setGatewayStandard(false);</con:setupScript>
       <con:tearDownScript>def dir = context.findProperty('GatewayPropDir');
 nhinc.FileUtils.restoreConfiguration(dir, log);
 def config = context.getConfiguration();
@@ -11223,12 +10937,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -11236,7 +10950,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -11799,12 +11513,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -11812,7 +11526,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -12243,12 +11957,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -12256,7 +11970,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -12431,9 +12145,9 @@ pdConfigFile.eachLine() {
 pdConfigFile.delete();
 pdConfigFileNew.renameTo(new File(dir + "/" + "PatientDiscoveryProxyConfig.xml"));
 **/
-log.info "Modifying internalConnectionInfo for adapterpatientdiscovery mock."
+log.info "Modifying internalExchangeInfo for adapterpatientdiscovery mock."
 
-nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterpatientdiscovery", "http://localhost:1720/MockPDAdapter", "2.0",
 	log);</script>
         </con:config>
@@ -12655,12 +12369,12 @@ nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", dir, "1.1
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -12668,7 +12382,7 @@ nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", dir, "1.1
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -13236,12 +12950,12 @@ if(passthruValue != null){
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
          <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -13249,7 +12963,7 @@ if(passthruValue != null){
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -13598,12 +13312,12 @@ if(passthruValue != null){
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -13611,7 +13325,7 @@ if(passthruValue != null){
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -13776,149 +13490,11 @@ if(passthruValue != null){
    <soap:Body testSuite="Entity_g1" testCase="Admin Distribution">
       <urn:RespondingGateway_SendAlertMessage>
          <urn:assertion>
-            <urn1:nationalProviderId>1234567890</urn1:nationalProviderId>         
-            <urn1:address>
-               <urn1:addressType>
-                  <urn1:code>AddrCode</urn1:code>
-                  <urn1:codeSystem>AddrCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>AddrCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>AddrCode</urn1:displayName>
-                  <urn1:originalText>AddrCode</urn1:originalText>
-               </urn1:addressType>
-               <urn1:city>AddrCity</urn1:city>
-               <urn1:country>AddrCountry</urn1:country>
-               <urn1:state>AddrState</urn1:state>
-               <urn1:streetAddress>AddrStreet</urn1:streetAddress>
-               <urn1:zipCode>AddrZip</urn1:zipCode>
-            </urn1:address>
-            <urn1:dateOfBirth>06/04/1959 05:21:00</urn1:dateOfBirth>
-            <urn1:explanationNonClaimantSignature>Electronic</urn1:explanationNonClaimantSignature>
-            <urn1:haveSecondWitnessSignature>false</urn1:haveSecondWitnessSignature>
-            <urn1:haveSignature>false</urn1:haveSignature>
-            <urn1:haveWitnessSignature>false</urn1:haveWitnessSignature>
             <urn1:homeCommunity>
                <urn1:description>${#Project#LocalHCDescription}</urn1:description>
                <urn1:homeCommunityId>${#Project#LocalHCID}</urn1:homeCommunityId>
                <urn1:name>${#Project#LocalHCDescription}</urn1:name>
             </urn1:homeCommunity>
-            <urn1:personName>
-               <urn1:familyName>Smith</urn1:familyName>
-               <urn1:givenName>Sandy</urn1:givenName>
-               <urn1:nameType>
-                  <urn1:code>nameCode</urn1:code>
-                  <urn1:codeSystem>nameCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>nameCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>nameCode</urn1:displayName>
-                  <urn1:originalText>nameCode</urn1:originalText>
-               </urn1:nameType>
-               <urn1:secondNameOrInitials>S</urn1:secondNameOrInitials>
-               <urn1:fullName>Sandy S. Smith</urn1:fullName>
-            </urn1:personName>
-            <urn1:phoneNumber>
-               <urn1:areaCode>321</urn1:areaCode>
-               <urn1:countryCode>1</urn1:countryCode>
-               <urn1:extension>5436</urn1:extension>
-               <urn1:localNumber>253-6849</urn1:localNumber>
-               <urn1:phoneNumberType>
-                  <urn1:code>phoneCode</urn1:code>
-                  <urn1:codeSystem>phoneCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>phoneCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>phoneCode</urn1:displayName>
-                  <urn1:originalText>phoneCode</urn1:originalText>
-               </urn1:phoneNumberType>
-            </urn1:phoneNumber>
-            <urn1:secondWitnessAddress>
-               <urn1:addressType>
-                  <urn1:code>AddrCode</urn1:code>
-                  <urn1:codeSystem>AddrCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>AddrCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>AddrCode</urn1:displayName>
-                  <urn1:originalText>AddrCode</urn1:originalText>
-               </urn1:addressType>
-               <urn1:city>Addr2City</urn1:city>
-               <urn1:country>Addr2Country</urn1:country>
-               <urn1:state>Addr2State</urn1:state>
-               <urn1:streetAddress>Addr2Street</urn1:streetAddress>
-               <urn1:zipCode>Addr2Zip</urn1:zipCode>
-            </urn1:secondWitnessAddress>
-            <urn1:secondWitnessName>
-               <urn1:familyName>Smith</urn1:familyName>
-               <urn1:givenName>Sammy</urn1:givenName>
-               <urn1:nameType>
-                  <urn1:code>nameCode</urn1:code>
-                  <urn1:codeSystem>nameCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>nameCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>nameCode</urn1:displayName>
-                  <urn1:originalText>nameCode</urn1:originalText>
-               </urn1:nameType>
-               <urn1:secondNameOrInitials>s</urn1:secondNameOrInitials>
-               <urn1:fullName>Sammy S. Smith</urn1:fullName>
-            </urn1:secondWitnessName>
-            <urn1:secondWitnessPhone>
-               <urn1:areaCode>321</urn1:areaCode>
-               <urn1:countryCode>1</urn1:countryCode>
-               <urn1:extension>5424</urn1:extension>
-               <urn1:localNumber>542-6823</urn1:localNumber>
-               <urn1:phoneNumberType>
-                  <urn1:code>phoneCode</urn1:code>
-                  <urn1:codeSystem>phoneCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>phoneCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>phoneCode</urn1:displayName>
-                  <urn1:originalText>phoneCode</urn1:originalText>
-               </urn1:phoneNumberType>
-            </urn1:secondWitnessPhone>
-            <urn1:SSN>253987546</urn1:SSN>
-            <!--1 or more repetitions:-->
-            <urn1:uniquePatientId>500000000^^^&amp;1.1&amp;ISO</urn1:uniquePatientId>
-            <urn1:witnessAddress>
-               <urn1:addressType>
-                  <urn1:code>addrCode</urn1:code>
-                  <urn1:codeSystem>addrCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>addrCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>addrCode</urn1:displayName>
-                  <urn1:originalText>addrCode</urn1:originalText>
-               </urn1:addressType>
-               <urn1:city>Burnell</urn1:city>
-               <urn1:country>USA</urn1:country>
-               <urn1:state>FL</urn1:state>
-               <urn1:streetAddress>825 North</urn1:streetAddress>
-               <urn1:zipCode>32184</urn1:zipCode>
-            </urn1:witnessAddress>
-            <urn1:witnessName>
-               <urn1:familyName>Smith</urn1:familyName>
-               <urn1:givenName>Scott</urn1:givenName>
-               <urn1:nameType>
-                  <urn1:code>nameCode</urn1:code>
-                  <urn1:codeSystem>nameCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>nameCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>nameCode</urn1:displayName>
-                  <urn1:originalText>nameCode</urn1:originalText>
-               </urn1:nameType>
-               <urn1:secondNameOrInitials>S.</urn1:secondNameOrInitials>
-               <urn1:fullName>Scott S. Smith</urn1:fullName>
-            </urn1:witnessName>
-            <urn1:witnessPhone>
-               <urn1:areaCode>321</urn1:areaCode>
-               <urn1:countryCode>1</urn1:countryCode>
-               <urn1:extension>8432</urn1:extension>
-               <urn1:localNumber>985-2239</urn1:localNumber>
-               <urn1:phoneNumberType>
-                  <urn1:code>phoneCode</urn1:code>
-                  <urn1:codeSystem>phoneCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>phoneCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>phoneCode</urn1:displayName>
-                  <urn1:originalText>phoneCode</urn1:originalText>
-               </urn1:phoneNumberType>
-            </urn1:witnessPhone>
             <urn1:userInfo>
                <urn1:personName>
                   <urn1:familyName>Skagerberg</urn1:familyName>
@@ -13942,8 +13518,6 @@ if(passthruValue != null){
                </urn1:org>
                <urn1:roleCoded>
                   <urn1:code>80584001</urn1:code>
-                  <urn1:codeSystem>2.16.840.1.113883.6.96</urn1:codeSystem>
-                  <urn1:codeSystemName>SNOMED_CT</urn1:codeSystemName>
                   <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
                   <urn1:displayName>Psychiatrist</urn1:displayName>
                   <urn1:originalText>Psychiatrist</urn1:originalText>
@@ -13952,36 +13526,34 @@ if(passthruValue != null){
             <urn1:authorized>true</urn1:authorized>
             <urn1:purposeOfDisclosureCoded>
                <urn1:code>PSYCHOTHERAPY</urn1:code>
-               <urn1:codeSystem>2.16.840.1.113883.3.18.7.1</urn1:codeSystem>
-               <urn1:codeSystemName>nhin-purpose</urn1:codeSystemName>
                <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
                <urn1:displayName>Use or disclosure of Psychotherapy Notes</urn1:displayName>
                <urn1:originalText>Psychotherapy Notes</urn1:originalText>
             </urn1:purposeOfDisclosureCoded>
             <urn1:samlAuthnStatement>
-               <urn1:authInstant>2009-09-01T13:00:00.000Z</urn1:authInstant>
-               <urn1:sessionIndex>mySessionIndex</urn1:sessionIndex>
-               <urn1:authContextClassRef>myContextClassRef</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>mySubjectLocalityAddress</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>mySubjectLocalityDns</urn1:subjectLocalityDNSName>
+               <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
+               <urn1:sessionIndex>987</urn1:sessionIndex>
+               <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>myAuthzDecisionStatementResource</urn1:resource>
-               <urn1:action>myAuthzDecisionStatementAction</urn1:action>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
-                     <urn1:id>AuthzDecisionStatementEvidenceAssertionId</urn1:id>
-                     <urn1:issueInstant>2009-09-02T14:00:00.000Z</urn1:issueInstant>
+                     <urn1:id>40df7c0a-ff3e-4b26-baeb-f2910f6d05a9</urn1:id>
+                     <urn1:issueInstant>2009-04-16T13:15:39Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuer>CN=Mr Saml User,OU=SU,O=Mr SAML Org,L=Chantilly,ST=VA,C=US</urn1:issuer>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
                      <urn1:conditions>
-                        <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
+                        <urn1:notBefore>2009-04-16T13:15:39Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
                      </urn1:conditions>
-                     <urn1:accessConsentPolicy>urn:oid:1.2.3.4</urn1:accessConsentPolicy>
-                     <urn1:instanceAccessConsentPolicy>urn:oid:1.2.3.4.123456789</urn1:instanceAccessConsentPolicy>
+                     <urn1:accessConsentPolicy>Claim-Ref-1234</urn1:accessConsentPolicy>
+                     <urn1:instanceAccessConsentPolicy>Claim-Instance-1</urn1:instanceAccessConsentPolicy>
                   </urn1:assertion>
                </urn1:evidence>
             </urn1:samlAuthzDecisionStatement>
@@ -14105,7 +13677,7 @@ if(passthruValue != null){
    </soap:Body>
 </soap:Envelope>]]></con:request>
             <con:credentials>
-              <con:authType>Global HTTP Settings</con:authType>
+              <con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:jmsPropertyConfig/>
@@ -14405,12 +13977,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -14418,7 +13990,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -15002,12 +14574,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -15016,7 +14588,7 @@ if(passthruValue != null){
                      <!--Optional:-->
                      <urn1:version>2.0</urn1:version>
                      <!--Optional:-->
-                     <urn1:issuer>CN=SAML User,OU=Harris,0=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <!--Optional:-->
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
                      <!--Optional:-->
@@ -15387,12 +14959,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -15400,7 +14972,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -15963,12 +15535,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -15976,7 +15548,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -16407,12 +15979,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -16420,7 +15992,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -16595,9 +16167,9 @@ pdConfigFile.eachLine() {
 pdConfigFile.delete();
 pdConfigFileNew.renameTo(new File(dir + "/" + "PatientDiscoveryProxyConfig.xml"));
 **/
-log.info "Modifying internalConnectionInfo for adapterpatientdiscovery mock."
+log.info "Modifying internalExchangeInfo for adapterpatientdiscovery mock."
 
-nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", dir, "1.1",
+nhinc.FileUtils.createOrUpdateConnection("internalExchangeInfo.xml", dir, "1.1",
 	"adapterpatientdiscovery", "http://localhost:1720/MockPDAdapter", "2.0",
 	log);</script>
         </con:config>
@@ -16819,12 +16391,12 @@ nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", dir, "1.1
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -16832,7 +16404,7 @@ nhinc.FileUtils.createOrUpdateConnection("internalConnectionInfo.xml", dir, "1.1
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -17398,12 +16970,12 @@ if(passthruValue != null){
                <urn3:authInstant>2009-04-16T13:15:39Z</urn3:authInstant>
                <urn3:sessionIndex>987</urn3:sessionIndex>
                <urn3:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn3:authContextClassRef>
-               <urn3:subjectLocalityAddress>158.147.185.168</urn3:subjectLocalityAddress>
-               <urn3:subjectLocalityDNSName>cs.myharris.net</urn3:subjectLocalityDNSName>
+               <urn3:subjectLocalityAddress>1.1.1.1</urn3:subjectLocalityAddress>
+               <urn3:subjectLocalityDNSName>connectopensource.org</urn3:subjectLocalityDNSName>
             </urn3:samlAuthnStatement>
          <urn3:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn3:decision>Permit</urn3:decision>
-               <urn3:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
+               <urn3:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn3:resource>
                <urn3:action>TestSaml</urn3:action>
                <urn3:evidence>
                   <urn3:assertion>
@@ -17411,7 +16983,7 @@ if(passthruValue != null){
                      <urn3:issueInstant>2009-04-16T13:10:39.093Z</urn3:issueInstant>
                      <urn3:version>2.0</urn3:version>
                      <urn3:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn3:issuerFormat>
-                     <urn3:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn3:issuer>
+                     <urn3:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn3:issuer>
                      <urn3:conditions>
                         <urn3:notBefore>2009-04-16T13:10:39.093Z</urn3:notBefore>
                         <urn3:notOnOrAfter>2009-12-31T12:00:00.000Z</urn3:notOnOrAfter>
@@ -17760,12 +17332,12 @@ if(passthruValue != null){
                <urn2:authInstant>2009-04-16T13:15:39Z</urn2:authInstant>
                <urn2:sessionIndex>987</urn2:sessionIndex>
                <urn2:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn2:authContextClassRef>
-               <urn2:subjectLocalityAddress>158.147.185.168</urn2:subjectLocalityAddress>
-               <urn2:subjectLocalityDNSName>cs.myharris.net</urn2:subjectLocalityDNSName>
+               <urn2:subjectLocalityAddress>1.1.1.1</urn2:subjectLocalityAddress>
+               <urn2:subjectLocalityDNSName>connectopensource.org</urn2:subjectLocalityDNSName>
             </urn2:samlAuthnStatement>
             <urn2:samlAuthzDecisionStatement xmlns:urn1="urn:gov:hhs:fha:nhinc:common:nhinccommon">
                <urn2:decision>Permit</urn2:decision>
-               <urn2:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
+               <urn2:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn2:resource>
                <urn2:action>TestSaml</urn2:action>
                <urn2:evidence>
                   <urn2:assertion>
@@ -17773,7 +17345,7 @@ if(passthruValue != null){
                      <urn2:issueInstant>2009-04-16T13:10:39.093Z</urn2:issueInstant>
                      <urn2:version>2.0</urn2:version>
                      <urn2:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn2:issuerFormat>
-                     <urn2:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn2:issuer>
+                     <urn2:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn2:issuer>
                      <urn2:conditions>
                         <urn2:notBefore>2009-04-16T13:10:39.093Z</urn2:notBefore>
                         <urn2:notOnOrAfter>2009-12-31T12:00:00.000Z</urn2:notOnOrAfter>
@@ -17938,149 +17510,11 @@ if(passthruValue != null){
    <soap:Body testSuite="Entity_g0" testCase="Admin Distribution">
       <urn:RespondingGateway_SendAlertMessage>
          <urn:assertion>
-            <urn1:nationalProviderId>1234567890</urn1:nationalProviderId>         
-            <urn1:address>
-               <urn1:addressType>
-                  <urn1:code>AddrCode</urn1:code>
-                  <urn1:codeSystem>AddrCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>AddrCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>AddrCode</urn1:displayName>
-                  <urn1:originalText>AddrCode</urn1:originalText>
-               </urn1:addressType>
-               <urn1:city>AddrCity</urn1:city>
-               <urn1:country>AddrCountry</urn1:country>
-               <urn1:state>AddrState</urn1:state>
-               <urn1:streetAddress>AddrStreet</urn1:streetAddress>
-               <urn1:zipCode>AddrZip</urn1:zipCode>
-            </urn1:address>
-            <urn1:dateOfBirth>06/04/1959 05:21:00</urn1:dateOfBirth>
-            <urn1:explanationNonClaimantSignature>Electronic</urn1:explanationNonClaimantSignature>
-            <urn1:haveSecondWitnessSignature>false</urn1:haveSecondWitnessSignature>
-            <urn1:haveSignature>false</urn1:haveSignature>
-            <urn1:haveWitnessSignature>false</urn1:haveWitnessSignature>
             <urn1:homeCommunity>
                <urn1:description>${#Project#LocalHCDescription}</urn1:description>
                <urn1:homeCommunityId>${#Project#LocalHCID}</urn1:homeCommunityId>
                <urn1:name>${#Project#LocalHCDescription}</urn1:name>
             </urn1:homeCommunity>
-            <urn1:personName>
-               <urn1:familyName>Smith</urn1:familyName>
-               <urn1:givenName>Sandy</urn1:givenName>
-               <urn1:nameType>
-                  <urn1:code>nameCode</urn1:code>
-                  <urn1:codeSystem>nameCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>nameCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>nameCode</urn1:displayName>
-                  <urn1:originalText>nameCode</urn1:originalText>
-               </urn1:nameType>
-               <urn1:secondNameOrInitials>S</urn1:secondNameOrInitials>
-               <urn1:fullName>Sandy S. Smith</urn1:fullName>
-            </urn1:personName>
-            <urn1:phoneNumber>
-               <urn1:areaCode>321</urn1:areaCode>
-               <urn1:countryCode>1</urn1:countryCode>
-               <urn1:extension>5436</urn1:extension>
-               <urn1:localNumber>253-6849</urn1:localNumber>
-               <urn1:phoneNumberType>
-                  <urn1:code>phoneCode</urn1:code>
-                  <urn1:codeSystem>phoneCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>phoneCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>phoneCode</urn1:displayName>
-                  <urn1:originalText>phoneCode</urn1:originalText>
-               </urn1:phoneNumberType>
-            </urn1:phoneNumber>
-            <urn1:secondWitnessAddress>
-               <urn1:addressType>
-                  <urn1:code>AddrCode</urn1:code>
-                  <urn1:codeSystem>AddrCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>AddrCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>AddrCode</urn1:displayName>
-                  <urn1:originalText>AddrCode</urn1:originalText>
-               </urn1:addressType>
-               <urn1:city>Addr2City</urn1:city>
-               <urn1:country>Addr2Country</urn1:country>
-               <urn1:state>Addr2State</urn1:state>
-               <urn1:streetAddress>Addr2Street</urn1:streetAddress>
-               <urn1:zipCode>Addr2Zip</urn1:zipCode>
-            </urn1:secondWitnessAddress>
-            <urn1:secondWitnessName>
-               <urn1:familyName>Smith</urn1:familyName>
-               <urn1:givenName>Sammy</urn1:givenName>
-               <urn1:nameType>
-                  <urn1:code>nameCode</urn1:code>
-                  <urn1:codeSystem>nameCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>nameCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>nameCode</urn1:displayName>
-                  <urn1:originalText>nameCode</urn1:originalText>
-               </urn1:nameType>
-               <urn1:secondNameOrInitials>s</urn1:secondNameOrInitials>
-               <urn1:fullName>Sammy S. Smith</urn1:fullName>
-            </urn1:secondWitnessName>
-            <urn1:secondWitnessPhone>
-               <urn1:areaCode>321</urn1:areaCode>
-               <urn1:countryCode>1</urn1:countryCode>
-               <urn1:extension>5424</urn1:extension>
-               <urn1:localNumber>542-6823</urn1:localNumber>
-               <urn1:phoneNumberType>
-                  <urn1:code>phoneCode</urn1:code>
-                  <urn1:codeSystem>phoneCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>phoneCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>phoneCode</urn1:displayName>
-                  <urn1:originalText>phoneCode</urn1:originalText>
-               </urn1:phoneNumberType>
-            </urn1:secondWitnessPhone>
-            <urn1:SSN>253987546</urn1:SSN>
-            <!--1 or more repetitions:-->
-            <urn1:uniquePatientId>500000000^^^&amp;1.1&amp;ISO</urn1:uniquePatientId>
-            <urn1:witnessAddress>
-               <urn1:addressType>
-                  <urn1:code>addrCode</urn1:code>
-                  <urn1:codeSystem>addrCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>addrCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>addrCode</urn1:displayName>
-                  <urn1:originalText>addrCode</urn1:originalText>
-               </urn1:addressType>
-               <urn1:city>Burnell</urn1:city>
-               <urn1:country>USA</urn1:country>
-               <urn1:state>FL</urn1:state>
-               <urn1:streetAddress>825 North</urn1:streetAddress>
-               <urn1:zipCode>32184</urn1:zipCode>
-            </urn1:witnessAddress>
-            <urn1:witnessName>
-               <urn1:familyName>Smith</urn1:familyName>
-               <urn1:givenName>Scott</urn1:givenName>
-               <urn1:nameType>
-                  <urn1:code>nameCode</urn1:code>
-                  <urn1:codeSystem>nameCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>nameCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>nameCode</urn1:displayName>
-                  <urn1:originalText>nameCode</urn1:originalText>
-               </urn1:nameType>
-               <urn1:secondNameOrInitials>S.</urn1:secondNameOrInitials>
-               <urn1:fullName>Scott S. Smith</urn1:fullName>
-            </urn1:witnessName>
-            <urn1:witnessPhone>
-               <urn1:areaCode>321</urn1:areaCode>
-               <urn1:countryCode>1</urn1:countryCode>
-               <urn1:extension>8432</urn1:extension>
-               <urn1:localNumber>985-2239</urn1:localNumber>
-               <urn1:phoneNumberType>
-                  <urn1:code>phoneCode</urn1:code>
-                  <urn1:codeSystem>phoneCodeSyst</urn1:codeSystem>
-                  <urn1:codeSystemName>phoneCodeSystName</urn1:codeSystemName>
-                  <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
-                  <urn1:displayName>phoneCode</urn1:displayName>
-                  <urn1:originalText>phoneCode</urn1:originalText>
-               </urn1:phoneNumberType>
-            </urn1:witnessPhone>
             <urn1:userInfo>
                <urn1:personName>
                   <urn1:familyName>Skagerberg</urn1:familyName>
@@ -18104,8 +17538,6 @@ if(passthruValue != null){
                </urn1:org>
                <urn1:roleCoded>
                   <urn1:code>80584001</urn1:code>
-                  <urn1:codeSystem>2.16.840.1.113883.6.96</urn1:codeSystem>
-                  <urn1:codeSystemName>SNOMED_CT</urn1:codeSystemName>
                   <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
                   <urn1:displayName>Psychiatrist</urn1:displayName>
                   <urn1:originalText>Psychiatrist</urn1:originalText>
@@ -18114,36 +17546,34 @@ if(passthruValue != null){
             <urn1:authorized>true</urn1:authorized>
             <urn1:purposeOfDisclosureCoded>
                <urn1:code>PSYCHOTHERAPY</urn1:code>
-               <urn1:codeSystem>2.16.840.1.113883.3.18.7.1</urn1:codeSystem>
-               <urn1:codeSystemName>nhin-purpose</urn1:codeSystemName>
                <urn1:codeSystemVersion>1.0</urn1:codeSystemVersion>
                <urn1:displayName>Use or disclosure of Psychotherapy Notes</urn1:displayName>
                <urn1:originalText>Psychotherapy Notes</urn1:originalText>
             </urn1:purposeOfDisclosureCoded>
             <urn1:samlAuthnStatement>
-               <urn1:authInstant>2009-09-01T13:00:00.000Z</urn1:authInstant>
-               <urn1:sessionIndex>mySessionIndex</urn1:sessionIndex>
-               <urn1:authContextClassRef>myContextClassRef</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>mySubjectLocalityAddress</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>mySubjectLocalityDns</urn1:subjectLocalityDNSName>
+               <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
+               <urn1:sessionIndex>987</urn1:sessionIndex>
+               <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>myAuthzDecisionStatementResource</urn1:resource>
-               <urn1:action>myAuthzDecisionStatementAction</urn1:action>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
-                     <urn1:id>AuthzDecisionStatementEvidenceAssertionId</urn1:id>
-                     <urn1:issueInstant>2009-09-02T14:00:00.000Z</urn1:issueInstant>
+                     <urn1:id>40df7c0a-ff3e-4b26-baeb-f2910f6d05a9</urn1:id>
+                     <urn1:issueInstant>2009-04-16T13:15:39Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuer>CN=Mr Saml User,OU=SU,O=Mr SAML Org,L=Chantilly,ST=VA,C=US</urn1:issuer>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
                      <urn1:conditions>
-                        <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
+                        <urn1:notBefore>2009-04-16T13:15:39Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
                      </urn1:conditions>
-                     <urn1:accessConsentPolicy>urn:oid:1.2.3.4</urn1:accessConsentPolicy>
-                     <urn1:instanceAccessConsentPolicy>urn:oid:1.2.3.4.123456789</urn1:instanceAccessConsentPolicy>
+                     <urn1:accessConsentPolicy>Claim-Ref-1234</urn1:accessConsentPolicy>
+                     <urn1:instanceAccessConsentPolicy>Claim-Instance-1</urn1:instanceAccessConsentPolicy>
                   </urn1:assertion>
                </urn1:evidence>
             </urn1:samlAuthzDecisionStatement>
@@ -18151,14 +17581,14 @@ if(passthruValue != null){
                <!--Optional:-->
                <urn1:keyInfo>
                   <!--Optional:-->
-                  <urn1:rsaKeyValueModulus>cid:921853060605</urn1:rsaKeyValueModulus>
+                  <urn1:rsaKeyValueModulus>cid:243113487404</urn1:rsaKeyValueModulus>
                   <!--Optional:-->
-                  <urn1:rsaKeyValueExponent>cid:507157468547</urn1:rsaKeyValueExponent>
+                  <urn1:rsaKeyValueExponent>cid:159355901562</urn1:rsaKeyValueExponent>
                </urn1:keyInfo>
                <!--Optional:-->
-               <urn1:signatureValue>cid:175264679488</urn1:signatureValue>
+               <urn1:signatureValue>cid:383675305350</urn1:signatureValue>
             </urn1:samlSignature>
-         </urn:assertion>
+            </urn:assertion>
          <!--Optional:-->
          <urn:nhinTargetCommunities>
             <!--1 or more repetitions:-->
@@ -18267,7 +17697,7 @@ if(passthruValue != null){
    </soap:Body>
 </soap:Envelope>]]></con:request>
             <con:credentials>
-              <con:authType>Global HTTP Settings</con:authType>
+              <con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:jmsPropertyConfig/>
@@ -18569,12 +17999,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -18582,7 +18012,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -18906,12 +18336,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -18919,7 +18349,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -19257,12 +18687,12 @@ if(passthruValue != null){
                <urn1:authInstant>2009-04-16T13:15:39Z</urn1:authInstant>
                <urn1:sessionIndex>987</urn1:sessionIndex>
                <urn1:authContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</urn1:authContextClassRef>
-               <urn1:subjectLocalityAddress>158.147.185.168</urn1:subjectLocalityAddress>
-               <urn1:subjectLocalityDNSName>cs.myharris.net</urn1:subjectLocalityDNSName>
+               <urn1:subjectLocalityAddress>1.1.1.1</urn1:subjectLocalityAddress>
+               <urn1:subjectLocalityDNSName>connectopensource.org</urn1:subjectLocalityDNSName>
             </urn1:samlAuthnStatement>
             <urn1:samlAuthzDecisionStatement>
                <urn1:decision>Permit</urn1:decision>
-               <urn1:resource>https://158.147.185.168:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
+               <urn1:resource>https://1.1.1.1:8181/SamlReceiveService/SamlProcessWS</urn1:resource>
                <urn1:action>TestSaml</urn1:action>
                <urn1:evidence>
                   <urn1:assertion>
@@ -19270,7 +18700,7 @@ if(passthruValue != null){
                      <urn1:issueInstant>2009-04-16T13:10:39.093Z</urn1:issueInstant>
                      <urn1:version>2.0</urn1:version>
                      <urn1:issuerFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</urn1:issuerFormat>
-                     <urn1:issuer>CN=SAML User,OU=Harris,O=HITS,L=Melbourne,ST=FL,C=US</urn1:issuer>
+                     <urn1:issuer>CN=SAML User,OU=connect,O=FHA,L=Melbourne,ST=FL,C=US</urn1:issuer>
                      <urn1:conditions>
                         <urn1:notBefore>2009-04-16T13:10:39.093Z</urn1:notBefore>
                         <urn1:notOnOrAfter>2009-12-31T12:00:00.000Z</urn1:notOnOrAfter>
@@ -19477,7 +18907,7 @@ if(context.findProperty("PassThruOn").toBoolean()){
     </con:property>
     <con:property>
       <con:name>GatewayPropDir</con:name>
-      <con:value>C:\glassfish3\glassfish\domains\domain1\config\nhin</con:value>
+      <con:value></con:value>
     </con:property>
     <con:property>
       <con:name>Gender</con:name>
@@ -19727,10 +19157,37 @@ com.eviware.soapui.impl.wsdl.testcase.WsdlTestRunContext.metaClass.getConfigurat
   def env = [
     (JMXConnector.CREDENTIALS): (String[])[username, password]
   ]
-  def serverUrl = 'service:jmx:rmi://' + jmxHost + ':' + jmxPort + '/jndi/rmi://' + jmxHost + ':' + jmxPort + '/jmxrmi';
+  def serverUrl = 'service:jmx:http-remoting-jmx://'+jmxHost+ ':' + jmxPort;
   def server = JmxFactory.connect(new JmxUrl(serverUrl), env).MBeanServerConnection
   def config = new GroovyMBean(server, 'org.connectopensource.mbeans:type=Configuration');
   return config;
+}
+
+com.eviware.soapui.impl.wsdl.testcase.WsdlTestRunContext.metaClass.setGatewayStandard = { standard ->
+  def username = delegate.findProperty("ASUsername");
+  def password = delegate.findProperty("ASPassword");
+  def jmxHost = delegate.findProperty("JMXHost");
+  def jmxPort = delegate.findProperty("JMXPort");
+//  log.info "Value of the Param Name -->"+name;
+  // use jmx to set passthru mode
+  def env = [
+    (JMXConnector.CREDENTIALS): (String[])[username, password]
+  ];
+def serverUrl = 'service:jmx:http-remoting-jmx://'+jmxHost+ ':' + jmxPort;
+//  log.info "Standard value-->"+standard
+  def server = JmxFactory.connect(new JmxUrl(serverUrl), env);
+  def config = new GroovyMBean(server.MBeanServerConnection, 'org.connectopensource.mbeans:type=Configuration');
+  //set the Gateway to Standard Mode
+    if (standard){
+  	config.setStandardMode();
+  	log.info "Inside STD"
+  }
+  else{
+  	log.info "Inside PASS"
+     config.setPassthruMode();	
+  }
+  server.close();
+  return true;
 }
 
 com.eviware.soapui.impl.wsdl.testcase.WsdlTestRunContext.metaClass.withSql = { dbOrPropertyName, block ->
@@ -19751,7 +19208,7 @@ sql.close()
   <con:wssContainer/>
   <con:databaseConnectionContainer/>
   <con:oAuth2ProfileContainer/>
-  <con:reporting>
+  <con:oAuth1ProfileContainer/><con:reporting>
     <con:xmlTemplates/>
     <con:xmlTemplates/>
     <con:xmlTemplates/>
